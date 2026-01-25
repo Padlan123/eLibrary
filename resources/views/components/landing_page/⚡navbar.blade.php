@@ -12,9 +12,7 @@ new class extends Component {
         <nav aria-label="Global" class="flex items-center justify-between p-6 lg:px-8">
             <div class="flex lg:flex-1">
                 <a href="#" class="-m-1.5 p-1.5">
-                    <span class="sr-only">E-BOOK</span>
-                    <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                        alt="" class="h-8 w-auto" />
+                    <span class="text-white">E-BOOK</span>
                 </a>
             </div>
             <div class="flex lg:hidden">
@@ -29,8 +27,8 @@ new class extends Component {
                 </button>
             </div>
             <div class="hidden lg:flex lg:gap-x-12">
-                <a href="{{ route('welcome') }}" class="text-sm/6 font-semibold text-white">Beranda</a>
-                <a href="{{ route('fitur') }}" class="text-sm/6 font-semibold text-white">Fitur</a>
+                <a href="{{ route('welcome') }}" wire:navigate class="text-sm/6 font-semibold text-white">Beranda</a>
+                <a href="{{ route('fitur') }}" wire:navigate class="text-sm/6 font-semibold text-white">Fitur</a>
             </div>
             <div class="hidden lg:flex lg:flex-1 lg:justify-end">
                 <a href="#" class="text-sm/6 font-semibold text-white">Log in <span

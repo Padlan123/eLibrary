@@ -33,7 +33,8 @@ new class extends Component {
                         <a href="#"
                             class="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Daftar
                             Sekarang</a>
-                        <a href="{{ route('fitur') }}" class="text-sm/6 font-semibold text-white">Pelajari Lebih Lanjut
+                        <a href="{{ route('fitur') }}" wire:navigate class="text-sm/6 font-semibold text-white">Pelajari
+                            Lebih Lanjut
                             <span aria-hidden="true">→</span></a>
                     </div>
                 </div>
