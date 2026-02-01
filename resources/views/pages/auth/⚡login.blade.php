@@ -20,8 +20,7 @@ new class extends Component {
                 </h1>
                 <p class="text-gray-600">Masuk ke akun Anda</p>
             </div>
-            <form action="" method="post" class="space-y-6">
-                @csrf
+            <form class="space-y-6">
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                     <input type="email" name="email" id="email"

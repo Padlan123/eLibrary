@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Role::create(['name' => 'admin']);
-        Role::create(['name' => 'pelanggan']);
+        Role::create(['name' => 'anggota']);
     }
 
     /**
@@ -21,7 +21,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Role::where(['name' => 'admin'])->delete();
-        Role::where(['name' => 'pelanggan'])->delete();
+        Role::where(['name', 'admin'])->delete();
+        Role::where(['name', 'anggota'])->delete();
     }
 };
