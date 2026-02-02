@@ -29,9 +29,7 @@ new class extends Component {
 
         $user->assignRole('anggota');
 
-        Auth::login($user);
-        $role = Auth::user()->getRoleNames()->first();
-        dd('berhasil daftar sebagai ' . $role);
+        return $this->redirect('/login');
     }
 
     public function render()

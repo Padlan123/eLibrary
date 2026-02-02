@@ -1,8 +1,6 @@
 <?php
 
 use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
@@ -21,7 +19,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Role::where(['name', 'admin'])->delete();
-        Role::where(['name', 'anggota'])->delete();
+        Role::where('name', 'admin')->delete();
+        Role::where('name', 'anggota')->delete();
     }
 };
