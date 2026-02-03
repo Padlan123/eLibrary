@@ -27,7 +27,7 @@ new class extends Component {
     {
         return match ($role) {
             'admin' => dd('berhasil login sebagai ' . $role),
-            'anggota' => dd('berhasil login sebagai ' . $role),
+            'anggota' => redirect()->route('home.anggota'),
             default => dd('role tidak valid'),
         };
     }

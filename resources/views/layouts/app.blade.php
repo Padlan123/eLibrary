@@ -11,11 +11,14 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+
     @livewireStyles
 </head>
 
 <body>
     {{ $slot }}
+
+    <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
 
     @livewireScripts
 </body>
