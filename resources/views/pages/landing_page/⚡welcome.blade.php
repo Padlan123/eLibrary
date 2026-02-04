@@ -5,7 +5,7 @@ use Livewire\Component;
 new class extends Component {
     public function render()
     {
-        return $this->view()->title('E-BOOK');
+        return $this->view()->title('Readify');
     }
 };
 ?>
