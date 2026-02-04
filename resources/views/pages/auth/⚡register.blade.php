@@ -1,25 +1,22 @@
 <?php
 
+use App\Traits\WithAuthValidation;
 use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 new class extends Component {
+    use WithAuthValidation;
+
     public string $username = '';
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
 
-    protected $rules = [
-        'username' => 'required',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|min:8|confirmed',
-    ];
-
     public function register()
     {
-        $validated = $this->validate();
+        $validated = $this->validateRegister();
 
         $user = User::create([
             'username' => $validated['username'],
@@ -55,17 +52,19 @@ new class extends Component {
                         class="w-full bg-orange-50 py-3 px-4 border-2 rounded-lg border-blue-500 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none transition duration-300"
                         placeholder="Masukkan username Anda" />
                     @error('username')
-                        {{ $message }}
+                        <p class="mt-0.5 text-sm text-fg-danger-strong"><span class="font-medium">{{ $message }}</span>
+                        </p>
                     @enderror
                 </div>
 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                    <input wire:model="email" type="email" id="email"
+                    <input wire:model="email" type="text" id="email"
                         class="w-full bg-orange-50 py-3 px-4 border-2 rounded-lg border-blue-500 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none transition duration-300"
                         placeholder="Masukkan email Anda" />
                     @error('email')
-                        {{ $message }}
+                        <p class="mt-0.5 text-sm text-fg-danger-strong"><span class="font-medium">{{ $message }}</span>
+                        </p>
                     @enderror
                 </div>
 
@@ -75,7 +74,8 @@ new class extends Component {
                         class="w-full bg-orange-50 py-3 px-4 border-2 rounded-lg border-blue-500 focus:border-blue-300 focus:ring-1 focus:ring-blue-200 focus:outline-none transition duration-300"
                         placeholder="Masukkan password Anda" />
                     @error('password')
-                        {{ $message }}
+                        <p class="mt-0.5 text-sm text-fg-danger-strong"><span class="font-medium">{{ $message }}</span>
+                        </p>
                     @enderror
                 </div>
                 <div>
@@ -86,9 +86,14 @@ new class extends Component {
                         placeholder="Masukkan ulang password Anda" />
                 </div>
 
-                <button type="submit"
+                <button wire:loading.class="opacity-50" type="submit"
                     class="w-full py-3 px-4 bg-linear-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 transition duration-300">
-                    Daftar
+                    <div wire:loading.remove>
+                        Daftar
+                    </div>
+                    <div wire:loading>
+                        loading......
+                    </div>
                 </button>
             </form>
 
