@@ -9,13 +9,13 @@ new class extends Component {
 
 <div>
     <footer class="bg-gray-800 p-12">
-        <div class="grid grid-cols-4 items-center mx-2">
+        <div class="items-center mx-2">
             <a href="#" class="text-2xl tracking-widest text-white">READIFY</a>
         </div>
-        <div class="grid grid-cols-4 items-start mt-4">
+        <div class="grid lg:grid-cols-4 sm:grid-cols-2 items-start mt-4">
             <!-- //// -->
             <ul class="flex flex-col tracking-tighter text-gray-200">
-                <li class="px-2 py-1 mb-2">
+                <li class="px-2 py-1 mb-2 sm:mt-2 sm:mb-1">
                     <h3 class="text-sm text-gray-500">Navigasi</h3>
                 </li>
                 <li class="px-2 py-1"><a href="#" class="text-base/7">Beranda</a></li>
@@ -29,7 +29,7 @@ new class extends Component {
             </ul>
             <!-- //// -->
             <ul class="flex flex-col tracking-tighter text-gray-200">
-                <li class="px-2 py-1 m6-2">
+                <li class="px-2 py-1 mb-2 sm:mt-2 sm:mb-1">
                     <h3 class="text-sm text-gray-500">Tentang</h3>
                 </li>
                 <li class="px-2 py-1">
@@ -47,7 +47,7 @@ new class extends Component {
             </ul>
             <!-- //// -->
             <ul class="flex flex-col tracking-tighter text-gray-200">
-                <li class="px-2 py-1 mb-2">
+                <li class="px-2 py-1 mb-2 sm:mt-2 sm:mb-1">
                     <h3 class="text-sm text-gray-500">Akun</h3>
                 </li>
                 <li class="px-2 py-1">
@@ -62,7 +62,7 @@ new class extends Component {
             </ul>
             <!-- //// -->
             <ul class="flex flex-col tracking-tighter text-gray-200">
-                <li class="px-2 py-1 mb-2">
+                <li class="px-2 py-1 mb-2 sm:mt-2 sm:mb-1">
                     <h3 class="text-sm text-gray-500">Pengembang</h3>
                 </li>
                 <li class="px-2 py-1">
@@ -77,7 +77,7 @@ new class extends Component {
             </ul>
         </div>
 
-        <div class="w-full mt-12 pt-10 border-t border-black">
+        <div class="w-full mt-12 pt-10 border-t border-gray-700">
             <div class="flex items-center justify-center mb-5">
                 <!-- youtube -->
 
