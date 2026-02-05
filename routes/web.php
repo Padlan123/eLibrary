@@ -7,3 +7,6 @@ Route::get('/', function () {
 });
 Route::livewire('/login', 'pages::auth.login')->name('login');
 Route::livewire('/register', 'pages::auth.register')->name('register');
+
+Route::livewire('/e-book', 'pages::landing_page.welcome')->name('welcome');
+Route::livewire('/beranda', 'pages::pelanggan.beranda');
