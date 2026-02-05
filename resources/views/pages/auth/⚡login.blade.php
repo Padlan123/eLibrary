@@ -1,19 +1,16 @@
 <?php
-
+use App\Traits\WithAuthValidation;
 use Livewire\Component;
 
 new class extends Component {
+    use WithAuthValidation;
+
     public string $email = '';
     public string $password = '';
 
-    protected $rules = [
-        'email' => 'required|email',
-        'password' => 'required',
-    ];
-
     public function login()
     {
-        $validated = $this->validate();
+        $validated = $this->validateLogin();
 
         if (!Auth::attempt($validated)) {
             $this->addError('email', 'email atau password anda salah');
@@ -27,7 +24,7 @@ new class extends Component {
     {
         return match ($role) {
             'admin' => dd('berhasil login sebagai ' . $role),
-            'anggota' => dd('berhasil login sebagai ' . $role),
+            'anggota' => redirect()->route('home.anggota'),
             default => dd('role tidak valid'),
         };
     }
@@ -70,9 +67,14 @@ new class extends Component {
                         @enderror
                     </div>
 
-                    <button type="submit"
+                    <button wire:loading.class="opacity-50" type="submit"
                         class="w-full py-3 px-4 bg-linear-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 transition duration-300">
-                        Masuk
+                        <div wire:loading.remove>
+                            Masuk
+                        </div>
+                        <div wire:loading>
+                            <p>loading......</p>
+                        </div>
                     </button>
                 </form>
 
