@@ -77,14 +77,7 @@ new class extends Component {
             </ul>
         </div>
 
-        <div class="w-full mt-12 pt-10 border-t border-gray-700">
-            @livewire('social_media')
-            <p class="font-medium text-slate-300 text-xs text-secondary text-center tracking-wide">
-                Dibuat oleh tim
-                <a href="#" target="_blank" class="font-bold text-white underline">STAR'S</a>
-                dengan menggunakan
-                <a href="https://tailwindcss.com" target="_blank" class="font-bold text-sky-500">Tailwindcss</a> dan
-                <a href="https://laravel.com" target="_blank" class="font-bold text-red-400">Laravel</a>
-            </p>
+        @livewire('social_media')
+
     </footer>
 </div>

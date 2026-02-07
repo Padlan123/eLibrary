@@ -12,7 +12,7 @@ new class extends Component {
 
 <div>
     <section class="min-h-screen relative">
-        <div class="bg-gray-900 backdrop-blur-sm absolute top-0 right-0 left-0 min-h-screen md:pb-48  sm:pb-32">
+        <div class="bg-gray-900 backdrop-blur-sm absolute top-0 right-0 left-0 min-h-screen pb-24 sm:pb-32 md:pb-38 ">
             <div aria-hidden="true"
                 class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
                 <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
@@ -47,7 +47,7 @@ new class extends Component {
 
     </section>
 
-    <div class="lg:py-32 sm:py-48 bg-gray-300/40 md:mt-28 lg:mt-0">
+    <div class="py-24 pt-64 bg-gray-300/40 sm:py-48 lg:py-32 lg:mt-0">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="mx-auto max-w-2xl text-center">
                 <h2 class="text-base/7 font-semibold text-indigo-400">Fitur</h2>
@@ -111,7 +111,6 @@ new class extends Component {
             </div>
         </div>
     </div>
-
 
     @livewire('footer')
 </div>

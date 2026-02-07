@@ -36,8 +36,7 @@ new class extends Component {
 };
 ?>
 <div>
-    <div
-        class="bg-linear-to-br from-orange-100 via-blue-400 to-blue-600 flex items-center justify-center font-sans lg:py-0 sm:py-32">
+    <div class="bg-linear-to-br from-orange-100 via-blue-400 to-blue-600 flex items-center justify-center font-sans">
         <section class="min-h-screen w-full flex items-center justify-center px-4">
             <div class="bg-white/30 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-full max-w-md">
                 <div class="text-center mb-8">
@@ -89,5 +88,5 @@ new class extends Component {
             </div>
         </section>
     </div>
-
+    @livewire('footer_kecil')
 </div>
