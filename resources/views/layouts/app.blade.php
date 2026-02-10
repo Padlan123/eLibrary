@@ -10,12 +10,28 @@
     <title>{{ $title ?? config('app.name') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
 
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+    </style>
 
     @livewireStyles
 </head>
 
-<body>
+<body class="font-sans">
     {{ $slot }}
     <script>
         document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -34,10 +50,7 @@
     </script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
     <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
-
-
     @livewireScripts
 </body>
 

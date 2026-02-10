@@ -1,5 +1,6 @@
 <?php
 use App\Traits\WithAuthValidation;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 new class extends Component {
