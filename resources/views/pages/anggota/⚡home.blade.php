@@ -204,7 +204,7 @@ new class extends Component {
                 </div>
             </div>
             <a href="#"
-                class="mx-auto inline-block px-4 py-2 rounded-lg font-medium text-blue-900 bg-gradient-to-r from-blue-300/80 to-blue-400/80 text-blue-900 hover:from-blue-300 hover:to-blue-400 shadow-sm ring-1 ring-blue-300 transition">
+                class="mx-auto inline-block px-4 py-2 rounded-lg font-medium bg-linear-to-r from-blue-300/80 to-blue-400/80 text-blue-900 hover:from-blue-300 hover:to-blue-400 shadow-sm ring-1 ring-blue-300 transition">
                 Lihat paket premium
             </a>
         </div>
