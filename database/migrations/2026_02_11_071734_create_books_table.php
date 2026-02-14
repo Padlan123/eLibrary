@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('penulis');
             $table->string('penerbit');
             $table->integer('tahun_terbit');
+            $table->text('sinopsis');
             $table->json('kategori');
+            $table->boolean('premium')->default(false);
+            $table->string('cover_image')->nullable();
             $table->timestamps();
         });
     }

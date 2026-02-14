@@ -1,8 +1,31 @@
 <?php
 
 use Livewire\Component;
+use Livewire\Attributes\Computed;
+use App\Models\Book;
+use Livewire\WithPagination;
 
 new class extends Component {
+    use WithPagination;
+
+    public $genre = '';
+
+    #[Computed]
+    public function books()
+    {
+        return Book::latest()->paginate(8);
+    }
+
+    public function filterBooks($genre)
+    {
+        dd($genre);
+        Books::where('kategori', function ($query) {
+            foreach ($query as $kategori) {
+                return $kategori;
+            }
+        });
+    }
+
     public function render()
     {
         return $this->view()->title('Home');
@@ -42,7 +65,7 @@ new class extends Component {
     </section>
 
     <!-- Section Card Buku -->
-    <section class="py-12 bg-gray-100 w-full" id="card">
+    <section class="scroll-mt-12 py-12 bg-gray-100 w-full" id="card">
         <div class="max-w-7xl mx-auto px-8">
             <div class="mb-10">
                 <h2 class="text-2xl font-semibold text-gray-800">Koleksi Buku</h2>
@@ -51,85 +74,73 @@ new class extends Component {
                         Temukan berbagai koleksi buku digital yang tersedia.
                     </p>
                     <div class="mt-4">
-                        <select
-                            class="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option>Semua Kategori</option>
-                            <option>Fiksi</option>
-                            <option>Non-Fiksi</option>
-                            <option>Teknologi</option>
-                        </select>
+                        <form class="max-w-sm mx-auto">
+                            <label for="countries" class="mb-2.5 text-sm font-medium text-heading">Pilih Kategori
+                                Buku</label>
+                            <select id="kategori"
+                                class="w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
+                                <option selected>Semua Kategori</option>
+                                <option value="umum">Pelajaran Umum</option>
+                                <option value="pengembangan-diri">
+                                    Pengembangan Diri</option>
+                            </select>
+                        </form>
                     </div>
                 </div>
             </div>
-
             <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Card 1 -->
-                <figure
-                    class="w-full p-2 flex bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition ease-in-out duration-300 relative">
-                    <img src="/img/book/book-1.jpg" alt=""
-                        class="object-cover object-center aspect-portrait w-28 rounded-l-lg" />
-                    <div class="flex flex-col justify-between px-3 w-full py-1">
-                        <div class="space-y-3 pb-2">
-                            <a href="#" class="flex items-center justify-between gap-2">
-                                <h4 class="text-lg text-gray-700 leading-tight">Petualangan mencari cinta</h4>
-                                <p
-                                    class="text-[12px] h-3 mr-1 font-medium text-gray-400 tracking-tight font-mono whitespace-nowrap">
-                                    1 jam yang lalu</p>
-                            </a>
-                            <div class="flex items-center gap-2">
-                                <span><a href="#"
-                                        class="text-sm text-gray-700 bg-gray-200 rounded-full px-2 outline-none ring-1 ring-gray-200 transition ease-in duration-300 hover:scale-105">Romance</a></span>
-                                <span><a href="#"
-                                        class="text-sm text-gray-700 bg-gray-200 rounded-full px-2 outline-none ring-1 ring-gray-200 transition ease-in duration-300 hover:scale-105">Action</a></span>
+                @foreach ($this->books as $book)
+                    <figure
+                        class="w-full p-2 flex bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition ease-in-out duration-300 relative">
+                        @if ($book->cover_image)
+                            <img src="{{ url('storage/covers/' . $book->cover_image) }}" alt=""
+                                class="object-cover object-center aspect-portrait w-28 rounded-lg" />
+                        @else
+                            <img src="{{ url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
+                                alt="" class="object-cover object-center aspect-portrait w-28 rounded-lg" />
+                        @endif
+                        <div class="flex flex-col justify-between px-3 w-full py-1">
+                            <div class="space-y-3 pb-2">
+                                <a href="#" class="flex items-center justify-between gap-2">
+                                    <h4 class="text-lg text-gray-700 leading-tight">{{ $book->judul }}</h4>
+                                    <p
+                                        class="text-[12px] h-3 mr-1 font-medium text-gray-400 tracking-tight font-mono whitespace-nowrap">
+                                        {{ $book->created_at->diffForHumans() }}</p>
+                                </a>
+                                <div class="flex items-center gap-2">
+                                    @foreach ($book->kategori as $kategori)
+                                        <span>
+                                            <p
+                                                class="text-sm text-gray-700 bg-gray-200 rounded-full px-2 outline-none ring-1 ring-gray-200 transition ease-in duration-300 hover:scale-105">
+                                                {{ $kategori }}</p>
+                                        </span>
+                                    @endforeach
+
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between w-full mt-6">
+                                <span class="text-sm text-gray-500">Tahun Terbit : {{ $book->tahun_terbit }}</span>
+                                <a href="#"
+                                    class="inline-flex items-center justify-center h-9 px-3 text-sm font-medium text-gray-100 bg-blue-500 hover:bg-blue-600 rounded-md transition relative">
+                                    Baca buku
+                                    <!-- Badge Premium -->
+                                    @if ($book->premium)
+                                        <span
+                                            class="absolute -top-2 -right-2 bg-yellow-400 text-xs font-bold px-2 py-0.5 rounded-full shadow">Premium</span>
+                                    @endif
+                                </a>
                             </div>
                         </div>
-                        <div class="flex items-center justify-between w-full mt-6">
-                            <span class="text-sm text-gray-500">Nama Penerbit · 2024</span>
-                            <a href="#"
-                                class="inline-flex items-center justify-center h-9 px-3 text-sm font-medium text-gray-100 bg-blue-500 hover:bg-blue-600 rounded-md transition relative">
-                                Baca buku
-                                <!-- Badge Premium -->
-                                <span
-                                    class="absolute -top-2 -right-2 bg-yellow-400 text-xs font-bold px-2 py-0.5 rounded-full shadow">Premium</span>
-                            </a>
-                        </div>
-                    </div>
-                </figure>
-                <!-- Card 2 (bisa duplikasi) -->
-                <figure
-                    class="w-full p-2 flex bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition ease-in-out duration-300 relative">
-                    <img src="/img/book/book-1.jpg" alt=""
-                        class="object-cover object-center aspect-portrait w-28 rounded-l-lg" />
-                    <div class="flex flex-col justify-between px-3 w-full py-1">
-                        <div class="space-y-3 pb-2">
-                            <a href="#" class="flex items-center justify-between gap-2">
-                                <h4 class="text-lg text-gray-700 leading-tight">Petualangan mencari cinta</h4>
-                                <p
-                                    class="text-[12px] h-3 mr-1 font-medium text-gray-400 tracking-tight font-mono whitespace-nowrap">
-                                    1 jam yang lalu</p>
-                            </a>
-                            <div class="flex items-center gap-2">
-                                <span><a href="#"
-                                        class="text-sm text-gray-700 bg-gray-200 rounded-full px-2 outline-none ring-1 ring-gray-200 transition ease-in duration-300 hover:scale-105">Romance</a></span>
-                                <span><a href="#"
-                                        class="text-sm text-gray-700 bg-gray-200 rounded-full px-2 outline-none ring-1 ring-gray-200 transition ease-in duration-300 hover:scale-105">Action</a></span>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between w-full mt-6">
-                            <span class="text-sm text-gray-500">Nama Penerbit · 2024</span>
-                            <a href="#"
-                                class="inline-flex items-center justify-center h-9 px-3 text-sm font-medium text-gray-100 bg-blue-500 hover:bg-blue-600 rounded-md transition">
-                                Baca buku
-                            </a>
-                        </div>
-                    </div>
-                </figure>
+                    </figure>
+                @endforeach
             </div>
+
+
         </div>
     </section>
 
     <!-- Why readify -->
-    <section class="py-12 bg-white w-full" id="why">
+    {{-- <section class="py-12 bg-white w-full" id="why">
         <div class="max-w-7xl px-8 grid grid-cols-1 items-center space-y-6">
             <div>
                 <span class="max-w-4xl flex flex-col items-center justify-center mx-auto text-center space-y-4">
@@ -208,7 +219,7 @@ new class extends Component {
                 Lihat paket premium
             </a>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Section Berlangganan Premium -->
     <section class="py-16 bg-gray-50 w-full" id="premium">

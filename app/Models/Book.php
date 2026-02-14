@@ -11,10 +11,13 @@ class Book extends Model
         'penulis',
         'penerbit',
         'tahun_terbit',
-        'kategori'
+        'kategori',
+        'sinopsis',
+        'premium',
     ];
 
     protected $casts = [
         'kategori' => 'array',
+        'premium' => 'boolean',
     ];
 }
