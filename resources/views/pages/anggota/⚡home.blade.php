@@ -3,27 +3,33 @@
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use App\Models\Book;
+use App\Models\Category;
 use Livewire\WithPagination;
 
 new class extends Component {
     use WithPagination;
 
-    public $genre = '';
+    public $category = '';
+
+    #[Computed]
+    public function categories()
+    {
+        return Category::orderBy('nama_kategori')->get();
+    }
 
     #[Computed]
     public function books()
     {
-        return Book::latest()->paginate(8);
-    }
-
-    public function filterBooks($genre)
-    {
-        dd($genre);
-        Books::where('kategori', function ($query) {
-            foreach ($query as $kategori) {
-                return $kategori;
-            }
-        });
+        $books = Book::query()
+            ->with('categories')
+            ->when($this->category, function ($query) {
+                $query->whereHas('categories', function ($q) {
+                    $q->where('categories.id', $this->category);
+                });
+            })
+            ->latest()
+            ->paginate(8);
+        return $books;
     }
 
     public function render()
@@ -77,12 +83,12 @@ new class extends Component {
                         <form class="max-w-sm mx-auto">
                             <label for="countries" class="mb-2.5 text-sm font-medium text-heading">Pilih Kategori
                                 Buku</label>
-                            <select id="kategori"
+                            <select wire:model.live="category" id="kategori"
                                 class="w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
-                                <option selected>Semua Kategori</option>
-                                <option value="umum">Pelajaran Umum</option>
-                                <option value="pengembangan-diri">
-                                    Pengembangan Diri</option>
+                                <option value="">Semua Kategori</option>
+                                @foreach ($this->categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->nama_kategori }}</option>
+                                @endforeach
                             </select>
                         </form>
                     </div>
@@ -108,14 +114,13 @@ new class extends Component {
                                         {{ $book->created_at->diffForHumans() }}</p>
                                 </a>
                                 <div class="flex items-center gap-2">
-                                    @foreach ($book->kategori as $kategori)
+                                    @foreach ($book->categories as $kategori)
                                         <span>
                                             <p
                                                 class="text-sm text-gray-700 bg-gray-200 rounded-full px-2 outline-none ring-1 ring-gray-200 transition ease-in duration-300 hover:scale-105">
-                                                {{ $kategori }}</p>
+                                                {{ $kategori->nama_kategori }}</p>
                                         </span>
                                     @endforeach
-
                                 </div>
                             </div>
                             <div class="flex items-center justify-between w-full mt-6">

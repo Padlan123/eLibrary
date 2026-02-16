@@ -20,4 +20,9 @@ class Book extends Model
         'kategori' => 'array',
         'premium' => 'boolean',
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'book_category', 'book_id', 'category_id');
+    }
 }

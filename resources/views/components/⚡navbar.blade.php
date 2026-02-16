@@ -29,16 +29,14 @@ new class extends Component {
 
             @auth
                 <span class="flex items-center gap-6">
-                    <select name="" id="navSelect"
-                        class="border-none ring-none outline-none rounded-md text-white px-2 bg-white/0">
-                        <option value="" class="text-gray-500">Navigasi</option>
-                        <option value="#card" class="text-gray-500">Jelajahi buku</option>
-                        <option value="#why" class="text-gray-500">Mengapa READIFY?</option>
-                        <option value="#premium" class="text-gray-500">Berlangganan</option>
-                    </select>
-                    <form action="#" method="post" class="flex items-center gap-2">
-                        <input type="search" name="search" id="search" placeholder="Masukan judul, pengarang, genre"
-                            class="text-sm text-gray-700 px-2 bg-gray-100 py-1 w-64 rounded-full ring-2 focus:ring-blue-300 outline-none" />
+                    <div class="flex gap-5">
+                        <a href="{{ route('home.anggota') }}"
+                            class="text-sm font-medium text-white hover:text-gray-200">Beranda</a>
+                        <a href="" class="text-sm font-medium text-white hover:text-gray-200">Berlangganan</a>
+                    </div>
+                    <form class="flex items-center gap-2">
+                        <input type="text" placeholder="Masukan judul, pengarang, genre"
+                            class="px-2 bg-gray-100 py-1 w-64 rounded-full ring-1 ring-blue-500 focus:ring-blue-300 outline-none" />
                         <button type="submit" class="bg-gray-100 p-1 rounded-full ring-1 focus:ring-blue-300">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                                 class="w-5">
@@ -47,12 +45,10 @@ new class extends Component {
                             </svg>
                         </button>
                     </form>
-
-
-                    <button type="submit" wire:click="logout" wire:confirm="yakin kamu logout"
+                    {{-- <button type="submit" wire:click="logout" wire:confirm="yakin kamu logout"
                         class="bg-red-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-red-400">
                         Logout
-                    </button>
+                    </button> --}}
                 @endauth
             </span>
         </nav>
