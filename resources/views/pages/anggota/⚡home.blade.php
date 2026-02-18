@@ -5,11 +5,13 @@ use Livewire\Attributes\Computed;
 use App\Models\Book;
 use App\Models\Category;
 use Livewire\WithPagination;
+use App\Traits\WithRateLimiting;
 
 new class extends Component {
-    use WithPagination;
+    use WithPagination, WithRateLimiting;
 
     public $category = '';
+    public bool $limit = false;
 
     #[Computed]
     public function categories()
@@ -17,9 +19,23 @@ new class extends Component {
         return Category::orderBy('nama_kategori')->get();
     }
 
+    public function updatingCategory()
+    {
+        if (!$this->checkRateLimit('filterBooks', max: 10, jedaWaktu: 60)) {
+            $this->limit = true;
+            return;
+        }
+
+        $this->limit = false;
+        $this->resetErrorBag('throttle');
+    }
+
     #[Computed]
     public function books()
     {
+        if ($this->limit) {
+            return collect();
+        }
         $books = Book::query()
             ->with('categories')
             ->when($this->category, function ($query) {
@@ -81,7 +97,7 @@ new class extends Component {
                     </p>
                     <div class="mt-4">
                         <form class="max-w-sm mx-auto">
-                            <label for="countries" class="mb-2.5 text-sm font-medium text-heading">Pilih Kategori
+                            <label for="kategori" class="mb-2.5 text-sm font-medium text-heading">Pilih Kategori
                                 Buku</label>
                             <select wire:model.live="category" id="kategori"
                                 class="w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
@@ -95,7 +111,12 @@ new class extends Component {
                 </div>
             </div>
             <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                @foreach ($this->books as $book)
+                @error('throttle')
+                    <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                        ⛔ {{ $message }}
+                    </div>
+                @enderror
+                @forelse ($this->books as $book)
                     <figure
                         class="w-full p-2 flex bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition ease-in-out duration-300 relative">
                         @if ($book->cover_image)
@@ -128,7 +149,6 @@ new class extends Component {
                                 <a href="#"
                                     class="inline-flex items-center justify-center h-9 px-3 text-sm font-medium text-gray-100 bg-blue-500 hover:bg-blue-600 rounded-md transition relative">
                                     Baca buku
-                                    <!-- Badge Premium -->
                                     @if ($book->premium)
                                         <span
                                             class="absolute -top-2 -right-2 bg-yellow-400 text-xs font-bold px-2 py-0.5 rounded-full shadow">Premium</span>
@@ -137,10 +157,12 @@ new class extends Component {
                             </div>
                         </div>
                     </figure>
-                @endforeach
+                @empty
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-gray-500 text-lg">Tidak ada buku yang ditemukan untuk kategori ini.</p>
+                    </div>
+                @endforelse
             </div>
-
-
         </div>
     </section>
 
