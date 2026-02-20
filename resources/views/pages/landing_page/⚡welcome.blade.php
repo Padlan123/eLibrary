@@ -3,6 +3,18 @@
 use Livewire\Component;
 
 new class extends Component {
+    public function mount()
+    {
+        if (auth()->check()) {
+            $role = auth()->user()->getRoleNames()->first();
+            return match ($role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'anggota' => redirect()->route('home.anggota'),
+                default => redirect()->route('login'),
+            };
+        }
+    }
+
     public function render()
     {
         return $this->view()->title('Readify');

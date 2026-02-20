@@ -96,7 +96,7 @@ new class extends Component {
             </div>
             <div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 @foreach ($this->books as $book)
-                    <figure
+                    <figure wire:key="{{ $book->id }}"
                         class="w-full p-2 flex bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition ease-in-out duration-300 relative">
                         @if ($book->cover_image)
                             <img src="{{ url('storage/covers/' . $book->cover_image) }}" alt=""
