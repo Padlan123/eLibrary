@@ -33,7 +33,7 @@ new class extends Component {
                     class="inline-flex items-center justify-center h-9 px-4 text-base font-medium text-gray-100 rounded-full bg-blue-500 hover:bg-blue-600 transition">
                     Jelajahi Buku
                 </a>
-                <a href="#premium"
+                <a href="{{ route('anggota.berlangganan') }}"
                     class="inline-flex items-center justify-center h-9 px-4 text-base font-medium text-gray-100 rounded-full bg-linear-to-r from-blue-400 via-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-700 transition">
                     Mulai Berlangganan
                 </a>
