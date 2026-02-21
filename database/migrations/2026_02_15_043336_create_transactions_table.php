@@ -15,9 +15,15 @@ return new class extends Migration
             $table->id();
             $table->foreignId('anggota_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('paket_id')->constrained('pakets')->cascadeOnDelete();
+            $table->string('nama_pengirim');
+            $table->string('nomor_pengirim');
+            $table->string('bukti_pembayaran');
             $table->date('tanggal_bayar');
-            $table->enum('status', ['pending', 'disetujui', 'ditolak']);
+            $table->enum('status', ['pending', 'disetujui', 'ditolak'])->default('pending');
             $table->timestamps();
+
+            $table->index('anggota_id');
+            $table->index('paket_id');
         });
     }
 
