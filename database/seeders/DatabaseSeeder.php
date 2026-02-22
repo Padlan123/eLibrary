@@ -2,10 +2,15 @@
 
 namespace Database\Seeders;
 
+
 use App\Models\User;
+use Database\Seeders\BookCategoriesSeeder;
+use Database\Seeders\BookSeeder;
+use Database\Seeders\CategoriesSeeder;
+use Database\Seeders\PaketSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -16,27 +21,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
-
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
-
-        $admin = User::create([
-            'username' => 'admin',
-            'email' => 'admin123@gmail.com',
-            'password' => Hash::make('padlan123')
+        $this->call([
+            CategoriesSeeder::class,
+            BookSeeder::class,
+            BookCategoriesSeeder::class,
+            PaketSeeder::class,
         ]);
 
-        $admin->assignRole('admin');
-
-        $admin = User::create([
-            'username' => 'anggota',
+        $anggota = User::create([
+            'username' => 'Anggota',
             'email' => 'anggota123@gmail.com',
-            'password' => Hash::make('anggota123')
+            'password' => bcrypt('anggota123'),
         ]);
-
-        $admin->assignRole('anggota');
+        $admin = User::create([
+            'username' => 'Admin',
+            'email' => 'admin123@gmail.com',
+            'password' => bcrypt('admin123'),
+        ]);
+        $anggota->assignRole('anggota');
+        $admin->assignRole('admin');
     }
 }
