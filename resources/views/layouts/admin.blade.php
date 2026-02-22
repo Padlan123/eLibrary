@@ -32,9 +32,9 @@
 </head>
 
 <body class="font-sans">
-    <div class="flex min-w-0">
+    <div class="flex min-w-0 ">
         @livewire('sidebar')
-        <div class="flex flex-1 flex-col min-w-0">
+        <div class="flex flex-1 flex-col min-w-0 ">
             @livewire('navbar.admin')
             <main class="p-4 md:p-8 flex-1 min-w-0">
                 {{ $slot }}

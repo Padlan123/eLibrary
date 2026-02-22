@@ -12,8 +12,11 @@ new class extends Component {
 ?>
 
 <div>
+
     <aside id="default-sidebar"
-        class="fixed top-0 left-0 z-50 w-52 h-full bg-linear-to-b from-gray-900 to-gray-800 text-white px-4 py-6 transition-transform -translate-x-full duration-300 ease-in-out">
+        class="fixed top-0 left-0 z-50 w-52 h-full bg-linear-to-b from-gray-900 to-gray-800 text-white px-4 py-6
+        transition-transform -translate-x-full duration-300 ease-in-out md:translate-x-0 md:relative md:w-50 md:min-h-screen lg:w-64">
+        {{-- --}}
         <h1 class="text-lg font-bold mb-8">Admin Panel</h1>
         <nav class="space-y-4">
 
@@ -27,7 +30,7 @@ new class extends Component {
 
             <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-drawer-hide="default-sidebar"
                 type="button"
-                class="w-full flex items-center gap-3 px-3 py-2  text-white font-bold bg-red-600 rounded-lg shadow-lg ">
+                class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white font-bold shadow-lg hover:bg-red-500 transition duration-300 ease-in-out">
                 <ion-icon class="size-4 pl-2" name="close"></ion-icon>
                 logout
             </button>
@@ -35,7 +38,7 @@ new class extends Component {
     </aside>
 
     <div id="popup-modal" tabindex="-1"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-2/3 md:inset-0 h-[calc(100%-1rem)] max-h-full mx-auto">
+        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-2/3 md:inset-0 h-[calc(100%-1rem)] max-h-full mx-auto lg:w-1/2">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
                 <button type="button"
@@ -55,7 +58,7 @@ new class extends Component {
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 13V8m0 8h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <h3 class="mb-6 text-body">Apakah kamu yakin ingin logout?</h3>
+                    <h3 class="mb-6 text-body">Apakah kamu yakin ingin Keluar? kamu harus login kembali</h3>
                     </h3>
                     <div class="flex items-center space-x-4 justify-center">
                         <button wire:click="logout" data-modal-hide="popup-modal" type="button"
