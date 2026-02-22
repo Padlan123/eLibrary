@@ -45,12 +45,12 @@ new class extends Component {
                             </svg>
                         </button>
                     </form>
-                    {{-- <button type="submit" wire:click="logout" wire:confirm="yakin kamu logout"
+                    <button type="submit" wire:click="logout" wire:confirm="yakin kamu logout"
                         class="bg-red-500 text-white px-3 py-1 rounded-md text-sm font-medium hover:bg-red-400">
                         Logout
-                    </button> --}}
-                @endauth
-            </span>
+                    </button>
+                </span>
+            @endauth
         </nav>
     </header>
 </div>

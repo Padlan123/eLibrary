@@ -13,3 +13,8 @@ Route::prefix('anggota')->middleware(['auth', 'role:anggota'])->name('anggota.')
     Route::livewire('/home', 'pages::anggota.home')->name('home');
     Route::livewire('/langganan', 'pages::anggota.form-berlangganan')->name('berlangganan');
 });
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::livewire('/dashboard', 'pages::admin.dashboard')->name('admin.dashboard');
+    Route::livewire('/ebook', 'pages::admin.ebook')->name('admin.ebook');
+    Route::livewire('/pengguna', 'pages::admin.pengguna')->name('admin.pengguna');
+});

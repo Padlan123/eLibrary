@@ -117,7 +117,7 @@ new class extends Component {
                     </div>
                 @enderror
                 @forelse ($this->books as $book)
-                    <figure
+                    <figure wire:key="{{ $book->id }}"
                         class="w-full p-2 flex bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition ease-in-out duration-300 relative">
                         @if ($book->cover_image)
                             <img src="{{ url('storage/covers/' . $book->cover_image) }}" alt=""

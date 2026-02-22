@@ -24,9 +24,9 @@ new class extends Component {
     public function redirectTo($role)
     {
         return match ($role) {
-            'admin' => dd('berhasil login sebagai ' . $role),
-            'anggota' => redirect()->route('anggota.home'),
-            default => dd('role tidak valid'),
+            'admin' => redirect()->route('admin.dashboard'),
+            'anggota' => redirect()->route('home.anggota'),
+            default => Auth::logout() && redirect()->route('login'),
         };
     }
 
@@ -89,5 +89,5 @@ new class extends Component {
             </div>
         </section>
     </div>
-    @livewire('footer_kecil')
+    @livewire('footer')
 </div>
