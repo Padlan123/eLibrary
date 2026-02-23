@@ -71,7 +71,7 @@ new class extends Component {
     <div class="bg-white rounded-2xl shadow-lg p-6 overflow-x-auto">
         <h3 class="text-xl font-bold mb-6">Konfirmasi Berlangganan</h3>
 
-        <table class="w-full border-separate border-spacing-y-3 min-w-150">
+        <table class="w-full border-separate border-spacing-y-3 min-w-250 lg:min-w-0">
             <thead>
                 <tr class="text-gray-500 text-left">
                     <th>Nama</th>

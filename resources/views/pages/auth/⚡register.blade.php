@@ -26,7 +26,7 @@ new class extends Component {
 
         $user->assignRole('anggota');
 
-        return $this->redirect('/login');
+        return $this->redirect()->route('login');
     }
 
     public function render()
