@@ -21,6 +21,7 @@ Route::prefix('/Readify')->group(function () {
             });
             Route::livewire('/home', 'pages::anggota.home')->name('home');
             Route::livewire('/langganan', 'pages::anggota.form-berlangganan')->name('berlangganan');
+            Route::livewire('profil', 'pages::anggota.profil')->name('profil');
         });
         Route::prefix('admin')->middleware('role:admin')->name('admin.')->group(function () {
             Route::get('/', function () {

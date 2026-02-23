@@ -52,13 +52,12 @@ new class extends Component {
 
     public function render()
     {
-        return $this->view()->title('Form Berlangganan');
+        return $this->view()->title('Form Berlangganan')->layout('layouts.anggota');
     }
 };
 ?>
 
 <div>
-    @livewire('navbar')
     <section class="py-8 antialiased bg-gray-900 md:py-32">
         <div class="mx-auto max-w-7xl px-4 2xl:px-0">
             <div class="mx-auto max-w-5xl">

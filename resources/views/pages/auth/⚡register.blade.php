@@ -26,7 +26,7 @@ new class extends Component {
 
         $user->assignRole('anggota');
 
-        return $this->redirect()->route('login');
+        return $this->redirect('/Readify/login');
     }
 
     public function render()

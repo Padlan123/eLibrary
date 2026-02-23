@@ -50,14 +50,12 @@ new class extends Component {
 
     public function render()
     {
-        return $this->view()->title('Home');
+        return $this->view()->title('Home')->layout('layouts.anggota');
     }
 };
 ?>
 
 <div>
-    @livewire('navbar')
-    <!-- Section Hero -->
     <section class="relative py-28 w-full"
         style="background-image: url(/img/background/dashboard-pelanggan.webp); background-size: cover; background-position: center;">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>

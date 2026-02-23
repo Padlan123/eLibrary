@@ -25,20 +25,12 @@
             animation: fadeInUp 1s ease-out forwards;
         }
     </style>
-
     @livewireStyles
 </head>
 
 <body class="font-sans">
-    <div class="flex min-w-0 ">
-        @livewire('sidebar')
-        <div class="flex flex-1 flex-col min-w-0 ">
-            @livewire('navbar.admin')
-            <main class="p-4 md:p-8 flex-1 min-w-0">
-                {{ $slot }}
-            </main>
-        </div>
-    </div>
+    @livewire('navbar')
+    {{ $slot }}
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
