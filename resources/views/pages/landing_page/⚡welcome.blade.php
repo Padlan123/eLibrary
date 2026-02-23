@@ -9,7 +9,7 @@ new class extends Component {
             $role = auth()->user()->getRoleNames()->first();
             return match ($role) {
                 'admin' => redirect()->route('admin.dashboard'),
-                'anggota' => redirect()->route('home.anggota'),
+                'anggota' => redirect()->route('anggota.home'),
                 default => redirect()->route('login'),
             };
         }

@@ -25,7 +25,7 @@ new class extends Component {
     {
         return match ($role) {
             'admin' => redirect()->route('admin.dashboard'),
-            'anggota' => redirect()->route('home.anggota'),
+            'anggota' => redirect()->route('anggota.home'),
             default => Auth::logout() && redirect()->route('login'),
         };
     }

@@ -17,7 +17,16 @@ class Transaction extends Model
     ];
 
     protected $casts = [
-        'status' => 'array',
         'tanggal_bayar' => 'date',
     ];
+
+    public function anggota()
+    {
+        return $this->belongsTo(User::class, 'anggota_id');
+    }
+
+    public function paket()
+    {
+        return $this->belongsTo(Paket::class, 'paket_id');
+    }
 }

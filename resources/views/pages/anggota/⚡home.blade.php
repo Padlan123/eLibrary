@@ -21,7 +21,7 @@ new class extends Component {
 
     public function updatingCategory()
     {
-        if (!$this->checkRateLimit('filterBooks', max: 10, jedaWaktu: 60)) {
+        if (!$this->checkRateLimit('filterBooks', max: 10, jedaWaktu: 30)) {
             $this->limit = true;
             return;
         }
@@ -99,7 +99,7 @@ new class extends Component {
                         <form class="max-w-sm mx-auto">
                             <label for="kategori" class="mb-2.5 text-sm font-medium text-heading">Pilih Kategori
                                 Buku</label>
-                            <select wire:model.live="category" id="kategori"
+                            <select wire:model.live.debounce="category" id="kategori"
                                 class="w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
                                 <option value="">Semua Kategori</option>
                                 @foreach ($this->categories as $category)
@@ -159,7 +159,7 @@ new class extends Component {
                     </figure>
                 @empty
                     <div class="col-span-full text-center py-10">
-                        <p class="text-gray-500 text-lg">Tidak ada buku yang ditemukan untuk kategori ini.</p>
+                        <p class="text-gray-500 text-lg">Tidak ada buku yang ditemukan</p>
                     </div>
                 @endforelse
             </div>

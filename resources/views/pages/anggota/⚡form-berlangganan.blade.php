@@ -35,12 +35,14 @@ new class extends Component {
     {
         $this->validateTransaction();
 
+        $path = $this->buktiPembayaran->store('bukti', 'public');
+
         Transaction::create([
             'anggota_id' => auth()->id(),
             'paket_id' => $this->pilihanPaketId,
             'nama_pengirim' => $this->namaPengirim,
             'nomor_pengirim' => $this->nomorPengirim,
-            'bukti_pembayaran' => $this->buktiPembayaran->store('bukti-pembayaran', 'public'),
+            'bukti_pembayaran' => $path,
             'tanggal_bayar' => now(),
         ]);
 
@@ -56,6 +58,7 @@ new class extends Component {
 ?>
 
 <div>
+    @livewire('navbar')
     <section class="py-8 antialiased bg-gray-900 md:py-32">
         <div class="mx-auto max-w-7xl px-4 2xl:px-0">
             <div class="mx-auto max-w-5xl">
@@ -258,5 +261,5 @@ new class extends Component {
             </div>
         </div>
     </section>
-    @livewire('footer_kecil')
+    @livewire('footer')
 </div>

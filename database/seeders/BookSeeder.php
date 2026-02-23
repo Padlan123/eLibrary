@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Book;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -23,6 +22,8 @@ class BookSeeder extends Seeder
                 'tahun_terbit' => 1925,
                 'sinopsis' => 'A novel about the American dream and the decadence of the Jazz Age.',
                 'premium' => false,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
             [
                 'judul' => 'To Kill a Mockingbird',
@@ -31,6 +32,8 @@ class BookSeeder extends Seeder
                 'tahun_terbit' => 1960,
                 'sinopsis' => 'A story of racial injustice and moral growth in the Deep South.',
                 'premium' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
             ],
         ]);
     }

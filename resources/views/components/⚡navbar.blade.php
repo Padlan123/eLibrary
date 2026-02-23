@@ -30,9 +30,10 @@ new class extends Component {
             @auth
                 <span class="flex items-center gap-6">
                     <div class="flex gap-5">
-                        <a href="{{ route('home.anggota') }}"
+                        <a href="{{ route('anggota.home') }}"
                             class="text-sm font-medium text-white hover:text-gray-200">Beranda</a>
-                        <a href="" class="text-sm font-medium text-white hover:text-gray-200">Berlangganan</a>
+                        <a href="{{ route('anggota.berlangganan') }}"
+                            class="text-sm font-medium text-white hover:text-gray-200">Berlangganan</a>
                     </div>
                     <form class="flex items-center gap-2">
                         <input type="text" placeholder="Masukan judul, pengarang, genre"

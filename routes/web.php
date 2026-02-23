@@ -3,18 +3,32 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/e-book');
+    return redirect()->route('welcome');
 });
-Route::livewire('/e-book', 'pages::landing_page.welcome')->name('welcome');
-Route::livewire('/login', 'pages::auth.login')->name('login');
-Route::livewire('/register', 'pages::auth.register')->name('register');
+Route::prefix('/Readify')->group(function () {
 
-Route::prefix('anggota')->middleware(['auth', 'role:anggota'])->name('anggota.')->group(function () {
-    Route::livewire('/home', 'pages::anggota.home')->name('home');
-    Route::livewire('/langganan', 'pages::anggota.form-berlangganan')->name('berlangganan');
-});
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::livewire('/dashboard', 'pages::admin.dashboard')->name('admin.dashboard');
-    Route::livewire('/ebook', 'pages::admin.ebook')->name('admin.ebook');
-    Route::livewire('/pengguna', 'pages::admin.pengguna')->name('admin.pengguna');
+    Route::get('/', function () {
+        return redirect()->route('welcome');
+    });
+    Route::livewire('/home', 'pages::landing_page.welcome')->name('welcome');
+    Route::livewire('/login', 'pages::auth.login')->name('login');
+    Route::livewire('/register', 'pages::auth.register')->name('register');
+
+    Route::middleware('auth')->group(function () {
+        Route::prefix('anggota')->middleware('role:anggota')->name('anggota.')->group(function () {
+            Route::get('/', function () {
+                return redirect()->route('anggota.home');
+            });
+            Route::livewire('/home', 'pages::anggota.home')->name('home');
+            Route::livewire('/langganan', 'pages::anggota.form-berlangganan')->name('berlangganan');
+        });
+        Route::prefix('admin')->middleware('role:admin')->name('admin.')->group(function () {
+            Route::get('/', function () {
+                return redirect()->route('admin.dashboard');
+            });
+            Route::livewire('/dashboard', 'pages::admin.dashboard')->name('dashboard');
+            Route::livewire('/ebook', 'pages::admin.ebook')->name('ebook');
+            Route::livewire('/pengguna', 'pages::admin.pengguna')->name('pengguna');
+        });
+    });
 });
