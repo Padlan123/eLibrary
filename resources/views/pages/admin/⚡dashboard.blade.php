@@ -2,13 +2,13 @@
 
 use Livewire\Component;
 use Livewire\Attributes\Computed;
-use App\Models\Transaction;
+use App\Models\SubscriptionTransaction;
 
 new class extends Component {
     public bool $show = false;
     public string $imageUrl = '';
 
-    public function showBuktiPembayaran(string $imageUrl)
+    public function showPaymentProof(string $imageUrl)
     {
         $this->imageUrl = $imageUrl;
         $this->show = true;
@@ -20,18 +20,18 @@ new class extends Component {
         $this->imageUrl = '';
     }
 
-    public function setujuiTransaksi($id)
+    public function approveTransaction($id)
     {
-        $transaksi = Transaction::find($id);
+        $transaksi = SubscriptionTransaction::find($id);
         if ($transaksi) {
             $transaksi->status = 'Disetujui';
             $transaksi->save();
         }
     }
 
-    public function tolakTransaksi($id)
+    public function rejectTransaction($id)
     {
-        $transaksi = Transaction::find($id);
+        $transaksi = SubscriptionTransaction::find($id);
         if ($transaksi) {
             $transaksi->status = 'Ditolak';
             $transaksi->save();
@@ -39,9 +39,9 @@ new class extends Component {
     }
 
     #[computed]
-    public function transaksis()
+    public function transactions()
     {
-        return Transaction::latest()->get();
+        return SubscriptionTransaction::latest()->get();
     }
 
     public function render()
@@ -84,16 +84,16 @@ new class extends Component {
             </thead>
 
             <tbody>
-                @forelse ($this->transaksis as $transaksi)
+                @forelse ($this->transactions as $transaction)
                     <tr class="bg-gray-50 rounded-lg shadow-sm">
-                        <td class="p-1">{{ $transaksi->anggota->username }}</td>
-                        <td class="p-1">{{ $transaksi->paket->nama }}</td>
-                        <td class="p-1">{{ $transaksi->nama_pengirim }}</td>
-                        <td class="p-1">{{ $transaksi->nomor_pengirim }}</td>
-                        <td class="p-1">{{ $transaksi->tanggal_bayar->format('d M Y') }}</td>
+                        <td class="p-1">{{ $transaction->member->username }}</td>
+                        <td class="p-1">{{ $transaction->package->name }}</td>
+                        <td class="p-1">{{ $transaction->name }}</td>
+                        <td class="p-1">{{ $transaction->number }}</td>
+                        <td class="p-1">{{ $transaction->paid_date->format('d M Y') }}</td>
                         <td class="p-1">
                             <button
-                                wire:click="showBuktiPembayaran('{{ asset('storage/' . $transaksi->bukti_pembayaran) }}')"
+                                wire:click="showPaymentProof('{{ asset('storage/' . $transaction->payment_proof) }}')"
                                 class="hover:opacity-75 transition bg-blue-500 p-1.5 rounded-md text-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                     class="size-6">
@@ -107,19 +107,19 @@ new class extends Component {
 
                         <td class="p-1">
                             <span class="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-sm">
-                                {{ $transaksi->status }}
+                                {{ $transaction->status }}
                             </span>
                         </td>
 
                         <td class="p-1 space-x-2">
-                            <button wire:click="setujuiTransaksi({{ $transaksi->id }})"
+                            <button wire:click="approveTransaction({{ $transaction->id }})"
                                 class="bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">
-                                Approve
+                                setujui
                             </button>
 
-                            <button wire:click="tolakTransaksi({{ $transaksi->id }})"
+                            <button wire:click="rejectTransaction({{ $transaction->id }})"
                                 class="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
-                                Reject
+                                tolak
                             </button>
                         </td>
                     </tr>

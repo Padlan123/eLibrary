@@ -11,7 +11,7 @@ class Category extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'nama_kategori',
+        'name',
     ];
 
     public function books()

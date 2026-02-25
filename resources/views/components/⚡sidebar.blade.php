@@ -15,14 +15,14 @@ new class extends Component {
 
     <aside id="default-sidebar"
         class="fixed top-0 left-0 z-50 w-52 h-full bg-linear-to-b from-gray-900 to-gray-800 text-white px-4 py-6
-        transition-transform -translate-x-full duration-300 ease-in-out md:translate-x-0 md:relative md:w-50 md:min-h-screen lg:w-64">
+        transition-transform -translate-x-full duration-300 ease-in-out md:translate-x-0 md:relative md:w-50 lg:w-64">
         {{-- --}}
         <h1 class="text-lg font-bold mb-8">Admin Panel</h1>
-        <nav class="space-y-4">
+        <nav class="space-y-4 md:space-y-6 md:min-h-screen">
 
             <x-nav-link :route="'admin.dashboard'" :icon="'bar-chart-outline'" :label="'Dashboard'"></x-nav-link>
 
-            <x-nav-link :route="'admin.ebook'" :icon="'book-outline'" :label="'Kelola E-Book'"></x-nav-link>
+            <x-nav-link :route="'admin.books'" :icon="'book-outline'" :label="'Kelola E-Book'"></x-nav-link>
 
             <x-nav-link :route="'admin.pengguna'" :icon="'person-outline'" :label="'Kelola Pengguna'"></x-nav-link>
 

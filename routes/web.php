@@ -28,7 +28,7 @@ Route::prefix('/Readify')->group(function () {
                 return redirect()->route('admin.dashboard');
             });
             Route::livewire('/dashboard', 'pages::admin.dashboard')->name('dashboard');
-            Route::livewire('/ebook', 'pages::admin.ebook')->name('ebook');
+            Route::livewire('/ebook', 'pages::admin.books')->name('books');
             Route::livewire('/pengguna', 'pages::admin.pengguna')->name('pengguna');
         });
     });

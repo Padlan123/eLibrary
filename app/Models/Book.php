@@ -11,16 +11,16 @@ class Book extends Model
     use HasFactory, Notifiable;
 
     protected $fillable = [
-        'judul',
-        'penulis',
-        'penerbit',
-        'tahun_terbit',
-        'sinopsis',
-        'premium',
+        'title',
+        'author',
+        'publisher',
+        'publication_year',
+        'summary',
+        'subscription',
     ];
 
     protected $casts = [
-        'premium' => 'boolean',
+        'subscription' => 'boolean',
     ];
 
     public function categories()

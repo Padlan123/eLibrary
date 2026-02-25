@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
             CategoriesSeeder::class,
             BookSeeder::class,
             BookCategoriesSeeder::class,
-            PaketSeeder::class,
+            PackagesSeeder::class,
         ]);
 
         $anggota = User::create([
