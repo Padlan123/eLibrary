@@ -17,6 +17,8 @@ class Book extends Model
         'publication_year',
         'summary',
         'subscription',
+        'cover_file_name',
+        'pdf_file_name'
     ];
 
     protected $casts = [

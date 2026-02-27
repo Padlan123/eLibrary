@@ -15,26 +15,32 @@ new class extends Component {
 
     <aside id="default-sidebar"
         class="fixed top-0 left-0 z-50 w-52 h-full bg-linear-to-b from-gray-900 to-gray-800 text-white px-4 py-6
-        transition-transform -translate-x-full duration-300 ease-in-out md:translate-x-0 md:relative md:w-50 lg:w-64">
-        {{-- --}}
+        transition-transform -translate-x-full duration-300 ease-in-out md:translate-x-0 md:w-50 lg:w-64"
+        aria-label="Sidebar">
         <h1 class="text-lg font-bold mb-8">Admin Panel</h1>
         <nav class="space-y-4 md:space-y-6 md:min-h-screen">
 
-            <x-nav-link :route="'admin.dashboard'" :icon="'bar-chart-outline'" :label="'Dashboard'"></x-nav-link>
+            <x-nav-link wire:navigate :class="'text-gray-300'" :route="'admin.dashboard'" :icon="'bar-chart-outline'"
+                :label="'Dashboard'"></x-nav-link>
 
-            <x-nav-link :route="'admin.books'" :icon="'book-outline'" :label="'Kelola E-Book'"></x-nav-link>
+            <x-nav-link wire:navigate :class="'text-gray-300'" :route="'admin.books'" :icon="'book-outline'"
+                :label="'Kelola E-Book'"></x-nav-link>
 
-            <x-nav-link :route="'admin.pengguna'" :icon="'person-outline'" :label="'Kelola Pengguna'"></x-nav-link>
+            <x-nav-link wire:navigate :class="'text-gray-300'" :route="'admin.pengguna'" :icon="'person-outline'"
+                :label="'Kelola Pengguna'"></x-nav-link>
 
             <hr class="text-gray-600">
 
-            <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-drawer-hide="default-sidebar"
-                type="button"
-                class="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-white font-bold shadow-lg hover:bg-red-500 transition duration-300 ease-in-out">
-                <ion-icon class="size-4 pl-2" name="close"></ion-icon>
-                logout
-            </button>
+            <div>
+                <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" data-drawer-hide="default-sidebar"
+                    type="button"
+                    class="w-full flex items-center gap-3 py-2 rounded-lg text-gray-300 font-semibold shadow-lg transition duration-300 ease-in-out">
+                    <ion-icon class="size-4 pl-2" name="close"></ion-icon>
+                    logout
+                </button>
+            </div>
         </nav>
+
     </aside>
 
     <div id="popup-modal" tabindex="-1"

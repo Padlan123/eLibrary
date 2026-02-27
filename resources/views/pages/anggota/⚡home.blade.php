@@ -101,7 +101,7 @@ new class extends Component {
                                 class="w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand shadow-xs placeholder:text-body">
                                 <option value="">Semua Kategori</option>
                                 @foreach ($this->categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->nama_kategori }}</option>
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </form>

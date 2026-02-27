@@ -4,6 +4,7 @@ use Livewire\Component;
 use Livewire\Attributes\Computed;
 use App\Models\Book;
 use App\Models\Category;
+use Livewire\WithPagination;
 
 new class extends Component {
     public $category = '';
@@ -18,8 +19,8 @@ new class extends Component {
                     $q->where('categories.id', $this->category);
                 });
             })
-            ->paginate(10);
-
+            ->latest()
+            ->get();
         return $books;
     }
 
@@ -38,96 +39,61 @@ new class extends Component {
 ?>
 
 <div>
-    <div class="p-4 md:p-8 space-y-4">
+    <div class="px-4 md:px-8 space-y-4">
         <button data-modal-target="form-modal" data-modal-toggle="form-modal"
             class="text-white bg-brand box-border border border-transparent hover:bg-brand-strong  shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5"
             type="button">
             Tambah E-Book
         </button>
         <section id="form-modal" tabindex="-1" aria-hidden="true"
-            class="hidden bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6 md:p-8 border">
-            <h2 class="font-semibold mb-6">Tambah E-Book</h2>
-
-            <form wire:submit="save" class="flex flex-col">
-
-                <div class="flex px-4 py-3 gap-12 items-center">
-                    <label for="judul">Judul</label>
-                    <input id="judul" placeholder="Masukkan judul e-book"
-                        class="border rounded-xl outline-none px-4 py-3 w-full" />
+            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+            <div class="relative p-4 w-full max-w-md max-h-full">
+                <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
+                    <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
+                        <h3 class="text-lg font-medium text-heading">
+                            Buat E-Book Baru
+                        </h3>
+                        <button type="button"
+                            class="text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center"
+                            data-modal-hide="form-modal">
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                                height="24" fill="none" viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
+                            </svg>
+                            <span class="sr-only">Close modal</span>
+                        </button>
+                    </div>
+                    @livewire('pages::admin.crud.create-book', ['categories' => $this->categories])
                 </div>
-
-                <div class=" px-4 py-3 gap-12">
-                    <label>kategori</label>
-                    <ul
-                        class="flex items-center select-none text-sm font-medium text-heading bg-neutral-primary-soft border border-transparent rounded-base gap-6 px-4 py-2">
-                        <li class="w-24 shadow-sm">
-                            <div class="flex items-center ps-3">
-                                <input id="vue-checkbox-list" type="checkbox" value=""
-                                    class="w-4 h-4  rounded-xs bg-neutral-secondary-medium ">
-                                <label for="vue-checkbox-list"
-                                    class="w-full py-3 ms-2 text-sm font-medium text-heading">Sains</label>
-                            </div>
-                        </li>
-                        <li class="w-24 shadow-sm">
-                            <div class="flex items-center ps-3">
-                                <input id="vue-checkbox-list" type="checkbox" value=""
-                                    class="w-4 h-4  rounded-xs bg-neutral-secondary-medium ">
-                                <label for="vue-checkbox-list"
-                                    class="w-full py-3 ms-2 text-sm font-medium text-heading">Sains</label>
-                            </div>
-                        </li>
-                        <li class="w-24 shadow-sm">
-                            <div class="flex items-center ps-3">
-                                <input id="vue-checkbox-list" type="checkbox" value=""
-                                    class="w-4 h-4  rounded-xs bg-neutral-secondary-medium ">
-                                <label for="vue-checkbox-list"
-                                    class="w-full py-3 ms-2 text-sm font-medium text-heading">Sains</label>
-                            </div>
-                        </li>
-                        <li class="w-24 shadow-sm">
-                            <div class="flex items-center ps-3">
-                                <input id="vue-checkbox-list" type="checkbox" value=""
-                                    class="w-4 h-4  rounded-xs bg-neutral-secondary-medium ">
-                                <label for="vue-checkbox-list"
-                                    class="w-full py-3 ms-2 text-sm font-medium text-heading">Sains</label>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="flex px-4 py-3 gap-12 items-center">
-                    <label for="tahun">Tahun</label>
-                    <input id="tahun" placeholder="Masukkan tahun terbit"
-                        class="block border rounded-xl px-4 py-3 outline-none w-full" />
-                </div>
-
-                <div class="flex px-4 py-3 gap-10 items-center">
-                    <label for="penulis">Penulis</label>
-                    <input id="penulis" placeholder="Masukkan nama penulis"
-                        class="block border rounded-xl px-4 py-3 outline-none w-full" />
-                </div>
-
-                <div class="px-4 py-3">
-                    <label for="">sinopsis</label>
-                    <textarea rows="4" placeholder="Masukkan sinopsis e-book"
-                        class="mt-4 w-full border rounded-xl px-4 py-3outline-none"></textarea>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                    <span>Tambahkan Foto</span>
-                    <input type="file" name="foto" class="border rounded-xl p-2" />
-                    <span>Tambahkan PDF</span>
-                    <input type="file" name="pdf" class="border rounded-xl p-2" />
-                </div>
-
-                <button wire:click="save"
-                    class="mt-6 bg-linear-to-r from-indigo-500 to-blue-600 text-white px-6 py-3 rounded-xl shadow hover:from-indigo-600 hover:to-blue-700 transition-colors duration-300 w-full">
-                    <span wire:loading.remove>Simpan</span>
-                    <span wire:loading wire:target="save">Loading...</span>
-                </button>
-            </form>
+            </div>
         </section>
-
+        @if (session('sukses'))
+            <div id="toast-success"
+                class="flex items-center w-full max-w-sm p-4 text-body bg-neutral-primary-soft rounded-base shadow-xs border border-default"
+                role="alert">
+                <div
+                    class="inline-flex items-center justify-center shrink-0 w-7 h-7 text-fg-success bg-success-soft rounded">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 11.917 9.724 16.5 19 7.5" />
+                    </svg>
+                    <span class="sr-only">Check icon</span>
+                </div>
+                <div class="ms-3 text-sm font-normal">{{ session('sukses') }}</div>
+                <button type="button"
+                    class="ms-auto flex items-center justify-center text-body hover:text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded text-sm h-8 w-8 focus:outline-none"
+                    data-dismiss-target="#toast-success" aria-label="Close">
+                    <span class="sr-only">Close</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18 17.94 6M18 18 6.06 6" />
+                    </svg>
+                </button>
+            </div>
+        @endif
         <section class="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg p-6 md:p-8 border overflow-x-auto">
             <div class="flex justify-between">
                 <h2 class="font-semibold mb-6">Daftar E-Book</h2>
@@ -186,8 +152,11 @@ new class extends Component {
 
                                 </button>
                             </td>
-                        @empty
-                            <td colspan="5" class="p-4 text-center text-gray-500">Tidak ada buku tersedia.</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="p-4 text-center text-gray-500">tidak ada buku di kategori ini
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>

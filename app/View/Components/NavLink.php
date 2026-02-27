@@ -11,7 +11,7 @@ class NavLink extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public string $route, public string $icon, public string $label) {}
+    public function __construct(public string $route, public string $icon, public string $label, public string $class = '') {}
 
     public function isActive()
     {

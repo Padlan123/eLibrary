@@ -16,10 +16,11 @@ return new class extends Migration
             $table->string('title');
             $table->string('author');
             $table->string('publisher');
-            $table->year('publication_year');
+            $table->unsignedSmallInteger('publication_year');
             $table->text('summary')->nullable();
             $table->boolean('subscription')->default(false);
-            $table->string('cover_image')->nullable();
+            $table->string('cover_file_name')->nullable();
+            $table->string('pdf_file_name');
             $table->timestamps();
         });
     }
