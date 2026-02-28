@@ -7,6 +7,7 @@ use App\Traits\WithFlashMessages;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Computed;
 
 new class extends Component {
     use WithFileUploads, WithBookValidation, WithFlashMessages;
@@ -24,6 +25,16 @@ new class extends Component {
 
     public $categories;
 
+    #[computed]
+    public function getCategoriesBook()
+    {
+        if ($this->book_categories == []) {
+            return;
+        }
+
+        return Category::whereIn('id', $this->book_categories)->get();
+    }
+
     public function save()
     {
         $this->validateBook();
@@ -37,8 +48,8 @@ new class extends Component {
                     'publisher' => $this->publisher,
                     'summary' => $this->summary,
                     'subscription' => $this->subscription,
-                    'cover_file_name' => $this->cover_file_name,
-                    'pdf_file_name' => $this->pdf_file_name,
+                    'cover_file_name' => $this->cover_file_name->store('cover', 'public'),
+                    'pdf_file_name' => $this->pdf_file_name->store('pdf', 'public'),
                 ]);
 
                 $book->categories()->attach($this->book_categories);
@@ -66,31 +77,28 @@ new class extends Component {
 
         </div>
 
-        <div class="gap-12">
-            <button id="dropdownSearchButton" data-dropdown-toggle="dropdownSearch" type="button"
-                class="inline-flex items-center text-white bg-gray-600 border border-transparent hover:bg-gray-700 mx-auto  shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 ">
+        <div x-data="{ open: false }" class="relative">
+            <button @click="open = !open" type="button"
+                class="inline-flex items-center text-body bg-white border border-gray-600 hover:bg-gray-300 mx-auto shadow-xs leading-5 rounded-base text-sm px-4 py-2.5 w-full appearance-none focus:outline-none focus:ring-0 focus:border-brand peer">
                 Kategori
-                <svg class="w-4
-                    h-4 ms-1.5 -me-1" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <svg class="h-4 w-4 ms-auto rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24" fill="none" viewBox="0 0 24 24">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m19 9-7 7-7-7" />
+                        d="m9 5 7 7-7 7" />
                 </svg>
             </button>
             @error('book_categories')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
-
-            <div id="dropdownSearch"
-                class="hidden z-99 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-60">
-                <ul class="select-none overflow-y-auto p-2 text-sm text-body font-medium"
-                    aria-labelledby="dropdownSearchButton">
+            <div x-show="open" @click.outside="open = false" x-transition
+                class="absolute left-1/2 top-0 ml-2 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-48 md:w-60 md:left-full">
+                <ul class="select-none overflow-y-auto p-2 text-sm text-body font-medium">
                     @foreach ($this->categories as $category)
                         <li wire:key="{{ $category->id }}">
                             <div
                                 class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded-md">
-                                <input wire:model="book_categories" id="{{ $category->id }}" type="checkbox"
-                                    value="{{ $category->id }}"
+                                <input wire:model.live.debounce.300ms="book_categories" id="{{ $category->id }}"
+                                    type="checkbox" value="{{ $category->id }}"
                                     class="w-4 h-4 border border-default-strong rounded-xs bg-neutral-secondary-strong focus:ring-2 focus:ring-brand-soft">
                                 <label for="{{ $category->id }}"
                                     class="w-full ms-2 text-sm font-medium text-heading">{{ $category->name }}</label>
@@ -99,6 +107,17 @@ new class extends Component {
                     @endforeach
                 </ul>
             </div>
+            @if ($this->getCategoriesBook)
+                <h2 class="my-2 text-base font-medium text-gray-700">Kategori yang dipilih</h2>
+                <ul class="max-w-md space-x-4 gap-y-2 text-body flex flex-wrap mb-2">
+                    @foreach ($this->getCategoriesBook as $category)
+                        <li class="list-none">
+                            <span
+                                class="bg-gray-600 text-neutral-primary text-xs font-medium px-2 py-1 rounded">{{ $category->name }}</span>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
 
         <div class="relative">
@@ -156,7 +175,6 @@ new class extends Component {
 
         </div>
 
-
         <div class="py-3">
             <label for="">sinopsis</label>
             <textarea wire:model="summary" rows="4" placeholder="Masukkan sinopsis e-book"
@@ -172,9 +190,9 @@ new class extends Component {
             <input wire:model="cover_file_name" type="file" class="hidden" id="cover_file_name"
                 @change="cover_file_name = $event.target.files[0] ? $event.target.files[0].name : 'Tidak ada file dipilih'" />
             <label for="cover_file_name"
-                class="flex items-center cursor-pointer border border-gray-600 bg-gray-700 rounded-base w-full shadow-xs overflow-hidden">
+                class="flex items-center cursor-pointer border border-gray-600 bg-white rounded-base w-full shadow-xs overflow-hidden">
                 <span
-                    class="bg-gray-800 hover:bg-gray-600 text-white text-sm px-4 py-2 whitespace-nowrap transition-colors">
+                    class="bg-white border-r border-gray-600 text-gray-800 text-sm px-4 py-2 whitespace-nowrap transition-colors">
                     Pilih File
                 </span>
                 <span x-text="cover_file_name" class="text-gray-400 text-sm px-3 truncate"></span>
@@ -188,9 +206,9 @@ new class extends Component {
             <input wire:model="pdf_file_name" type="file" class="hidden" id="pdf_file_name"
                 @change="pdf_file_name = $event.target.files[0] ? $event.target.files[0].name : 'Tidak ada file dipilih'" />
             <label for="pdf_file_name"
-                class="flex items-center cursor-pointer border border-gray-600 bg-gray-700 rounded-base w-full shadow-xs overflow-hidden">
+                class="flex items-center cursor-pointer border border-gray-600 bg-white rounded-base w-full shadow-xs overflow-hidden">
                 <span
-                    class="bg-gray-800 hover:bg-gray-600 text-white text-sm px-4 py-2 whitespace-nowrap transition-colors">
+                    class="bg-white border-r border-gray-600 text-gray-800 text-sm px-4 py-2 whitespace-nowrap transition-colors">
                     Pilih File
                 </span>
                 <span x-text="pdf_file_name" class="text-gray-400 text-sm px-3 truncate"></span>

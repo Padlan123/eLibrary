@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategoriesSeeder::class,
-            // BookSeeder::class,
-            // BookCategoriesSeeder::class,
+            BookSeeder::class,
+            BookCategoriesSeeder::class,
             PackagesSeeder::class,
         ]);
 

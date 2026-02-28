@@ -19,6 +19,10 @@ class CategoriesSeeder extends Seeder
             ['name' => 'Non-Fiksi'],
             ['name' => 'Sains'],
             ['name' => 'Teknologi'],
+            ['name' => 'Sci-Fi'],
+            ['name' => 'Romantis'],
+            ['name' => 'Aksi'],
+            ['name' => 'Self-Development'],
         ]);
     }
 }
