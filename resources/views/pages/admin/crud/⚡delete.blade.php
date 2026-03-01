@@ -33,9 +33,10 @@ new class extends Component {
 ?>
 
 <div>
-    <div x-data="{ open: false }" x-on:open-delete-modal.window="open = true" x-on:close-delete-modal.window="open = false"
-        x-show="open" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-150"
+    <section x-data="{ open: false }" x-on:open-delete-modal.window="open = true"
+        x-on:close-delete-modal.window="open = false" x-show="open" x-cloak
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-100"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
         class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <div class="relative p-4 w-full max-w-md max-h-full">
@@ -75,5 +76,5 @@ new class extends Component {
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </div>

@@ -9,9 +9,24 @@ use Livewire\WithPagination;
 new class extends Component {
     public $category = '';
 
-    public function modal($id)
+    #[Computed]
+    public function categories()
+    {
+        return Category::orderBy('name', 'asc')->get();
+    }
+
+    public function modalCreate()
+    {
+        $this->dispatch('open-create-modal');
+    }
+    public function modalDelete($id)
     {
         $this->dispatch('open-delete-modal', id: $id);
+    }
+
+    public function modalUpdate($id)
+    {
+        $this->dispatch('open-update-modal', id: $id);
     }
 
     #[Computed]
@@ -31,12 +46,6 @@ new class extends Component {
     }
 
     #[Computed]
-    public function categories()
-    {
-        return Category::orderBy('name', 'asc')->get();
-    }
-
-    #[Computed]
     public function render()
     {
         return $this->view()->layout('layouts.admin', ['title' => 'Kelola Buku']);
@@ -46,35 +55,11 @@ new class extends Component {
 
 <div>
     <div class="px-4 md:px-8 space-y-4">
-        <button data-modal-target="form-modal" data-modal-toggle="form-modal"
+        <button wire:click="modalCreate"
             class="text-white bg-brand box-border border border-transparent hover:bg-brand-strong  shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5"
             type="button">
             Tambah E-Book
         </button>
-        <section id="form-modal" tabindex="-1" aria-hidden="true"
-            class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative p-4 w-full max-w-md max-h-full">
-                <div
-                    class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6 fade-in-up">
-                    <div class="flex items-center justify-between border-b border-default pb-4 md:pb-5">
-                        <h3 class="text-lg font-medium text-heading">
-                            Buat E-Book Baru
-                        </h3>
-                        <button type="button"
-                            class="text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center"
-                            data-modal-hide="form-modal">
-                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                                height="24" fill="none" viewBox="0 0 24 24">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="M6 18 17.94 6M18 18 6.06 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
-                    </div>
-                    @livewire('pages::admin.crud.create-book', ['categories' => $this->categories])
-                </div>
-            </div>
-        </section>
         @if (session('error'))
             <div id="toast-warning"
                 class="flex items-center w-full max-w-sm p-4 text-body bg-neutral-primary-soft rounded-base shadow-xs border border-default"
@@ -164,7 +149,7 @@ new class extends Component {
                             </td>
 
                             <td class="p-3 text-center space-x-2">
-                                <button onclick="openEditModal()"
+                                <button wire:click="modalUpdate({{ $book->id }})"
                                     class="bg-blue-50 text-blue-600 px-3 py-2 rounded-lg hover:bg-blue-100">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                         class="size-6">
@@ -174,7 +159,7 @@ new class extends Component {
 
                                 </button>
 
-                                <button wire:click="modal({{ $book->id }})"
+                                <button wire:click="modalDelete({{ $book->id }})"
                                     class="bg-red-50 text-red-600 px-3 py-2 rounded-lg" type="button">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                         class="size-6">
@@ -200,5 +185,7 @@ new class extends Component {
             </table>
         </section>
     </div>
+    @livewire('pages::admin.crud.create')
     @livewire('pages::admin.crud.delete')
+    @livewire('pages::admin.crud.update')
 </div>
