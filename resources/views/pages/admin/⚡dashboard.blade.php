@@ -23,19 +23,21 @@ new class extends Component {
     public function approveTransaction($id)
     {
         $transaksi = SubscriptionTransaction::find($id);
-        if ($transaksi) {
-            $transaksi->status = 'Disetujui';
-            $transaksi->save();
+        if (!$transaksi) {
+            return;
         }
+        $transaksi->status = 'Disetujui';
+        $transaksi->save();
     }
 
     public function rejectTransaction($id)
     {
         $transaksi = SubscriptionTransaction::find($id);
-        if ($transaksi) {
-            $transaksi->status = 'Ditolak';
-            $transaksi->save();
+        if (!$transaksi) {
+            return;
         }
+        $transaksi->status = 'Ditolak';
+        $transaksi->save();
     }
 
     #[computed]

@@ -29,7 +29,7 @@ Route::prefix('/Readify')->group(function () {
             });
             Route::livewire('/dashboard', 'pages::admin.dashboard')->name('dashboard');
             Route::livewire('/ebook', 'pages::admin.books')->name('books');
-            Route::livewire('/pengguna', 'pages::admin.pengguna')->name('pengguna');
+            Route::livewire('/pengguna', 'pages::admin.users')->name('users');
         });
     });
 });

@@ -185,7 +185,7 @@ new class extends Component {
             </table>
         </section>
     </div>
-    @livewire('pages::admin.crud.create')
-    @livewire('pages::admin.crud.delete')
-    @livewire('pages::admin.crud.update')
+    @livewire('pages::admin.crud-book.create')
+    @livewire('pages::admin.crud-book.delete')
+    @livewire('pages::admin.crud-book.update')
 </div>

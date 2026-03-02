@@ -16,7 +16,7 @@ new class extends Component {
     #[Computed]
     public function categories()
     {
-        return Category::orderBy('nama_kategori')->get();
+        return Category::orderBy('name', 'asc')->get();
     }
 
     public function updatingCategory()
@@ -117,8 +117,8 @@ new class extends Component {
                 @forelse ($this->books as $book)
                     <figure wire:key="{{ $book->id }}"
                         class="w-full p-2 flex bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition ease-in-out duration-300 relative">
-                        @if ($book->cover_image)
-                            <img src="{{ url('storage/covers/' . $book->cover_image) }}" alt=""
+                        @if ($book->cover_file_name)
+                            <img src="{{ url('storage/' . $book->cover_file_name) }}" alt=""
                                 class="object-cover object-center aspect-portrait w-28 rounded-lg" />
                         @else
                             <img src="{{ url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
@@ -127,7 +127,7 @@ new class extends Component {
                         <div class="flex flex-col justify-between px-3 w-full py-1">
                             <div class="space-y-3 pb-2">
                                 <a href="#" class="flex items-center justify-between gap-2">
-                                    <h4 class="text-lg text-gray-700 leading-tight">{{ $book->judul }}</h4>
+                                    <h4 class="text-lg text-gray-700 leading-tight">{{ $book->title }}</h4>
                                     <p
                                         class="text-[12px] h-3 mr-1 font-medium text-gray-400 tracking-tight font-mono whitespace-nowrap">
                                         {{ $book->created_at->diffForHumans() }}</p>
@@ -137,13 +137,13 @@ new class extends Component {
                                         <span>
                                             <p
                                                 class="text-sm text-gray-700 bg-gray-200 rounded-full px-2 outline-none ring-1 ring-gray-200 transition ease-in duration-300 hover:scale-105">
-                                                {{ $kategori->nama_kategori }}</p>
+                                                {{ $kategori->name }}</p>
                                         </span>
                                     @endforeach
                                 </div>
                             </div>
                             <div class="flex items-center justify-between w-full mt-6">
-                                <span class="text-sm text-gray-500">Tahun Terbit : {{ $book->tahun_terbit }}</span>
+                                <span class="text-sm text-gray-500">Tahun Terbit : {{ $book->publication_year }}</span>
                                 <a href="#"
                                     class="inline-flex items-center justify-center h-9 px-3 text-sm font-medium text-gray-100 bg-blue-500 hover:bg-blue-600 rounded-md transition relative">
                                     Baca buku

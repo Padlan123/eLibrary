@@ -26,7 +26,7 @@ new class extends Component {
             <x-nav-link wire:navigate :class="'text-gray-300'" :route="'admin.books'" :icon="'book-outline'"
                 :label="'Kelola E-Book'"></x-nav-link>
 
-            <x-nav-link wire:navigate :class="'text-gray-300'" :route="'admin.pengguna'" :icon="'person-outline'"
+            <x-nav-link wire:navigate :class="'text-gray-300'" :route="'admin.users'" :icon="'person-outline'"
                 :label="'Kelola Pengguna'"></x-nav-link>
 
             <hr class="text-gray-600">
