@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MemberSubcription extends Model
+class MemberSubscription extends Model
 {
     protected $fillable = [
         'member_id',
         'start_date',
         'end_date',
+        'package',
         'status',
     ];
 
