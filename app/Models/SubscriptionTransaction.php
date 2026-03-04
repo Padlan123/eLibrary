@@ -9,8 +9,13 @@ class SubscriptionTransaction extends Model
     protected $fillable = [
         'member_id',
         'package_id',
-        'transaction_date',
+        'name',
+        'number',
         'amount',
+        'invoice_number',
+        'duration_days',
+        'payment_proof',
+        'paid_date',
         'status',
     ];
 
