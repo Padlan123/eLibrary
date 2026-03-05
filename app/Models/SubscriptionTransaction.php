@@ -20,7 +20,7 @@ class SubscriptionTransaction extends Model
     ];
 
     protected $casts = [
-        'transaction_date' => 'datetime',
+        'paid_date' => 'date',
         'amount' => 'decimal:2',
     ];
 

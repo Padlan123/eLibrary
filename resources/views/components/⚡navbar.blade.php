@@ -17,7 +17,9 @@ new class extends Component {
         <nav class="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
             @guest
                 <div>
-                    <h1 class="text-xl font-bold text-white">Readify</h1>
+                    <a href="{{ route('welcome') }}">
+                        <h1 class="text-xl font-bold text-white">Readify</h1>
+                    </a>
                 </div>
                 <div class="flex items-center gap-6">
                     <a href="{{ route('login') }}" class="text-sm font-medium text-white hover:text-gray-200">Masuk</a>

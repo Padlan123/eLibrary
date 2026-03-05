@@ -3,8 +3,13 @@
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use App\Models\SubscriptionTransaction;
+use App\Models\MemberSubscription;
+use Carbon\Carbon;
+use App\Traits\WithFlashMessages;
 
 new class extends Component {
+    use WithFlashMessages;
+
     public bool $show = false;
     public string $imageUrl = '';
 
@@ -22,22 +27,44 @@ new class extends Component {
 
     public function approveTransaction($id)
     {
-        $transaksi = SubscriptionTransaction::find($id);
-        if (!$transaksi) {
+        $transaction = SubscriptionTransaction::find($id);
+        if (!$transaction) {
             return;
         }
-        $transaksi->status = 'Disetujui';
-        $transaksi->save();
+        $transaction->load('package');
+
+        if ($transaction->status == 'completed' || $transaction->status == 'rejected') {
+            $this->flashMessage('gagal', 'invoice sudah terdaftar', 'admin.dashboard');
+            return;
+        }
+        $existMemberSubscription = MemberSubscription::where('member_id', $transaction->member_id)->where('status', 'active')->where('end_date', '>', now())->latest('end_date')->first();
+
+        if ($existMemberSubscription) {
+            $existMemberSubscription->end_date = Carbon::parse($existMemberSubscription->end_date)->addDays($transaction->package->duration_days);
+            $existMemberSubscription->save();
+        } else {
+            MemberSubscription::create([
+                'member_id' => $transaction->member_id,
+                'start_date' => now(),
+                'end_date' => now()->addDays($transaction->duration_days),
+                'status' => 'active',
+            ]);
+        }
+        $transaction->status = 'completed';
+        $transaction->save();
+        $this->flashMessage('sukses', 'berlangganan disetujui', 'admin.dashboard');
     }
 
     public function rejectTransaction($id)
     {
-        $transaksi = SubscriptionTransaction::find($id);
-        if (!$transaksi) {
+        $transaction = SubscriptionTransaction::find($id);
+        if (!$transaction || $transaction->status == 'completed') {
+            $this->flashMessage('gagal', 'Transaksi sudah disetujui', 'admin.dashboard');
             return;
         }
-        $transaksi->status = 'Ditolak';
-        $transaksi->save();
+
+        $transaction->status = 'rejected';
+        $transaction->save();
     }
 
     #[computed]
@@ -56,14 +83,12 @@ new class extends Component {
 <div>
     <!-- CARDS -->
     <div class="grid md:grid-cols-2 gap-6 mb-8">
-        <div
-            class="bg-linear-to-r w-full from-indigo-500 to-indigo-600 text-white px-6 py-4 rounded-2xl shadow-lg hover:scale-[1.02] transition">
+        <div class="bg-linear-to-r w-full from-indigo-500 to-indigo-600 text-white px-6 py-4 rounded-2xl shadow-lg ">
             <p class="opacity-80 lg:text-base">Total Pengguna</p>
             <h3 class="text-2xl font-bold mt-2 lg:text-3xl">1,245</h3>
         </div>
 
-        <div
-            class="bg-linear-to-r w-full from-green-400 to-emerald-600 text-white px-6 py-4 rounded-2xl shadow-lg hover:scale-[1.02] transition">
+        <div class="bg-linear-to-r w-full from-green-400 to-emerald-600 text-white px-6 py-4 rounded-2xl shadow-lg ">
             <p class="opacity-80 lg:text-base">Total Profit Langganan</p>
             <h3 class="text-2xl font-bold mt-2 lg:text-3xl">Rp 12.500.000</h3>
         </div>
@@ -72,16 +97,70 @@ new class extends Component {
     <!-- TABLE -->
     <div class="bg-white rounded-2xl shadow-lg p-6 overflow-x-auto">
         <h3 class="text-xl font-bold mb-6">Konfirmasi Berlangganan</h3>
+        @if (session('gagal'))
+            <div id="toast-danger"
+                class="flex items-center w-full max-w-sm p-4 text-body bg-neutral-primary-soft rounded-base shadow-xs border border-default"
+                role="alert">
+                <div
+                    class="inline-flex items-center justify-center shrink-0 w-7 h-7 text-fg-danger bg-danger-soft rounded">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18 17.94 6M18 18 6.06 6" />
+                    </svg>
+                    <span class="sr-only">Error icon</span>
+                </div>
+                <div class="ms-3 text-sm font-normal">{{ session('gagal') }}</div>
+                <button type="button"
+                    class="ms-auto flex items-center justify-center text-body hover:text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded text-sm h-8 w-8 focus:outline-none"
+                    data-dismiss-target="#toast-danger" aria-label="Close">
+                    <span class="sr-only">Close</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18 17.94 6M18 18 6.06 6" />
+                    </svg>
+                </button>
+            </div>
+        @endif
 
+        @if (session('sukses'))
+            <div id="toast-success"
+                class="flex items-center w-full max-w-sm p-4 text-body bg-neutral-primary-soft rounded-base shadow-xs border border-default"
+                role="alert">
+                <div
+                    class="inline-flex items-center justify-center shrink-0 w-7 h-7 text-fg-success bg-success-soft rounded">
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 11.917 9.724 16.5 19 7.5" />
+                    </svg>
+                    <span class="sr-only">Check icon</span>
+                </div>
+                <div class="ms-3 text-sm font-normal">{{ session('sukses') }}</div>
+                <button type="button"
+                    class="ms-auto flex items-center justify-center text-body hover:text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded text-sm h-8 w-8 focus:outline-none"
+                    data-dismiss-target="#toast-success" aria-label="Close">
+                    <span class="sr-only">Close</span>
+                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18 17.94 6M18 18 6.06 6" />
+                    </svg>
+                </button>
+            </div>
+        @endif
         <table class="w-full border-separate border-spacing-y-3 min-w-250 lg:min-w-0">
             <thead>
                 <tr class="text-gray-500 text-left">
-                    <th>Nama</th>
-                    <th>Nama Paket</th>
-                    <th>Nama Pengirim</th>
-                    <th>Nomor Pengirim</th>
-                    <th>Tanggal</th>
-                    <th>Status</th>
+                    <th class="text-center">Nama Pengguna</th>
+                    <th class="text-center">Nama Paket</th>
+                    <th class="text-center">Nama Pengirim</th>
+                    <th class="text-center">Nomor Pengirim</th>
+                    <th class="text-center">Tanggal</th>
+                    <th class="text-center">Bukti</th>
+                    <th class="text-center">Status</th>
+                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
 
@@ -108,9 +187,19 @@ new class extends Component {
                         </td>
 
                         <td class="p-1">
-                            <span class="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-sm">
-                                {{ $transaction->status }}
-                            </span>
+                            @if ($transaction->status == 'pending')
+                                <span class="bg-yellow-100 text-yellow-600 px-3 py-1 rounded-full text-sm">
+                                    Pending
+                                </span>
+                            @elseif ($transaction->status == 'rejected')
+                                <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">
+                                    Ditolak
+                                </span>
+                            @elseif ($transaction->status == 'completed')
+                                <span class="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm">
+                                    Disetujui
+                                </span>
+                            @endif
                         </td>
 
                         <td class="p-1 space-x-2">
@@ -135,7 +224,7 @@ new class extends Component {
             </tbody>
         </table>
     </div>
-    {{-- resources/views/livewire/bukti-pembayaran-modal.blade.php --}}
+
     @if ($show)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60" wire:click.self="close">
             <div class="relative bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4">

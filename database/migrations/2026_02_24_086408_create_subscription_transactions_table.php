@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('name');
             $table->integer('number');
             $table->decimal('amount', 8, 2);
-            $table->integer('duration_days');
             $table->enum('status', ['pending', 'completed', 'rejected'])->default('pending');
             $table->dateTime('paid_date');
             $table->string('payment_proof')->nullable();

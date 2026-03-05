@@ -10,7 +10,6 @@ class MemberSubscription extends Model
         'member_id',
         'start_date',
         'end_date',
-        'package',
         'status',
     ];
 

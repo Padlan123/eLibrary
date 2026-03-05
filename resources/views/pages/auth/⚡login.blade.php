@@ -37,8 +37,9 @@ new class extends Component {
 };
 ?>
 <div>
-    <div class="bg-linear-to-br from-orange-100 via-blue-400 to-blue-600 flex items-center justify-center font-sans">
-        <section class="min-h-screen w-full flex items-center justify-center px-4">
+    <div
+        class="bg-linear-to-br from-orange-100 via-blue-400 to-blue-600 flex items-center justify-center font-sans fade-in-up">
+        <div class="min-h-screen w-full flex items-center justify-center px-4">
             <div class="bg-white/30 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-full max-w-md">
                 <div class="text-center mb-8">
                     <h1 class="text-4xl font-bold text-orange-50 bg-clip-text mb-2">
@@ -77,7 +78,6 @@ new class extends Component {
                         </div>
                     </button>
                 </form>
-
                 <div class="mt-6 text-center">
                     <p class="text-sm text-gray-600">
                         Belum punya akun?
@@ -87,7 +87,7 @@ new class extends Component {
                     </p>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
     @livewire('footer')
 </div>
