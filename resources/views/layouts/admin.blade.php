@@ -24,6 +24,22 @@
         .fade-in-up {
             animation: fadeInUp 1s ease-out forwards;
         }
+
+        nav a {
+            animation: slideIn 0.3s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
     </style>
 
     @livewireStyles
@@ -33,12 +49,10 @@
     @livewire('sidebar')
     <div class="flex flex-1 flex-col min-w-0 md:ml-64">
         @livewire('navbar.admin')
-        <main class="p-4 md:p-8 flex-1 min-w-0">
+        <main class="p-4 md:p-8 flex-1 min-w-0 fade-in-up">
             {{ $slot }}
         </main>
     </div>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
     @livewireScripts
 </body>

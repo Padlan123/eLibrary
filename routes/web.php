@@ -30,6 +30,7 @@ Route::prefix('/Readify')->group(function () {
             Route::livewire('/dashboard', 'pages::admin.dashboard')->name('dashboard');
             Route::livewire('/ebook', 'pages::admin.books')->name('books');
             Route::livewire('/pengguna', 'pages::admin.users')->name('users');
+            Route::livewire('/langganan', 'pages::admin.subscriptions')->name('subscriptions');
         });
     });
 });
