@@ -9,6 +9,18 @@ new class extends Component {
     public string $email = '';
     public string $password = '';
 
+    public function mount()
+    {
+        if (auth()->check()) {
+            $role = auth()->user()->getRoleNames()->first();
+            return match ($role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'anggota' => redirect()->route('anggota.home'),
+                default => redirect()->route('login'),
+            };
+        }
+    }
+
     public function login()
     {
         $validated = $this->validateLogin();

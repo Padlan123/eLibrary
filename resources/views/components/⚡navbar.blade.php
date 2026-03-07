@@ -65,7 +65,7 @@ new class extends Component {
                     <div class="flex gap-5">
                         <a href="{{ route('anggota.home') }}"
                             class="text-sm font-medium text-white hover:text-gray-200">Beranda</a>
-                        <a href="{{ route('anggota.berlangganan') }}"
+                        <a href="{{ route('anggota.subscriptions') }}"
                             class="text-sm font-medium text-white hover:text-gray-200">Berlangganan</a>
                     </div>
                     <form class="flex items-center gap-2">

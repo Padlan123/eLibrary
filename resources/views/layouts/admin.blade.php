@@ -47,13 +47,15 @@
 
 <body class="font-sans">
     @livewire('sidebar')
-    <div class="flex flex-1 flex-col min-w-0 md:ml-64">
+    <div class="flex flex-1 flex-col min-w-0 md:ml-50 lg:ml-64">
         @livewire('navbar.admin')
         <main class="p-4 md:p-8 flex-1 min-w-0 fade-in-up">
             {{ $slot }}
         </main>
+        @livewire('pages::admin.crud-book.create')
+        @livewire('pages::admin.crud-book.delete')
+        @livewire('pages::admin.crud-book.update')
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
     @livewireScripts
 </body>
 

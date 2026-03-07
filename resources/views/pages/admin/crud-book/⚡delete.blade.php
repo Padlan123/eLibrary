@@ -32,13 +32,18 @@ new class extends Component {
 };
 ?>
 
-<div>
-    <section x-data="{ open: false }" x-on:open-delete-modal.window="open = true"
-        x-on:close-delete-modal.window="open = false" x-show="open" x-cloak
-        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+<div x-data="{ open: false }" @open-delete-modal.window="open = true" @close-delete-modal.window="open = false">
+    <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-100"
-        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click="open = false"
+        class="fixed inset-0 z-40 bg-black/50">
+    </div>
+
+    <section x-show="open" x-cloak x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100"
+        x-transition:leave-end="opacity-0 scale-95"
+        class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
                 <button type="button"

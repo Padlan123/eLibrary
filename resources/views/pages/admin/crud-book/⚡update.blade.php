@@ -107,12 +107,12 @@ new class extends Component {
         preview: null,
         update_cover_file_name: 'Tidak ada file dipilih',
         update_pdf_file_name: 'Tidak ada file dipilih',
-    }" x-on:open-update-modal.window="open = true"
-        x-on:close-update-modal.window="open = false" x-cloak @click="open = false" x-show="open"
-        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-100"
-        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-        class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    }" @open-update-modal.window="open = true" @close-update-modal.window="open = false"
+        x-cloak @click="open = false" x-show="open" x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center min-h-screen bg-black/50">
         <div @click.stop class="relative p-4 w-full max-w-md max-h-full">
             <div
                 class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6 fade-in-up">

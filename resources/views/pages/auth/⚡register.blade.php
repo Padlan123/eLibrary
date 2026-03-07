@@ -14,6 +14,18 @@ new class extends Component {
     public string $password = '';
     public string $password_confirmation = '';
 
+    public function mount()
+    {
+        if (auth()->check()) {
+            $role = auth()->user()->getRoleNames()->first();
+            return match ($role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'anggota' => redirect()->route('anggota.home'),
+                default => redirect()->route('login'),
+            };
+        }
+    }
+
     public function register()
     {
         $validated = $this->validateRegister();

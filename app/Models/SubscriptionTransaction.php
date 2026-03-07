@@ -13,7 +13,6 @@ class SubscriptionTransaction extends Model
         'number',
         'amount',
         'invoice_number',
-        'duration_days',
         'payment_proof',
         'paid_date',
         'status',

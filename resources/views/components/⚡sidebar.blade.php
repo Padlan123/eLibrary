@@ -11,9 +11,11 @@ new class extends Component {
 };
 ?>
 
-<div>
-
-    <aside id="default-sidebar"
+<div x-data="{ open: false }" @toggle-sidebar.window="open = !open">
+    <div x-show="open" x-cloak x-transition.opacity @click="open = false"
+        class="fixed inset-0 z-40 bg-black/70 md:hidden">
+    </div>
+    <aside :class="open ? 'translate-x-0' : '-translate-x-full'"
         class="fixed top-0 left-0 z-50 w-52 h-full bg-linear-to-b from-gray-900 to-gray-800 text-white px-4 py-6
         transition-transform -translate-x-full duration-300 ease-in-out md:translate-x-0 md:w-50 lg:w-64"
         aria-label="Sidebar">
@@ -53,8 +55,7 @@ new class extends Component {
             <hr class="text-gray-600">
 
 
-            <button data-modal-target="logout" data-modal-toggle="logout" data-drawer-hide="default-sidebar"
-                type="button"
+            <button @click="open = false; $dispatch('open-logout-modal')" x-transition.opacity type="button"
                 class="w-full flex items-center gap-3 rounded-lg text-gray-300 font-semibold shadow-lg transition duration-300 ease-in-out px-3 py-2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
                     <path fill-rule="evenodd"
@@ -68,11 +69,11 @@ new class extends Component {
 
     </aside>
 
-    <div id="logout" tabindex="-1"
-        class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-2/3 md:inset-0 h-[calc(100%-1rem)] max-h-full mx-auto lg:w-1/2">
+    <div x-data="{ show: false }" x-show="show" @open-logout-modal.window="show = true" x-transition.opacity
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/70" style="display: none;">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
-                <button type="button"
+                <button type="button" @click="show = false"
                     class="absolute top-3 end-2.5 text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center"
                     data-modal-hide="logout">
                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -96,7 +97,7 @@ new class extends Component {
                             class="text-white bg-danger box-border border border-transparent hover:bg-danger-strong focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                             Keluar
                         </button>
-                        <button data-modal-hide="logout" type="button"
+                        <button @click="show = false" type="button"
                             class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Batal</button>
                     </div>
                 </div>

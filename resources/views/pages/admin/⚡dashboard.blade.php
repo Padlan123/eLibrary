@@ -14,6 +14,7 @@ new class extends Component {
 ?>
 
 <div>
+
     <!-- CARDS -->
     <div class="grid md:grid-cols-2 gap-6 mb-8">
         <div class="bg-linear-to-r w-full from-indigo-500 to-indigo-600 text-white px-6 py-4 rounded-2xl shadow-lg ">
@@ -26,7 +27,5 @@ new class extends Component {
             <h3 class="text-2xl font-bold mt-2 lg:text-3xl">Rp 12.500.000</h3>
         </div>
     </div>
-
-
 
 </div>

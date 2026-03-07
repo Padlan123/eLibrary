@@ -20,7 +20,7 @@ Route::prefix('/Readify')->group(function () {
                 return redirect()->route('anggota.home');
             });
             Route::livewire('/home', 'pages::anggota.home')->name('home');
-            Route::livewire('/langganan', 'pages::anggota.form-berlangganan')->name('berlangganan');
+            Route::livewire('/langganan', 'pages::anggota.form-berlangganan')->name('subscriptions');
             Route::livewire('profil', 'pages::anggota.profil')->name('profil');
         });
         Route::prefix('admin')->middleware('role:admin')->name('admin.')->group(function () {

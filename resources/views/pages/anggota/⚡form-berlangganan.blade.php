@@ -22,10 +22,8 @@ new class extends Component {
 
     public function updatedPaymentProof(): void
     {
-        // Validasi langsung saat file selesai diupload
-        // $this->validateOnly('payment_proof');
+        $this->validateOnly('payment_proof');
 
-        // Simpan temporary path sebagai "checkpoint"
         $this->uploaded_path = $this->payment_proof?->getRealPath();
         $this->is_uploading = false;
     }
@@ -81,7 +79,6 @@ new class extends Component {
             'invoice_number' => $this->generateInvoiceNumber(),
             'name' => $this->name,
             'number' => $this->number,
-            'duration_days' => $packageSelected->duration_days,
             'amount' => $packageSelected->price,
             'payment_proof' => $path,
             'paid_date' => now(),
