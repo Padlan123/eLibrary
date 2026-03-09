@@ -5,10 +5,15 @@ use App\Traits\WithFlashMessages;
 use Livewire\Attributes\Computed;
 use App\Models\SubscriptionTransaction;
 use App\Models\MemberSubscription;
+use App\Models\Package;
 use Carbon\Carbon;
 
 new class extends Component {
     use WithFlashMessages;
+
+    public $packageId = [];
+    public $status = ['pending', 'completed', 'rejected'];
+    public $search = '';
 
     public bool $show = false;
     public string $imageUrl = '';
@@ -67,10 +72,41 @@ new class extends Component {
         $transaction->save();
     }
 
+    #[Computed]
+    public function packages()
+    {
+        return Package::all();
+    }
+
+    #[Computed]
+    public function selectedPackages()
+    {
+        return Package::whereIn('id', $this->packageId)->get();
+    }
+
+    #[Computed]
+    public function selectedStatuses()
+    {
+        return SubscriptionTransaction::whereIn('status', $this->status)->get();
+    }
+
     #[computed]
     public function transactions()
     {
-        return SubscriptionTransaction::latest()->get();
+        return SubscriptionTransaction::with('package', 'member')
+            ->when($this->packageId, function ($query) {
+                $query->whereIn('package_id', $this->packageId);
+            })
+            ->when($this->status, function ($query) {
+                $query->whereIn('status', $this->status);
+            })
+            ->when($this->search, function ($query) {
+                $query->whereHas('member', function ($q) {
+                    $q->where('username', 'like', '%' . $this->search . '%');
+                });
+            })
+            ->latest()
+            ->get();
     }
 
     public function render()
@@ -82,7 +118,7 @@ new class extends Component {
 
 <div>
 
-    <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-100">
+    <div class="max-w-7xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-100 mb-8">
 
         <!-- ── Page Header ─────────────────────────────────── -->
         <div
@@ -170,95 +206,111 @@ new class extends Component {
                         <path d="m21 21-4.35-4.35" />
                     </svg>
                 </div>
-                <input type="text" id="tableSearch"
+                <input wire:model.live.debounce="search" type="text"
                     class="block w-full pl-9 pr-4 py-2.5 text-sm text-slate-700 bg-white border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-slate-400"
-                    placeholder="Cari pengguna, paket..." />
+                    placeholder="Cari pengguna..." />
             </div>
 
             <!-- Actions -->
             <div class="flex items-center gap-2 flex-wrap">
-
-                <!-- Laporan Dropdown (Flowbite) -->
-                <div class="relative">
-                    <button id="laporanBtn" data-dropdown-toggle="laporanDropdown" type="button"
-                        class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors">
-                        <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                            stroke-width="2">
-                            <path
-                                d="M9 17v-2m3 2v-4m3 4v-6M5 20h14a2 2 0 0 0 2-2V8l-5-5H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z" />
-                        </svg>
-                        Laporan
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" stroke-width="2.5">
-                            <path d="m6 9 6 6 6-6" />
-                        </svg>
-                    </button>
-                    <div id="laporanDropdown"
-                        class="z-20 hidden bg-white divide-y divide-slate-100 rounded-xl shadow-lg border border-slate-100 w-44">
-                        <ul class="py-1 text-sm text-slate-700">
-                            <li><a href="#"
-                                    class="flex items-center gap-2 px-4 py-2.5 hover:bg-slate-50 hover:text-blue-700 transition-colors">
-                                    <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor" stroke-width="2">
-                                        <rect x="3" y="4" width="18" height="18" rx="2" />
-                                        <path d="M16 2v4M8 2v4M3 10h18" />
-                                    </svg>
-                                    Bulanan
-                                </a></li>
-                        </ul>
-                        <div class="py-1">
-                            <a href="#"
-                                class="flex items-center gap-2 px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 hover:text-blue-700 transition-colors">
-                                <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path d="M3 3v18h18" />
-                                    <path d="m19 9-5 5-4-4-3 3" />
-                                </svg>
-                                Tahunan
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filter Dropdown (Flowbite) -->
-                <div class="relative">
-                    <button id="filterBtn" data-dropdown-toggle="filterDropdown" type="button"
+                <ul class="max-w-md space-y-1 text-body list-disc list-inside">
+                    <li class="text-xs list-none">
+                        filter :
+                    </li>
+                </ul>
+                <ul class="max-w-md space-y-1 text-body list-disc list-inside">
+                    <li class="text-xs">
+                        @foreach ($this->selectedPackages as $package)
+                            {{ $package->name }} @if (!$loop->last)
+                                ,
+                            @endif
+                        @endforeach
+                    </li>
+                </ul>
+                <ul class="max-w-md space-y-1 text-body list-disc list-inside">
+                    <li class="text-xs">
+                        @foreach ($this->selectedStatuses as $status)
+                            {{ $status->status }} @if (!$loop->last)
+                                ,
+                            @endif
+                        @endforeach
+                    </li>
+                </ul>
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" type="button"
                         class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors">
                         <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                             stroke-width="2">
                             <path d="M3 4h18M7 8h10M11 12h2" />
                         </svg>
-                        Filter
+                        Paket
                         <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor" stroke-width="2.5">
                             <path d="m6 9 6 6 6-6" />
                         </svg>
                     </button>
-                    <div id="filterDropdown"
-                        class="z-20 hidden w-52 p-4 bg-white rounded-xl shadow-lg border border-slate-100">
-                        <p class="mb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Filter Status</p>
+                    <div x-show="open" @click.outside="open = false" x-transition
+                        class="absolute z-20 w-52 p-4 bg-white rounded-xl shadow-lg border border-slate-100">
+                        <p class="mb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Filter Paket</p>
+                        <ul class="space-y-2.5 text-sm">
+                            @foreach ($this->packages as $package)
+                                <li wire:key="{{ $package->id }}" class="flex items-center gap-2.5">
+                                    <input wire:model.live="packageId" id="{{ $package->id }}" type="checkbox"
+                                        checked value="{{ $package->id }}" class="w-4 h-4 rounded " />
+                                    <label for="{{ $package->id }}"
+                                        class="text-sm font-medium text-slate-700 cursor-pointer">{{ $package->name }}</label>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Filter Dropdown (Flowbite) -->
+                <div class="relative" x-data="{ open: false }">
+                    <button @click="open = !open" type="button"
+                        class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors">
+                        <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M3 4h18M7 8h10M11 12h2" />
+                        </svg>
+                        Status
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <path d="m6 9 6 6 6-6" />
+                        </svg>
+                    </button>
+                    <div x-show="open" @click.outside="open = false" x-transition
+                        class="absolute z-20 w-40 p-4 bg-white rounded-xl shadow-lg border border-slate-100">
+                        <p class="mb-3 text-xs font-bold text-slate-400 uppercase tracking-widest">Filter Status
+                        </p>
                         <ul class="space-y-2.5 text-sm">
                             <li class="flex items-center gap-2.5">
-                                <input id="f-pending" type="checkbox" checked
-                                    class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer" />
+                                <input wire:model.live="status" id="f-pending" type="checkbox" checked
+                                    class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
+                                    value="pending" />
                                 <label for="f-pending"
                                     class="text-sm font-medium text-slate-700 cursor-pointer">Pending</label>
                             </li>
                             <li class="flex items-center gap-2.5">
-                                <input id="f-approved" type="checkbox" checked
-                                    class="w-4 h-4 rounded text-green-600 border-slate-300 focus:ring-green-500 cursor-pointer" />
+                                <input wire:model.live="status" id="f-approved" type="checkbox" checked
+                                    class="w-4 h-4 rounded text-green-600 border-slate-300 focus:ring-green-500 cursor-pointer"
+                                    value="completed" />
                                 <label for="f-approved"
                                     class="text-sm font-medium text-slate-700 cursor-pointer">Disetujui</label>
                             </li>
                             <li class="flex items-center gap-2.5">
-                                <input id="f-rejected" type="checkbox" checked
-                                    class="w-4 h-4 rounded text-red-600 border-slate-300 focus:ring-red-500 cursor-pointer" />
+                                <input wire:model.live="status" id="f-rejected" type="checkbox" checked
+                                    class="w-4 h-4 rounded text-red-600 border-slate-300 focus:ring-red-500 cursor-pointer"
+                                    value="rejected" />
                                 <label for="f-rejected"
                                     class="text-sm font-medium text-slate-700 cursor-pointer">Ditolak</label>
                             </li>
                         </ul>
                     </div>
                 </div>
+
+
+
 
             </div>
         </div>
@@ -568,6 +620,8 @@ new class extends Component {
                 </div>
             </div>
         @endif
+
     </div>
+    @livewire('pages::admin.reports.transactions')
 
 </div>

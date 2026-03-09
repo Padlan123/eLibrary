@@ -8,13 +8,23 @@ new class extends Component {
     #[Computed]
     public function subscribes()
     {
-        return User::whereHas('subscribes')->with('subscribes')->get();
+        return User::whereHas('subscribes', function ($query) {
+            $query->active();
+        })
+            ->with([
+                'subscribes',
+                function ($query) {
+                    $query->active();
+                },
+            ])
+            ->latest()
+            ->get();
     }
 
     #[Computed]
     public function users()
     {
-        return User::latest()->get();
+        return User::role('anggota')->latest()->get();
     }
 
     public function render()
@@ -25,21 +35,6 @@ new class extends Component {
 ?>
 
 <div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div
-            class="bg-linear-to-r from-blue-500 to-indigo-600 text-white p-6 md:p-8 rounded-2xl shadow-lg hover:scale-[1.02] transition">
-            <p class="opacity-80 text-sm md:text-base">Total Pengguna</p>
-            <h3 class="text-3xl md:text-4xl font-bold mt-2">{{ $this->users->count() }}</h3>
-        </div>
-
-        <div
-            class="bg-linear-to-r from-cyan-400 to-cyan-600 text-white p-6 md:p-8 rounded-2xl shadow-lg hover:scale-[1.02] transition">
-            <p class="opacity-80 text-sm md:text-base">
-                Total pengguna berlangganan
-            </p>
-            <h3 class="text-3xl md:text-4xl font-bold mt-2">{{ $this->subscribes->count() }}</h3>
-        </div>
-    </div>
     <div class="bg-white rounded-2xl shadow-lg p-4 md:p-6 overflow-x-auto">
         <h3 class="text-lg md:text-xl font-bold mb-6">Tabel Pengguna</h3>
 

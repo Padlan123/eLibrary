@@ -84,7 +84,7 @@ new class extends Component {
             'paid_date' => now(),
         ]);
 
-        $this->flashMessage('sukses', 'Berhasil mengajukan berlangganan!', 'anggota.berlangganan');
+        $this->flashMessage('sukses', 'Berhasil mengajukan berlangganan!', 'anggota.subscriptions');
     }
 
     public function render()

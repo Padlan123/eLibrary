@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,6 +32,8 @@ Route::prefix('/Readify')->group(function () {
             Route::livewire('/ebook', 'pages::admin.books')->name('books');
             Route::livewire('/pengguna', 'pages::admin.users')->name('users');
             Route::livewire('/langganan', 'pages::admin.subscriptions')->name('subscriptions');
+            Route::get('/laporan/penjualan/download', [ReportController::class, 'download'])
+                ->name('report.transactions.download');
         });
     });
 });

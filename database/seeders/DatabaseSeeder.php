@@ -40,5 +40,17 @@ class DatabaseSeeder extends Seeder
         ]);
         $anggota->assignRole('anggota');
         $admin->assignRole('admin');
+
+        User::factory()->admin()->create([
+            'username'  => 'Supri',
+            'email' => 'admin@example.com',
+        ]);
+
+        User::factory()->admin()->create([
+            'username'  => 'Supri',
+            'email' => 'editor@example.com',
+        ]);
+
+        User::factory()->anggota()->count(10)->create();
     }
 }

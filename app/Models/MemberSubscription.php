@@ -22,4 +22,12 @@ class MemberSubscription extends Model
     {
         return $this->belongsTo(User::class, 'member_id');
     }
+
+    public function scopeActive($query)
+    {
+        $today = now()->toDateString();
+        return $query->where('status', 'active')
+            ->where('start_date', '<=', $today)
+            ->where('end_date', '=>', $today);
+    }
 }
