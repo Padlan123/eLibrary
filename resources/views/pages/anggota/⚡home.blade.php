@@ -293,5 +293,5 @@ new class extends Component {
             </p>
         </div>
     </section>
-    @livewire('footer')
+    <x-footer></x-footer>
 </div>

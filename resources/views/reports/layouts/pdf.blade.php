@@ -46,8 +46,18 @@
             margin-top: 3px;
         }
 
+        .filter-info {
+            margin: 6px 0;
+        }
+
+        .filter-info p {
+            margin: 2px 0;
+            font-size: 12px;
+            color: #595c63;
+        }
+
         table {
-            width: 80%;
+            width: 100%;
             margin: 10px auto;
             border-collapse: collapse;
             margin-top: 10px;

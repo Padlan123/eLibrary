@@ -1,12 +1,3 @@
-<?php
-
-use Livewire\Component;
-
-new class extends Component {
-    //
-};
-?>
-
 <div>
     <div class="w-full mt-12 pt-10 border-t border-gray-700">
         <div class="flex items-center justify-center mb-5">

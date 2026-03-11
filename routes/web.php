@@ -7,13 +7,16 @@ Route::get('/', function () {
     return redirect()->route('welcome');
 });
 Route::prefix('/Readify')->group(function () {
-
-    Route::get('/', function () {
-        return redirect()->route('welcome');
+    Route::middleware('guest')->group(function () {
+        Route::get('/', function () {
+            return redirect()->route('welcome');
+        });
+        Route::get('/home', function () {
+            return view('welcome');
+        })->name('welcome');
+        Route::livewire('/login', 'pages::auth.login')->name('login');
+        Route::livewire('/register', 'pages::auth.register')->name('register');
     });
-    Route::livewire('/home', 'pages::landing_page.welcome')->name('welcome');
-    Route::livewire('/login', 'pages::auth.login')->name('login');
-    Route::livewire('/register', 'pages::auth.register')->name('register');
 
     Route::middleware('auth')->group(function () {
         Route::prefix('anggota')->middleware('role:anggota')->name('anggota.')->group(function () {

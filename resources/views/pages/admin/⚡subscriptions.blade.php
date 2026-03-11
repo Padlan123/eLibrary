@@ -12,11 +12,32 @@ new class extends Component {
     use WithFlashMessages;
 
     public $packageId = [];
-    public $status = ['pending', 'completed', 'rejected'];
+    public $status = [];
     public $search = '';
 
     public bool $show = false;
     public string $imageUrl = '';
+
+    public $from = ' ';
+    public $to = ' ';
+
+    public function mount()
+    {
+        $this->from = now()->startOfMonth()->format('Y-m-d');
+        $this->to = now()->format('Y-m-d');
+    }
+
+    #[computed]
+    public function getUrlDownload()
+    {
+        return route('admin.report.transactions.download', [
+            'from' => $this->from,
+            'to' => $this->to,
+            'package_id' => $this->packageId,
+            'status' => $this->status,
+            'search' => $this->search,
+        ]);
+    }
 
     public function showPaymentProof(string $imageUrl)
     {
@@ -105,8 +126,11 @@ new class extends Component {
                     $q->where('username', 'like', '%' . $this->search . '%');
                 });
             })
+            ->when($this->from && $this->to, function ($query) {
+                $query->whereBetween('paid_date', [Carbon::parse($this->from)->startOfDay(), Carbon::parse($this->to)->endOfDay()]);
+            })
             ->latest()
-            ->get();
+            ->paginate(10);
     }
 
     public function render()
@@ -220,20 +244,24 @@ new class extends Component {
                 </ul>
                 <ul class="max-w-md space-y-1 text-body list-disc list-inside">
                     <li class="text-xs">
-                        @foreach ($this->selectedPackages as $package)
+                        @forelse ($this->selectedPackages as $package)
                             {{ $package->name }} @if (!$loop->last)
                                 ,
                             @endif
-                        @endforeach
+                        @empty
+                            -
+                        @endforelse
                     </li>
                 </ul>
                 <ul class="max-w-md space-y-1 text-body list-disc list-inside">
                     <li class="text-xs">
-                        @foreach ($this->selectedStatuses as $status)
+                        @forelse ($this->selectedStatuses as $status)
                             {{ $status->status }} @if (!$loop->last)
                                 ,
                             @endif
-                        @endforeach
+                        @empty
+                            -
+                        @endforelse
                     </li>
                 </ul>
                 <div class="relative" x-data="{ open: false }">
@@ -255,8 +283,9 @@ new class extends Component {
                         <ul class="space-y-2.5 text-sm">
                             @foreach ($this->packages as $package)
                                 <li wire:key="{{ $package->id }}" class="flex items-center gap-2.5">
-                                    <input wire:model.live="packageId" id="{{ $package->id }}" type="checkbox"
-                                        checked value="{{ $package->id }}" class="w-4 h-4 rounded " />
+                                    <input wire:model.live.debounce="packageId" id="{{ $package->id }}"
+                                        type="checkbox" checked value="{{ $package->id }}"
+                                        class="w-4 h-4 rounded " />
                                     <label for="{{ $package->id }}"
                                         class="text-sm font-medium text-slate-700 cursor-pointer">{{ $package->name }}</label>
                                 </li>
@@ -285,7 +314,7 @@ new class extends Component {
                         </p>
                         <ul class="space-y-2.5 text-sm">
                             <li class="flex items-center gap-2.5">
-                                <input wire:model.live="status" id="f-pending" type="checkbox" checked
+                                <input wire:model.live.debounce="status" id="f-pending" type="checkbox" checked
                                     class="w-4 h-4 rounded text-blue-600 border-slate-300 focus:ring-blue-500 cursor-pointer"
                                     value="pending" />
                                 <label for="f-pending"
@@ -409,85 +438,8 @@ new class extends Component {
             </table>
         </div>
 
-        <!-- ── TABLET (sm–lg): Scrollable compact table ─────── -->
-        <div class="hidden sm:block lg:hidden overflow-x-auto">
-            <p class="text-xs text-slate-400 px-4 pt-3 pb-1 flex items-center gap-1.5">
-                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path
-                        d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2" />
-                </svg>
-                Geser ke kanan untuk lihat semua kolom
-            </p>
-            <div style="min-width: 600px;">
-                <table class="w-full text-sm text-left">
-                    <thead
-                        class="text-xs text-slate-400 uppercase tracking-widest bg-slate-50/80 border-b border-slate-100">
-                        <tr>
-                            <th class="px-4 py-3 font-semibold">Pengguna</th>
-                            <th class="px-4 py-3 font-semibold">Paket</th>
-                            <th class="px-4 py-3 font-semibold">Nama Pengirim</th>
-                            <th class="px-4 py-3 font-semibold">No. Pengirim</th>
-                            <th class="px-4 py-3 font-semibold">Tanggal</th>
-                            <th class="px-4 py-3 font-semibold text-center">Bukti</th>
-                            <th class="px-4 py-3 font-semibold text-center">Status</th>
-                            <th class="px-4 py-3 font-semibold text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-50">
-                        @forelse ($this->transactions as $transaction)
-                            <tr wire:key="{{ $transaction->id }}"
-                                class="bg-white hover:bg-blue-50/30 transition-colors">
-                                <td class="px-4 py-3 font-semibold text-slate-800">
-                                    {{ $transaction->member->username }}
-                                </td>
-                                <td class="px-4 py-3"><span
-                                        class="bg-blue-50 text-blue-700 text-xs font-semibold px-2 py-0.5 rounded">{{ $transaction->package->name }}</span>
-                                </td>
-                                <td class="px-4 py-3 num-pill text-slate-500">{{ $transaction->name }}</td>
-                                <td class="px-4 py-3 num-pill text-slate-500">{{ $transaction->number }}</td>
-                                <td class="px-4 py-3 text-xs text-slate-500">
-                                    {{ $transaction->paid_date->format('d M Y') }}</td>
-                                <td class="px-4 py-3 text-center"><button
-                                        wire:click="showPaymentProof('{{ asset('storage/' . $transaction->payment_proof) }}')"
-                                        class="inline-flex items-center justify-center w-7 h-7 bg-blue-600 text-white rounded-lg hover:bg-blue-700"><svg
-                                            class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                                            <circle cx="12" cy="12" r="3" />
-                                        </svg></button></td>
-                                <td class="px-4 py-3 text-center"><span
-                                        class="inline-flex items-center gap-1 bg-amber-50 text-amber-700 text-xs font-semibold px-2 py-0.5 rounded-full"><span
-                                            class="w-1.5 h-1.5 bg-amber-400 rounded-full animate-pulse"></span>{{ $transaction->status }}</span>
-                                </td>
-                                <td class="px-4 py-3">
-                                    <div class="flex gap-1 justify-center"><button
-                                            wire:click="approveTransaction({{ $transaction->id }})"
-                                            class="text-xs font-semibold text-green-700 bg-green-50 border border-green-200 px-2.5 py-1 rounded-lg hover:bg-green-100">✓</button><button
-                                            wire:click="rejectTransaction({{ $transaction->id }})"
-                                            class="text-xs font-semibold text-red-700 bg-red-50 border border-red-200 px-2.5 py-1 rounded-lg hover:bg-red-100">✕</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="8" class="text-center py-16 text-slate-400">
-                                    <svg class="w-10 h-10 mx-auto mb-3 text-slate-300" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                        <path
-                                            d="M9 17v-2m3 2v-4m3 4v-6M5 20h14a2 2 0 0 0 2-2V8l-5-5H5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z" />
-                                    </svg>
-                                    <p class="font-medium text-sm">Tidak ada transaksi ditemukan</p>
-                                </td>
-                            </tr>
-                        @endforelse
-
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
         <!-- ── MOBILE CARDS (<sm) ───────────────────────────── -->
-        <div class="md:hidden px-3 py-3 space-y-3">
+        <div class="block lg:hidden px-3 py-3 space-y-3">
 
             @forelse ($this->transactions as $transaction)
                 <div class="card-animate bg-white border border-slate-100 rounded-xl shadow-xs overflow-hidden"
@@ -622,6 +574,24 @@ new class extends Component {
         @endif
 
     </div>
-    @livewire('pages::admin.reports.transactions')
+    <h1 class="leading-5 text-sm text-center text-slate-500">filter dan download berdasarkan tanggal</h1>
+    <div class="flex flex-col lg:flex-row gap-4 px-6 py-4 w-full lg:w-2/3 lg:mx-auto">
+        <form class="flex gap-4 items-center lg:w-full">
+            <input wire:model.live.debounce="from" id="from" type="date"
+                class="w-full inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors">
+
+            <label class="hidden lg:block">sampai</label>
+
+            <input wire:model.live.debounce="to" id="to" type="date"
+                class="w-full inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors">
+        </form>
+
+        <a href="{{ $this->getUrlDownload() }}"
+            class="w-full px-4 py-2 inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white text-semibold rounded-lg transition-colors">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                    d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
+            </svg>Download</a>
+    </div>
 
 </div>
