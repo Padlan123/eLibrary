@@ -33,9 +33,6 @@ new class extends Component {
     #[Computed]
     public function books()
     {
-        if ($this->limit) {
-            return collect();
-        }
         $books = Book::query()
             ->with('categories')
             ->when($this->category, function ($query) {
@@ -56,36 +53,107 @@ new class extends Component {
 ?>
 
 <div>
-    <section class="relative py-28 w-full"
-        style="background-image: url(/img/background/dashboard-pelanggan.webp); background-size: cover; background-position: center;">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
+    <section class="max-w-7xl mx-auto px-4 md:px-6 hero-carousel mt-32">
+        <div class="relative overflow-hidden rounded-xl shadow-lg">
+            <!-- CAROUSEL - MAX SLIDE 8 -->
+            <div x-data="{
+                current: 0,
+                total: 0,
+                autoplayInterval: null,
+                init() {
+                    this.total = this.$refs.track.children.length;
+                    this.startAutoplay();
+                },
+                next() {
+                    this.current = (this.current + 1) % this.total;
+                },
+                prev() {
+                    this.current = (this.current - 1 + this.total) % this.total;
+                },
+                goTo(index) {
+                    this.current = index;
+                },
+                startAutoplay() {
+                    this.autoplayInterval = setInterval(() => this.next(), 5000);
+                },
+                stopAutoplay() {
+                    clearInterval(this.autoplayInterval);
+                }
+            }" @mouseenter="stopAutoplay" @mouseleave="startAutoplay"
+                class="relative overflow-hidden aspect-video md:aspect-16/5">
+                <!-- TRACK -->
+                <div x-ref="track" class="flex transition-transform duration-500"
+                    :style="`transform: translateX(-${current * 100}%)`">
+                    @foreach ($this->books as $index => $book)
+                        <article class="min-w-full">
+                            @if ($book->cover_file_name)
+                                <img src="{{ url('storage/' . $book->cover_file_name) }}" alt="{{ $book->title }}"
+                                    loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                                    fetchpriority="{{ $index === 0 ? 'high' : 'low' }}"
+                                    class="w-full h-full object-cover" />
+                            @else
+                                <img src="{{ url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
+                                    alt="{{ $book->title }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                                    fetchpriority="{{ $index === 0 ? 'high' : 'low' }}"
+                                    class="w-full h-full object-cover" />
+                            @endif
+                        </article>
+                    @endforeach
 
-        <div class="relative max-w-7xl mx-auto px-8 py-28 text-center space-y-4">
-            <div class="grid grid-cols-1 items-center space-y-2 tracking-tight animate-fade-in">
-                <h2 class="text-5xl font-semibold text-gray-200">
-                    Baca Buku Dimana Saja
-                </h2>
-                <p class="max-w-4xl mx-auto text-lg text-gray-300 leading-relaxed">
-                    Digilab E-Book adalah situs web baca buku online. Buku Materi Pelajaran, Buku novel, Buku
-                    Self-Development. Tanpa Iklan menganggu dan hanya di READIFY.
-                </p>
+
+                </div>
+
+                <!-- PREV BUTTON -->
+                <button @click="prev"
+                    class="absolute z-99 left-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-9 h-9 flex items-center justify-center transition"
+                    aria-label="Previous slide">
+                    &#8592;
+                </button>
+
+                <!-- NEXT BUTTON -->
+                <button @click="next"
+                    class="absolute z-99 right-3 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white rounded-full w-9 h-9 flex items-center justify-center transition"
+                    aria-label="Next slide">
+                    &#8594;
+                </button>
+
+                <!-- DOT INDICATORS -->
+                <div class="absolute z-99 bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
+                    <template x-for="(_, index) in total" :key="index">
+                        <button @click="goTo(index)" :class="current === index ? 'bg-white scale-125' : 'bg-white/50'"
+                            class="w-2 h-2 rounded-full transition-all duration-300"
+                            :aria-label="`Go to slide ${index + 1}`"></button>
+                    </template>
+                </div>
             </div>
 
-            <div class="flex justify-center gap-4 mt-6">
-                <a href="#card"
-                    class="inline-flex items-center justify-center h-9 px-4 text-base font-medium text-gray-100 rounded-full bg-blue-500 hover:bg-blue-600 transition">
-                    Jelajahi Buku
-                </a>
-                <a href="{{ route('anggota.subscriptions') }}"
-                    class="inline-flex items-center justify-center h-9 px-4 text-base font-medium text-gray-100 rounded-full bg-linear-to-r from-blue-400 via-blue-500 to-blue-600 hover:from-blue-500 hover:to-blue-700 transition">
-                    Mulai Berlangganan
-                </a>
+            <!-- TITLE, SUBTITLE, CTA -->
+            <div
+                class="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-transparent flex items-center justify-center text-center">
+                <div class="max-w-xl text-white space-y-3">
+                    <h1 class="text-2xl md:text-3xl font-semibold">
+                        Perpustakaan Digital
+                    </h1>
+
+                    <p class="text-sm md:text-base text-gray-100">
+                        Temukan berbagai buku menarik dan mulai membaca kapan saja di
+                        Readify.
+                    </p>
+
+                    <a href="#terbaru"
+                        class="inline-block px-3 text-sm md:text-base md:px-4 py-1 md:py-2 bg-blue-600 hover:bg-blue-700 shadow-sm hover:shadow-md rounded-md transition">
+                        Mulai Membaca
+                    </a>
+                </div>
             </div>
+
+            <!-- DOTS NAVIGATION -->
+            <div class="dots absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"></div>
         </div>
     </section>
 
     <!-- Section Card Buku -->
-    <section class="scroll-mt-12 py-12 bg-gray-100 w-full" id="card">
+    {{-- <section class="scroll-mt-12 py-12 bg-gray-100 w-full" id="card">
         <div class="max-w-7xl mx-auto px-8">
             <div class="mb-10">
                 <h2 class="text-2xl font-semibold text-gray-800">Koleksi Buku</h2>
@@ -162,135 +230,70 @@ new class extends Component {
                 @endforelse
             </div>
         </div>
-    </section>
-
-    <!-- Why readify -->
-    {{-- <section class="py-12 bg-white w-full" id="why">
-        <div class="max-w-7xl px-8 grid grid-cols-1 items-center space-y-6">
-            <div>
-                <span class="max-w-4xl flex flex-col items-center justify-center mx-auto text-center space-y-4">
-                    <h3 class="text-xl text-gray-700 font-semibold">
-                        Mengapa Readify?
-                    </h3>
-                    <p class="text-base text-gray-600 max-w-2xl">
-                        Readify hadir sebagai platform perpustakaan digital yang
-                        memudahkan pengguna menemukan, membaca, dan mengelola koleksi buku
-                        secara online. Dirancang sederhana dan fungsional agar pengalaman
-                        membaca terasa nyaman dan efisien.
-                    </p>
-                </span>
-            </div>
-            <div class="flex justify-center pb-6">
-                <div class="grid grid-cols-2 max-w-4xl mx-auto gap-8">
-                    <div class="tracking-tight p-2 m-2 h-full flex flex-col">
-                        <span class="flex items-center space-x-1">
-                            <ion-icon name="search-outline" class="text-xl text-blue-500"></ion-icon>
-                            <h4 class="text-lg text-gray-700 leading-relaxed">OPAC</h4>
-                        </span>
-                        <span>
-                            <p class="text-base/7 text-gray-600">
-                                Fitur pencarian katalog yang membantu pengguna menemukan buku
-                                berdasarkan judul, penulis, atau kategori secara cepat dan
-                                terstruktur.
-                            </p>
-                        </span>
-                    </div>
-                    <div class="tracking-tight p-2 m-2 h-full flex flex-col">
-                        <span class="flex items-center space-x-1">
-                            <ion-icon name="book-outline" class="text-xl text-amber-800"></ion-icon>
-                            <h4 class="text-lg text-gray-700 leading-relaxed">
-                                Koleksi digital
-                            </h4>
-                        </span>
-                        <span>
-                            <p class="text-base/7 text-gray-600">
-                                Menyediakan berbagai jenis buku digital mulai dari buku
-                                pelajaran, novel, hingga pengembangan diri yang dapat diakses
-                                kapan saja.
-                            </p>
-                        </span>
-                    </div>
-                    <div class="tracking-tight p-2 m-2 h-full flex flex-col">
-                        <span class="flex items-center space-x-1">
-                            <ion-icon name="person-outline" class="text-xl text-gray-500"></ion-icon>
-                            <h4 class="text-lg text-gray-700 leading-relaxed">
-                                Akun pengguna
-                            </h4>
-                        </span>
-                        <span>
-                            <p class="text-base/7 text-gray-600">
-                                Setiap pengguna memiliki akun pribadi untuk menyimpan riwayat
-                                bacaan, mengelola koleksi favorit, dan menyesuaikan pengalaman
-                                membaca.
-                            </p>
-                        </span>
-                    </div>
-                    <div class="tracking-tight p-2 m-2 h-full flex flex-col">
-                        <span class="flex items-center space-x-1">
-                            <ion-icon name="star-outline" class="text-xl text-yellow-500"></ion-icon>
-                            <h4 class="text-lg text-gray-700 leading-relaxed">Premium</h4>
-                        </span>
-                        <span>
-                            <p class="text-base/7 text-gray-600">
-                                Akses tambahan untuk menikmati fitur eksklusif seperti koleksi
-                                khusus dan pengalaman membaca tanpa gangguan.
-                            </p>
-                        </span>
-                    </div>
-                </div>
-            </div>
-            <a href="#"
-                class="mx-auto inline-block px-4 py-2 rounded-lg font-medium bg-linear-to-r from-blue-300/80 to-blue-400/80 text-blue-900 hover:from-blue-300 hover:to-blue-400 shadow-sm ring-1 ring-blue-300 transition">
-                Lihat paket premium
-            </a>
-        </div>
     </section> --}}
 
-    <!-- Section Berlangganan Premium -->
-    <section class="py-16 bg-gray-50 w-full" id="premium">
-        <div class="max-w-7xl mx-auto px-8 text-center space-y-6">
-            <h3 class="text-2xl font-semibold text-gray-800">Berlangganan Premium</h3>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Nikmati pengalaman membaca tanpa gangguan, akses koleksi eksklusif, dan fitur premium lainnya. Pilih
-                paket yang sesuai dengan kebutuhanmu.
-            </p>
+    <section aria-labelledby="populer-title" class="max-w-7xl mx-auto px-4 md:px-6 lg:py-24 space-y-10">
+        <div class="space-y-6">
+            <header id="populer-title" class="text-center">
+                <h2 class="text-xl font-semibold text-gray-700 tracking-wide uppercase">
+                    Buku Populer
+                </h2>
+            </header>
 
-            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <!-- Bulanan -->
-                <div
-                    class="bg-white rounded-xl shadow-md p-6 flex flex-col justify-between hover:shadow-xl transition ease-in-out duration-300">
-                    <div class="space-y-4">
-                        <h4 class="text-xl font-semibold text-gray-700">Bulanan</h4>
-                        <p class="text-3xl font-bold text-gray-900">Rp25.000</p>
-                        <p class="text-gray-600">Per bulan, dapatkan akses penuh ke semua buku dan fitur premium.</p>
-                    </div>
-                    <a href="#"
-                        class="mt-6 inline-block bg-blue-500 text-white font-medium rounded-lg px-6 py-2 hover:bg-blue-600 transition">
-                        Mulai Bulanan
-                    </a>
-                </div>
+            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <!-- BOOK CARD - START - FOREACH -->
+                @forelse ($this->books as $book)
+                    <article
+                        class="group flex gap-3 p-3 bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-transform ease-out duration-500">
+                        <figure class="w-20 shrink-0 aspect-2/3 overflow-hidden rounded-md">
+                            <img src="/img/book/book-1.jpg" alt="Cover buku Atomic Habits karya James Clear"
+                                loading="lazy"
+                                class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+                        </figure>
 
-                <!-- Tahunan (highlight) -->
-                <div
-                    class="bg-linear-to-r from-blue-400 to-blue-500 rounded-xl shadow-xl p-6 flex flex-col justify-between text-white border-2 border-blue-600 hover:shadow-2xl transition ease-in-out duration-300">
-                    <div class="space-y-4">
-                        <h4 class="text-xl font-semibold">Tahunan</h4>
-                        <p class="text-3xl font-bold">Rp200.000</p>
-                        <p>Bayar sekali untuk 12 bulan dan hemat lebih banyak dibanding paket bulanan.</p>
-                        <span
-                            class="inline-block bg-yellow-400 text-black px-2 py-1 rounded-full font-bold text-sm">Hemat
-                            20%</span>
+                        <div class="flex flex-col justify-between flex-1">
+                            <div>
+                                <h3 class="text-sm md:text-base font-medium text-gray-700 line-clamp-2">
+                                    <a href="#" class="hover:text-blue-600 transition">
+                                        {{ $book->title }}
+                                    </a>
+                                </h3>
+
+                                <p class="text-xs text-gray-500">{{ $book->author }}</p>
+                                @foreach ($book->categories as $kategori)
+                                    <p class="text-xs text-gray-600">
+                                        {{ $kategori->name }}</p>
+                                @endforeach
+                            </div>
+
+                            <div class="flex items-center justify-between">
+                                <a href="#" aria-label="Baca buku Atomic Habits"
+                                    class="px-3 py-1 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-md transition">
+                                    Baca
+                                </a>
+
+                                <a href="#" class="text-xs text-gray-500 hover:text-blue-600 transition">
+                                    Lihat detail →
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                @empty
+                    <div class="col-span-full text-center py-10">
+                        <p class="text-gray-500 text-lg">Tidak ada buku yang ditemukan</p>
                     </div>
-                    <a href="#"
-                        class="mt-6 inline-block bg-white text-blue-600 font-medium rounded-lg px-6 py-2 hover:bg-gray-100 transition">
-                        Mulai Tahunan
-                    </a>
-                </div>
+                @endforelse
+
+                <!-- BOOK CARD - END - FOREACH -->
+
             </div>
+        </div>
 
-            <p class="text-gray-500 mt-6 text-sm max-w-md mx-auto">
-                Semua paket dilengkapi akses fitur premium, koleksi eksklusif, dan pengalaman membaca tanpa iklan.
-            </p>
+        <div class="flex justify-center">
+            <a href="#"
+                class="bg-linear-to-t from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 py-1 px-3 text-center rounded-lg shadow-sm text-sm text-white transition">
+                Lihat semua
+            </a>
         </div>
     </section>
     <x-footer></x-footer>
