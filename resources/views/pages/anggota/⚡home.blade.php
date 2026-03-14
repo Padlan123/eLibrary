@@ -232,7 +232,7 @@ new class extends Component {
         </div>
     </section> --}}
 
-    <section aria-labelledby="populer-title" class="max-w-7xl mx-auto px-4 md:px-6 lg:py-24 space-y-10">
+    <section aria-labelledby="populer-title" class="max-w-7xl mx-auto px-4 md:px-6 space-y-10">
         <div class="space-y-6">
             <header id="populer-title" class="text-center">
                 <h2 class="text-xl font-semibold text-gray-700 tracking-wide uppercase">
@@ -259,11 +259,8 @@ new class extends Component {
                                     </a>
                                 </h3>
 
-                                <p class="text-xs text-gray-500">{{ $book->author }}</p>
-                                @foreach ($book->categories as $kategori)
-                                    <p class="text-xs text-gray-600">
-                                        {{ $kategori->name }}</p>
-                                @endforeach
+                                <p class="text-xs text-gray-500">$book</p>
+                                <p class="text-xs text-gray-600">Pengembangan diri</p>
                             </div>
 
                             <div class="flex items-center justify-between">
@@ -279,9 +276,6 @@ new class extends Component {
                         </div>
                     </article>
                 @empty
-                    <div class="col-span-full text-center py-10">
-                        <p class="text-gray-500 text-lg">Tidak ada buku yang ditemukan</p>
-                    </div>
                 @endforelse
 
                 <!-- BOOK CARD - END - FOREACH -->
