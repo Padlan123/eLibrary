@@ -59,6 +59,7 @@ new class extends Component {
                     </h1>
                     <p class="text-gray-600">Masuk ke akun Anda</p>
                 </div>
+
                 <form wire:submit="login" class="space-y-6">
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
@@ -99,7 +100,44 @@ new class extends Component {
                     </p>
                 </div>
             </div>
+            @if (session('sukses'))
+                <div x-data="{ open: false }" x-show="open" x-cloak
+                    x-transition:enter="transition ease-out duration-800"
+                    x-transition:enter-start="opacity-0 translate-y-10"
+                    x-transition:enter-end="opacity-100 translate-y-0"
+                    x-transition:leave="transition ease-in duration-300"
+                    x-transition:leave-start="opacity-100 translate-y-0"
+                    x-transition:leave-end="opacity-0 translate-y-10" x-init="setTimeout(() => {
+                        open = true;
+                        setTimeout(() => open = false, 3000)
+                    }, 700)"
+                    class="fixed top-12 z-50 flex items-center w-full max-w-sm px-4 py-2 text-body bg-neutral-primary-soft rounded-base shadow-xs border border-default"
+                    role="alert">
+                    <div
+                        class="inline-flex items-center justify-center shrink-0 w-7 h-7 text-fg-success bg-success-soft rounded">
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5 11.917 9.724 16.5 19 7.5" />
+                        </svg>
+                        <span class="sr-only">Check icon</span>
+                    </div>
+                    <div class="ms-3 text-sm font-normal">{{ session('sukses') }}</div>
+                    <button @click="open = false" type="button"
+                        class="ms-auto flex items-center justify-center text-body hover:text-heading bg-transparent box-border border border-transparent hover:bg-neutral-secondary-medium focus:ring-4 focus:ring-neutral-tertiary font-medium leading-5 rounded text-sm h-8 w-8 focus:outline-none"
+                        aria-label="Close">
+                        <span class="sr-only">Close</span>
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
+                            height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18 17.94 6M18 18 6.06 6" />
+                        </svg>
+                    </button>
+                </div>
+            @endif
         </div>
+
     </div>
+
     <x-footer></x-footer>
 </div>

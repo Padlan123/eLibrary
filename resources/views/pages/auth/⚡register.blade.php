@@ -5,9 +5,10 @@ use Livewire\Component;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\WithFlashMessages;
 
 new class extends Component {
-    use WithAuthValidation;
+    use WithAuthValidation, WithFlashMessages;
 
     public string $username = '';
     public string $email = '';
@@ -38,6 +39,7 @@ new class extends Component {
 
         $user->assignRole('anggota');
 
+        $this->flashMessage('sukses', 'berhasil membuat akun', 'login');
         return $this->redirect('/Readify/login');
     }
 
