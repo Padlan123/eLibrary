@@ -1,23 +1,36 @@
 <?php
 
 use Livewire\Component;
+use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Computed;
 use App\Models\Book;
-use Livewire\WithPagination;
+use App\Models\Category;
 
-new class extends Component {
-    use WithPagination;
+new #[Lazy] class extends Component {
+    public function placeholder()
+    {
+        return view('placeholder.default', [
+            'message' => 'memuat buku...',
+        ]);
+    }
+
+    #[Computed]
+    public function categories()
+    {
+        return Category::withCount('books')->orderBy('name', 'asc')->get();
+    }
+
     #[Computed]
     public function books()
     {
-        return Book::with('categories')->latest()->paginate(8);
+        return Book::with('categories')->latest()->limit(8)->get();
     }
 };
 ?>
 
 <div>
     <section id="rekomendasi" aria-labelledby="rekomendasi"
-        class="max-w-7xl mx-auto px-4 md:px-6 space-y-6 md:space-y-8 py-12 lg:py-24">
+        class="max-w-7xl mx-auto px-4 md:px-6 space-y-6 md:space-y-8 py-12 lg:py-24 fade-in-up">
         <header class="text-center" id="rekomendasi">
             <h2 class="text-2xl font-semibold text-gray-700 uppercase tracking-widest">
                 Rekomendasi
@@ -49,17 +62,19 @@ new class extends Component {
                         <!-- TRACK -->
                         <div x-ref="track" class="flex h-full transition-transform duration-500"
                             :style="`transform: translateX(-${current * 100}%)`">
-                            @foreach ($this->books as $index => $book)
+                            @foreach ($this->books as $book)
                                 <article class="min-w-full">
                                     @if ($book->cover_file_name)
                                         <img src="{{ url('storage/' . $book->cover_file_name) }}"
-                                            alt="{{ $book->title }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
-                                            fetchpriority="{{ $index === 0 ? 'high' : 'low' }}"
+                                            alt="{{ $book->title }}"
+                                            loading="{{ $loop->index === 0 ? 'eager' : 'lazy' }}"
+                                            fetchpriority="{{ $loop->index === 0 ? 'high' : 'low' }}"
                                             class="w-full h-full object-cover" />
                                     @else
                                         <img src="{{ url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
-                                            alt="{{ $book->title }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
-                                            fetchpriority="{{ $index === 0 ? 'high' : 'low' }}"
+                                            alt="{{ $book->title }}"
+                                            loading="{{ $loop->index === 0 ? 'eager' : 'lazy' }}"
+                                            fetchpriority="{{ $loop->index === 0 ? 'high' : 'low' }}"
                                             class="w-full h-full object-cover" />
                                     @endif
                                 </article>
@@ -91,13 +106,13 @@ new class extends Component {
                             <figure class="w-20 shrink-0 aspect-2/3 overflow-hidden rounded-md">
                                 @if ($book->cover_file_name)
                                     <img src="{{ url('storage/' . $book->cover_file_name) }}"
-                                        loading="{{ $this->books->currentPage() === 1 && $loop->index < 3 ? 'eager' : 'lazy' }}"
-                                        fetchpriority="{{ $this->books->currentPage() === 1 && $loop->index < 3 ? 'high' : 'auto' }}"
+                                        loading="{{ $loop->index < 3 ? 'eager' : 'lazy' }}"
+                                        fetchpriority="{{ $loop->index < 3 ? 'high' : 'auto' }}"
                                         class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
                                 @else
                                     <img src="{{ url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
-                                        loading="{{ $this->books->currentPage() === 1 && $loop->index < 3 ? 'eager' : 'lazy' }}"
-                                        fetchpriority="{{ $this->books->currentPage() === 1 && $loop->index < 3 ? 'high' : 'auto' }}"
+                                        loading="{{ $loop->index < 3 ? 'eager' : 'lazy' }}"
+                                        fetchpriority="{{ $loop->index < 3 ? 'high' : 'auto' }}"
                                         class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
                                 @endif
                             </figure>
@@ -153,37 +168,16 @@ new class extends Component {
 
                     <nav aria-label="rak kategori">
                         <ul class="space-y-2 text-sm">
-                            <li>
-                                <a href="#"
-                                    class="flex justify-between px-3 py-2 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition">
-                                    Pengembangan Diri
-                                    <span aria-label="kategori buku" class="text-sm text-gray-400">(12)</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#"
-                                    class="flex justify-between px-3 py-2 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition">
-                                    Teknologi
-                                    <span aria-label="kategori buku" class="text-sm text-gray-400">(8)</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#"
-                                    class="flex justify-between px-3 py-2 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition">
-                                    Bisnis
-                                    <span aria-label="kategori buku" class="text-sm text-gray-400">(5)</span>
-                                </a>
-                            </li>
-
-                            <li>
-                                <a href="#"
-                                    class="flex justify-between px-3 py-2 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition">
-                                    Fiksi
-                                    <span aria-label="kategori buku" class="text-sm text-gray-400">(9)</span>
-                                </a>
-                            </li>
+                            @foreach ($this->categories as $category)
+                                <li>
+                                    <a href="#"
+                                        class="flex justify-between px-3 py-2 rounded-lg text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition">
+                                        {{ $category->name }}
+                                        <span aria-label="kategori buku"
+                                            class="text-sm text-gray-400">{{ $category->books_count }}</span>
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
                     </nav>
                 </div>

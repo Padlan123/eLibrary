@@ -3,13 +3,12 @@
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use App\Models\Book;
-use Livewire\WithPagination;
 
 new class extends Component {
     #[Computed]
     public function books()
     {
-        return Book::with('categories')->latest()->paginate(12);
+        return Book::with('categories')->latest()->limit(12)->get();
     }
     public function render()
     {
@@ -19,7 +18,7 @@ new class extends Component {
 ?>
 
 <div>
-    <section aria-labelledby="populer-title" class="max-w-7xl mx-auto px-4 md:px-6 space-y-10 py-12 lg:py-24">
+    <section aria-labelledby="populer-title" class="max-w-7xl mx-auto px-4 md:px-6 space-y-10 py-12 lg:py-24 fade-in-up">
         <div class="space-y-6">
             <header id="populer-title" class="text-center">
                 <h2 class="text-xl font-semibold text-gray-700 tracking-wide uppercase">
@@ -35,13 +34,13 @@ new class extends Component {
                         <figure class="w-20 shrink-0 aspect-2/3 overflow-hidden rounded-md">
                             @if ($book->cover_file_name)
                                 <img src="{{ url('storage/' . $book->cover_file_name) }}"
-                                    loading="{{ $this->books->currentPage() === 1 && $loop->index < 3 ? 'eager' : 'lazy' }}"
-                                    fetchpriority="{{ $this->books->currentPage() === 1 && $loop->index < 3 ? 'high' : 'auto' }}"
+                                    loading="{{ $loop->index < 3 ? 'eager' : 'lazy' }}"
+                                    fetchpriority="{{ $loop->index < 3 ? 'high' : 'auto' }}"
                                     class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
                             @else
                                 <img src="{{ url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
-                                    loading="{{ $this->books->currentPage() === 1 && $loop->index < 3 ? 'eager' : 'lazy' }}"
-                                    fetchpriority="{{ $this->books->currentPage() === 1 && $loop->index < 3 ? 'high' : 'auto' }}"
+                                    loading="{{ $loop->index < 3 ? 'eager' : 'lazy' }}"
+                                    fetchpriority="{{ $loop->index < 3 ? 'high' : 'auto' }}"
                                     class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
                             @endif
                         </figure>

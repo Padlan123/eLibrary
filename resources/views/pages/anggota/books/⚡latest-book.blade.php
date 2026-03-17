@@ -1,21 +1,29 @@
 <?php
 
 use Livewire\Component;
+use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Computed;
 use App\Models\Book;
-use Livewire\WithPagination;
 
-new class extends Component {
+new #[Lazy] class extends Component {
+    public function placeholder()
+    {
+        return view('placeholder.default', [
+            'message' => 'memuat buku...',
+        ]);
+    }
+
     #[Computed]
     public function books()
     {
-        return Book::with('categories')->latest()->paginate(12);
+        return Book::with('categories')->latest()->limit(12)->get();
     }
 };
 ?>
 
 <div>
-    <section aria-labelledby="terbaru" class="max-w-7xl mx-auto px-4 md:px-6 space-y-6 md:space-y-8 py-12 lg:py-24">
+    <section aria-labelledby="terbaru"
+        class="max-w-7xl mx-auto px-4 md:px-6 space-y-6 md:space-y-8 py-12 lg:py-24 fade-in-up">
         <header id="terbaru" class="text-center">
             <h2 class="text-2xl font-semibold text-gray-700 uppercase tracking-widest">
                 Terbaru

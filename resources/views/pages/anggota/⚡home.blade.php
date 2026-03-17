@@ -3,15 +3,12 @@
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use App\Models\Book;
-use Livewire\WithPagination;
 
 new class extends Component {
-    use WithPagination;
-
     #[Computed]
     public function books()
     {
-        return Book::with('categories')->latest()->paginate(8);
+        return Book::with('categories')->latest()->limit(8)->get();
     }
 
     public function render()
@@ -22,7 +19,7 @@ new class extends Component {
 ?>
 
 <div>
-    <section class="max-w-7xl mx-auto px-4 md:px-6 mt-32">
+    <section class="max-w-7xl mx-auto px-4 md:px-6 mt-32 fade-in-up">
         <div class="relative overflow-hidden rounded-xl">
             <!-- CAROUSEL - MAX SLIDE 8 -->
             <div x-data="{
@@ -53,17 +50,17 @@ new class extends Component {
                 <!-- TRACK -->
                 <div x-ref="track" class="flex transition-transform duration-500"
                     :style="`transform: translateX(-${current * 100}%)`">
-                    @foreach ($this->books as $index => $book)
+                    @foreach ($this->books as $book)
                         <article class="min-w-full">
                             @if ($book->cover_file_name)
                                 <img src="{{ url('storage/' . $book->cover_file_name) }}" alt="{{ $book->title }}"
-                                    loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
-                                    fetchpriority="{{ $index === 0 ? 'high' : 'low' }}"
+                                    loading="{{ $loop->index === 0 ? 'eager' : 'lazy' }}"
+                                    fetchpriority="{{ $loop->index === 0 ? 'high' : 'low' }}"
                                     class="w-full h-full object-cover" />
                             @else
                                 <img src="{{ url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
-                                    alt="{{ $book->title }}" loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
-                                    fetchpriority="{{ $index === 0 ? 'high' : 'low' }}"
+                                    alt="{{ $book->title }}" loading="{{ $loop->index === 0 ? 'eager' : 'lazy' }}"
+                                    fetchpriority="{{ $loop->index === 0 ? 'high' : 'low' }}"
                                     class="w-full h-full object-cover" />
                             @endif
                         </article>

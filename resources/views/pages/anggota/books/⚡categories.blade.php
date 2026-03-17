@@ -2,9 +2,17 @@
 
 use Livewire\Component;
 use App\Models\Category;
+use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Computed;
 
-new class extends Component {
+new #[Lazy] class extends Component {
+    public function placeholder()
+    {
+        return view('placeholder.default', [
+            'message' => 'memuat kategori...',
+        ]);
+    }
+
     #[Computed]
     public function categories()
     {
@@ -14,7 +22,8 @@ new class extends Component {
 ?>
 
 <div>
-    <section aria-labelledby="jelajahi-kategori" class="max-w-7xl mx-auto px-4 md:px-6 space-y-10 py-12 lg:py-24">
+    <section aria-labelledby="jelajahi-kategori"
+        class="max-w-7xl mx-auto px-4 md:px-6 space-y-10 py-12 lg:py-24 fade-in-up">
         <header class="text-center" id="jelajahi-kategori">
             <h2 class="text-xl font-semibold text-gray-700 tracking-wide uppercase">
                 Jelajahi Kategori
