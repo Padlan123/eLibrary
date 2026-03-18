@@ -1,31 +1,35 @@
 <?php
 
 use Livewire\Component;
-use App\Models\Transaction;
+use App\Models\SubscriptionTransaction;
 use Livewire\Attributes\Computed;
 
 new class extends Component {
-    #[computed]
+    #[Computed]
     public function konfirmasi()
     {
-        $transaksi = Transaction::where('anggota_id', auth()->id())->first();
-        switch ($transaksi->status) {
-            case 'pending':
-                return $transaksi;
-                break;
-            case 'disetujui':
-                return $transaksi;
-                break;
-            case 'ditolak':
-                return $transaksi;
-                break;
-            default:
-                return null;
-                break;
+        $transaksi = SubscriptionTransaction::where('member_id', auth()->id())->first();
+        if (!$transaksi->status == null) {
+            switch ($transaksi->status) {
+                case 'pending':
+                    return $transaksi;
+                    break;
+                case 'approve':
+                    return $transaksi;
+                    break;
+                case 'rejected':
+                    return $transaksi;
+                    break;
+                default:
+                    return null;
+                    break;
+            }
+        } else {
+            return null;
         }
-        return null;
     }
 
+    #[computed]
     public function render()
     {
         return $this->view()->title('Profil')->layout('layouts.anggota');
@@ -39,15 +43,18 @@ new class extends Component {
         @if ($this->konfirmasi)
             <div class="p-4 mb-4 text-sm text-fg-success-strong rounded-base bg-success-soft w-64 mx-auto mt-2"
                 role="alert">
-                @if ($this->konfirmasi()->status === 'disetujui')
+                @if ($this->konfirmasi()->status === 'completed')
                     <span class="font-medium">Status:</span> Berlangganan Aktif
-                @elseif ($this->konfirmasi()->status === 'ditolak')
+                @elseif ($this->konfirmasi()->status === 'rejected')
                     <span class="font-medium">Status:</span> Berlangganan Ditolak
                 @elseif ($this->konfirmasi()->status === 'pending')
                     <span class="font-medium">Status:</span> Menunggu Konfirmasi
-                @else
-                    <span class="font-medium">Status:</span> Tidak Berlangganan
                 @endif
+            </div>
+        @else
+            <div class="p-4 mb-4 text-sm text-fg-success-strong rounded-base bg-success-soft w-64 mx-auto mt-2"
+                role="alert">
+                <span class="font-medium">Status:</span> Tidak Berlangganan
             </div>
         @endif
     </div>

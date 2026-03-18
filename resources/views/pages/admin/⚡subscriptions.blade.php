@@ -396,9 +396,17 @@ new class extends Component {
                             </td>
                             <td class="px-5 py-3.5 text-center">
                                 <span
-                                    class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 text-xs font-semibold px-2.5 py-1 rounded-full border border-amber-100">
-                                    <span
-                                        class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>{{ $transaction->status }}
+                                    class="inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border border-amber-100">
+                                    @if ($transaction->status == 'completed')
+                                        <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span><span
+                                            class="text-green-600">Disetujui</span>
+                                    @elseif ($transaction->status == 'rejected')
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span><span
+                                            class="text-red-600">Ditolak</span>
+                                    @else
+                                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span><span
+                                            class="text-amber-600">Pending</span>
+                                    @endif
                                 </span>
                             </td>
                             <td class="px-5 py-3.5">

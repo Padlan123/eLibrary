@@ -16,16 +16,23 @@ class PackagesSeeder extends Seeder
     {
         DB::table('packages')->insert([
             [
-                'name' => 'paket dasar',
-                'price' => 15000,
+                'name' => 'Paket Dasar',
+                'price' => 49000,
                 'duration_days' => 30,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Premium',
-                'price' => 200000,
-                'duration_days' => 365,
+                'name' => 'Paket Medium',
+                'price' => 235000,
+                'duration_days' => 180,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Paket Ultimate',
+                'price' => 450000,
+                'duration_days' => 360,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

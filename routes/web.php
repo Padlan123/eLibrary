@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('welcome');
-});
+})->middleware('guest');
 Route::prefix('/Readify')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('/', function () {

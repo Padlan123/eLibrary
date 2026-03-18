@@ -29,27 +29,17 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $anggota = User::create([
-            'username' => 'Anggota',
-            'email' => 'anggota123@gmail.com',
-            'password' => bcrypt('anggota123'),
+            'username' => 'Padlan',
+            'email' => 'padlan123@gmail.com',
+            'password' => bcrypt('padlan123'),
         ]);
         $admin = User::create([
-            'username' => 'Admin',
-            'email' => 'admin123@gmail.com',
-            'password' => bcrypt('admin123'),
+            'username' => 'Alex',
+            'email' => 'alex123@gmail.com',
+            'password' => bcrypt('alex123'),
         ]);
         $anggota->assignRole('anggota');
         $admin->assignRole('admin');
-
-        User::factory()->admin()->create([
-            'username'  => 'Supri',
-            'email' => 'admin@example.com',
-        ]);
-
-        User::factory()->admin()->create([
-            'username'  => 'Supri',
-            'email' => 'editor@example.com',
-        ]);
 
         User::factory()->anggota()->count(10)->create();
     }
