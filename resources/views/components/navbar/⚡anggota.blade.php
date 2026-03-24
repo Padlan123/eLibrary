@@ -12,6 +12,7 @@ new class extends Component {
 
         $this->initials = $initial;
     }
+
     public function logout()
     {
         Auth::logout();
@@ -23,7 +24,7 @@ new class extends Component {
 <div>
     <header
         class="fixed top-0 w-full bg-linear-to-l from-blue-500/95 to-blue-600/95 backdrop-blur-md shadow-md z-100 py-1">
-        <nav class="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between" aria-label="navigasi utama">
+        <nav class="max-w-7xl mx-auto px-6 md:px-6 py-3 flex items-center justify-between" aria-label="navigasi utama">
             @unless (request()->routeIs('anggota.subscriptions'))
                 <div class="flex items-center justify-center gap-4">
                     <img src="{{ asset('img/logo-Readify.webp') }}" alt="" class="size-10 bg-white rounded-lg">
@@ -58,8 +59,8 @@ new class extends Component {
                     </form>
                 @endunless
 
-                <ul class="hidden md:flex items-center gap-4">
-                    @unless (request()->routeIs('anggota.subscriptions'))
+                <ul class="md:flex items-center gap-4">
+                    @unless (request()->routeIs('anggota.subscriptions') || request()->routeIs('anggota.profil'))
                         <li>
                             <a href="{{ route('anggota.subscriptions') }}"
                                 class="flex items-center gap-2 px-3 py-1 rounded-lg text-gray-600 hover:text-gray-700 bg-white/90 hover:bg-white backdrop-blur-sm transition">
@@ -81,7 +82,7 @@ new class extends Component {
                                 {{ $initials }}
                             </span>
                         </a>
-                        <div x-show="open"
+                        <div x-show="open" x-cloak
                             class="z-10 fixed right-7 top-18 bg-neutral-primary-medium border border-default-medium rounded-base divide-y divide-default-medium shadow-lg w-44">
                             <ul class="p-2 text-sm text-body font-medium" aria-labelledby="dropdownDividerButton">
 

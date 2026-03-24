@@ -10,6 +10,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\UploadedFile;
 use Livewire\Attributes\Computed;
+use Smalot\PdfParser\Parser;
 
 new class extends Component {
     use WithFileUploads, WithBookValidationUpdate, WithFlashMessages;
@@ -70,6 +71,10 @@ new class extends Component {
         $this->validateBookUpdate();
 
         try {
+            $parser = new Parser();
+            $pdf = $parser->parseFile($this->pdf_file_name->getRealPath());
+            $total_pages = count($pdf->getPages());
+
             DB::transaction(function () {
                 $book = Book::findOrFail($this->updateId);
                 $book->update([
@@ -79,6 +84,7 @@ new class extends Component {
                     'publisher' => $this->update_publisher,
                     'summary' => $this->update_summary,
                     'subscription' => $this->update_subscription,
+                    'total_pages' => $total_pages,
                 ]);
 
                 $book->categories()->sync($this->update_book_categories);

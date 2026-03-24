@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('publication_year');
             $table->text('summary')->nullable();
             $table->boolean('subscription')->default(false);
+            $table->integer('total_pages')->nullable();
             $table->string('cover_file_name')->nullable();
             $table->string('pdf_file_name')->nullable();
             $table->timestamps();

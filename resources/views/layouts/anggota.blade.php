@@ -31,6 +31,7 @@
 <body class="font-sans">
     @livewire('navbar.anggota')
     {{ $slot }}
+    <x-footer></x-footer>
     @livewireScripts
 </body>
 

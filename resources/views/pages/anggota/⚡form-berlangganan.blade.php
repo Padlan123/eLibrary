@@ -462,5 +462,5 @@ new class extends Component {
 
         </div>
     </section>
-    <x-footer></x-footer>
+
 </div>

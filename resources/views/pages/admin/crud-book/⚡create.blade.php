@@ -9,6 +9,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
+use Smalot\PdfParser\Parser;
 
 new class extends Component {
     use WithFileUploads, WithBookValidation, WithFlashMessages;
@@ -25,6 +26,7 @@ new class extends Component {
     public $summary;
     public $cover_file_name;
     public $pdf_file_name;
+    public $total_pages = 0;
 
     public $preview;
 
@@ -52,6 +54,10 @@ new class extends Component {
         $this->validateBook();
 
         try {
+            $parser = new Parser();
+            $pdf = $parser->parseFile($this->pdf_file_name->getRealPath());
+            $this->total_pages = count($pdf->getPages());
+
             DB::transaction(function () {
                 $book = Book::create([
                     'title' => $this->title,
@@ -60,6 +66,7 @@ new class extends Component {
                     'publisher' => $this->publisher,
                     'summary' => $this->summary,
                     'subscription' => $this->subscription,
+                    'total_pages' => $this->total_pages,
                     'cover_file_name' => $this->cover_file_name->store('cover', 'public'),
                     'pdf_file_name' => $this->pdf_file_name->store('pdf', 'public'),
                 ]);

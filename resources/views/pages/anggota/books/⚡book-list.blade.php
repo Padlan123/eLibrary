@@ -32,17 +32,10 @@ new class extends Component {
                     <article
                         class="group flex gap-3 p-3 bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-transform ease-out duration-500">
                         <figure class="w-20 shrink-0 aspect-2/3 overflow-hidden rounded-md">
-                            @if ($book->cover_file_name)
-                                <img src="{{ url('storage/' . $book->cover_file_name) }}"
-                                    loading="{{ $loop->index < 3 ? 'eager' : 'lazy' }}"
-                                    fetchpriority="{{ $loop->index < 3 ? 'high' : 'auto' }}"
-                                    class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
-                            @else
-                                <img src="{{ url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
-                                    loading="{{ $loop->index < 3 ? 'eager' : 'lazy' }}"
-                                    fetchpriority="{{ $loop->index < 3 ? 'high' : 'auto' }}"
-                                    class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
-                            @endif
+                            <img src="{{ $book->cover_file_name ? Storage::url($book->cover_file_name) : url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
+                                loading="{{ $loop->index < 3 ? 'eager' : 'lazy' }}"
+                                fetchpriority="{{ $loop->index < 3 ? 'high' : 'auto' }}"
+                                class="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
                         </figure>
 
                         <div class="flex flex-col justify-between flex-1">
@@ -64,12 +57,13 @@ new class extends Component {
                             </div>
 
                             <div class="flex items-center justify-between">
-                                <a href="#" aria-label="Baca buku Atomic Habits"
+                                <a href="{{ route('anggota.books.read', $book) }}" aria-label="Baca buku Atomic Habits"
                                     class="px-3 py-1 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-md transition">
                                     Baca
                                 </a>
 
-                                <a href="#" class="text-xs text-gray-500 hover:text-blue-600 transition">
+                                <a href="{{ route('anggota.detail-book', $book->id) }}"
+                                    class="text-xs text-gray-500 hover:text-blue-600 transition">
                                     Lihat detail →
                                 </a>
                             </div>

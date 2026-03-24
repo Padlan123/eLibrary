@@ -121,5 +121,5 @@ new class extends Component {
     @livewire('pages::anggota.books.categories')
     @livewire('pages::anggota.books.latest-book')
     @livewire('pages::anggota.books.recommended-book')
-    <x-footer></x-footer>
+    
 </div>
