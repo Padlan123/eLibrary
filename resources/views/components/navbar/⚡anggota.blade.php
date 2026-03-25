@@ -41,7 +41,10 @@ new class extends Component {
                 </div>
             @endunless
             <div class="flex items-center gap-4">
-                @unless (request()->routeIs('anggota.subscriptions') || request()->routeIs('anggota.profil'))
+                @unless (request()->routeIs('anggota.subscriptions') ||
+                        request()->routeIs('anggota.profil') ||
+                        request()->routeIs('anggota.transaction.history') ||
+                        request()->routeIs('anggota.invoice'))
                     <form role="search" class="flex">
                         <label for="search" class="sr-only"> Cari buku </label>
 
@@ -60,7 +63,10 @@ new class extends Component {
                 @endunless
 
                 <ul class="md:flex items-center gap-4">
-                    @unless (request()->routeIs('anggota.subscriptions') || request()->routeIs('anggota.profil'))
+                    @unless (request()->routeIs('anggota.subscriptions') ||
+                            request()->routeIs('anggota.profil') ||
+                            request()->routeIs('anggota.transaction.history') ||
+                            request()->routeIs('anggota.invoice'))
                         <li>
                             <a href="{{ route('anggota.subscriptions') }}"
                                 class="flex items-center gap-2 px-3 py-1 rounded-lg text-gray-600 hover:text-gray-700 bg-white/90 hover:bg-white backdrop-blur-sm transition">

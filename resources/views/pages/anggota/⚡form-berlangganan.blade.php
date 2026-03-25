@@ -45,8 +45,11 @@ new class extends Component {
 
     private function generateInvoiceNumber(): string
     {
+        $words = explode(' ', auth()->user()->username);
+        $initial = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''));
+
         do {
-            $invoice = 'INV-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+            $invoice = 'INV-' . now()->format('Ymd') . '-' . $initial . strtoupper(Str::random(6));
         } while (SubscriptionTransaction::where('invoice_number', $invoice)->exists());
 
         return $invoice;
@@ -62,8 +65,6 @@ new class extends Component {
             $this->addError('payment_proof', 'File tidak valid, silakan upload ulang.');
             return;
         }
-
-        // dd($this->packageSelectedId, $this->name, $this->number, $this->payment_proof);
 
         $this->validateTransaction();
 
@@ -213,43 +214,14 @@ new class extends Component {
                         Transaksi
                     </h3>
 
-                    {{-- Toast --}}
-                    @if (session('sukses'))
-                        <div x-data="{ show: false }" x-show="show" x-cloak
-                            x-transition:enter="transition ease-out duration-300"
-                            x-transition:enter-start="opacity-0 translate-y-10"
-                            x-transition:enter-end="opacity-100 translate-y-0"
-                            x-transition:leave="transition ease-in duration-300"
-                            x-transition:leave-start="opacity-100 translate-y-0"
-                            x-transition:leave-end="opacity-0 translate-y-10" x-init="setTimeout(() => {
-                                show = true;
-                                setTimeout(() => show = false, 3000)
-                            }, 300)">
-                            <div class="fixed top-14 sm:top-16 left-1/2 -translate-x-1/2 z-50
-                                    w-[calc(100%-2rem)] sm:w-auto sm:max-w-sm
-                                    flex items-start sm:items-center px-4 py-3 text-sm
-                                    text-fg-success-strong rounded-xl bg-success-soft
-                                    border border-success-subtle shadow-lg"
-                                role="alert">
-                                <svg class="w-4 h-4 me-2 shrink-0 mt-0.5 sm:mt-0" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                                    viewBox="0 0 24 24">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                                <p>{{ session('sukses') }}</p>
-                            </div>
-                        </div>
-                    @endif
+
 
                     <form wire:submit="submit">
                         <div class="space-y-4 sm:space-y-5">
 
                             {{-- Field Nama --}}
                             <div class="flex flex-col gap-1.5 sm:gap-2">
-                                <label for="username"
-                                    class="text-sm font-medium text-gray-700 flex items-center gap-1">
+                                <label for="username" class="text-sm font-medium text-gray-700 flex items-center gap-1">
                                     Nama
                                     <button data-popover-target="name-popover" data-popover-placement="top"
                                         type="button"
@@ -461,6 +433,29 @@ new class extends Component {
             </div>
 
         </div>
-    </section>
 
+    </section>
+    {{-- Toast --}}
+    @if (session('sukses'))
+        <div x-data="{ show: false }" x-show="show" x-cloak x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 translate-y-0"
+            x-transition:leave-end="opacity-0 translate-y-4" x-init="setTimeout(() => {
+                show = true;
+                setTimeout(() => show = false, 3000)
+            }, 300)"
+            class="fixed top-36 left-1/2 -translate-x-1/2 z-50
+        w-[calc(100%-2rem)] sm:w-auto sm:max-w-sm
+        flex items-start sm:items-center px-4 py-3 text-sm
+        text-fg-success-strong rounded-xl bg-success-soft
+        border border-success-subtle shadow-lg"
+            role="alert">
+            <svg class="w-4 h-4 me-2 shrink-0 mt-0.5 sm:mt-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <p>{{ session('sukses') }}</p>
+        </div>
+    @endif
 </div>

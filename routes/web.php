@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BookReaderController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ReadingHistoryController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
@@ -27,10 +28,14 @@ Route::prefix('/Readify')->group(function () {
             });
             Route::livewire('/home', 'pages::anggota.home')->name('home');
             Route::livewire('/langganan', 'pages::anggota.form-berlangganan')->name('subscriptions');
-            Route::livewire('profil', 'pages::anggota.profil')->name('profil');
+            Route::livewire('/riwayat-transaksi', 'pages::anggota.transaction-history')->name('transaction.history');
+            Route::livewire('/invoice/{id}', 'pages::anggota.invoice')->name('invoice');
+            Route::livewire('/profil', 'pages::anggota.profil')->name('profil');
             Route::livewire('/detail-buku/{id}', 'pages::anggota.books.detail-book')->name('detail-book');
             Route::get('/books/{book}/read', [BookReaderController::class, 'show'])->name('books.read');
             Route::post('/reading-history/update', [ReadingHistoryController::class, 'update'])->name('reading.update');
+            Route::get('/invoice/{invoice}/download', [InvoiceController::class, 'download'])
+                ->name('invoice.download');
         });
         Route::prefix('admin')->middleware('role:admin')->name('admin.')->group(function () {
             Route::get('/', function () {

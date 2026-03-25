@@ -29,9 +29,13 @@
 </head>
 
 <body class="font-sans">
-    @livewire('navbar.anggota')
+    @unless (request()->routeIs('anggota.invoice'))
+        @livewire('navbar.anggota')
+    @endunless
     {{ $slot }}
-    <x-footer></x-footer>
+    @unless (Request()->routeIs('anggota.transaction.history') || request()->routeIs('anggota.invoice'))
+        <x-footer></x-footer>
+    @endunless
     @livewireScripts
 </body>
 

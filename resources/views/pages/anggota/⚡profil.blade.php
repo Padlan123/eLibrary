@@ -239,14 +239,9 @@ new class extends Component {
         <!-- PENGATURAN -->
         <section class="px-4 md:px-10">
             <ul class="rounded-lg bg-white shadow overflow-hidden">
-                {{-- <li class="hover:bg-gray-50 transition">
-                    <a href="#" class="block p-4 text-gray-800 font-medium">
-                        Notifikasi
-                    </a>
-                </li> --}}
                 <li class="hover:bg-gray-50 transition">
-                    <a href="#" class="block p-4 text-gray-800 font-medium">
-                        Pengaturan
+                    <a href="{{ route('anggota.transaction.history') }}" class="block p-4 text-gray-800 font-medium">
+                        Riwayat Transaksi
                     </a>
                 </li>
             </ul>
