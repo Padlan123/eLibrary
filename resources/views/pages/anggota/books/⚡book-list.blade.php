@@ -46,7 +46,7 @@ new class extends Component {
 ?>
 
 <div>
-    <section aria-labelledby="populer-title" class="max-w-7xl mx-auto px-4 md:px-6 space-y-10 py-12 lg:py-24 fade-in-up">
+    <section aria-labelledby="populer-title" class="px-4 md:px-6 space-y-10 py-12 lg:py-24 fade-in-up">
         <div class="space-y-6">
             <header id="populer-title" class="text-center">
                 <h2 class="text-xl font-semibold text-gray-700 tracking-wide uppercase">
@@ -58,7 +58,7 @@ new class extends Component {
                 <!-- BOOK CARD - START - FOREACH -->
                 @forelse ($this->books as $book)
                     <article wire:key="{{ $book->id }}"
-                        class="group flex gap-3 p-3 bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-transform ease-out duration-500">
+                        class="relative group flex gap-3 p-3 bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-transform ease-out duration-500">
                         <figure class="w-20 shrink-0 aspect-2/3 overflow-hidden rounded-md">
                             <img src="{{ $book->cover_file_name ? Storage::url($book->cover_file_name) : url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
                                 loading="{{ $loop->index < 3 ? 'eager' : 'lazy' }}"
@@ -112,6 +112,10 @@ new class extends Component {
                                 </a>
                             </div>
                         </div>
+                        @if ($book->subscription === true)
+                            <span
+                                class="absolute right-2 top-2 z-99 bg-warning-soft text-fg-warning text-xs font-medium px-2 py-0.5 rounded shadow">Premium</span>
+                        @endif
                     </article>
                 @empty
                     <div class="col-span-full text-center py-10">

@@ -58,7 +58,7 @@ new class extends Component {
 ?>
 
 <div class="bg-gray-50 text-gray-700 py-24">
-    <div class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <div class="px-4 py-8 space-y-8">
         <section class="grid gap-8 lg:grid-cols-3">
             <!-- BOOK COVER -->
             <figure class="w-full max-w-xs mx-auto lg:mx-0">

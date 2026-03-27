@@ -48,7 +48,7 @@ new class extends Component {
 ?>
 
 <div>
-    <div class="max-w-7xl mx-auto space-y-12 py-24">
+    <div class="space-y-12 py-24">
         <!-- PROFILE -->
         <section class="relative py-10 px-4 md:px-10">
             <div class="relative z-10 flex flex-col  items-center text-center">

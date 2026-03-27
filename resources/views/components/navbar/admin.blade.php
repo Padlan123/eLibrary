@@ -1,12 +1,3 @@
-<?php
-
-use Livewire\Component;
-
-new class extends Component {
-    //
-};
-?>
-
 <div x-data>
     <header
         class="bg-linear-to-r from-blue-600 via-blue-400 to-blue-400 shadow-sm p-3 flex justify-between items-center">

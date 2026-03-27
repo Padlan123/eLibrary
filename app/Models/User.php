@@ -50,7 +50,7 @@ class User extends Authenticatable
 
     public function subscribes()
     {
-        return $this->hasMany(MemberSubscription::class, 'member_id');
+        return $this->hasMany(MemberSubscription::class, 'user_id');
     }
 
     public function readingHistories()

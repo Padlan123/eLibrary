@@ -19,7 +19,7 @@ new class extends Component {
 ?>
 
 <div>
-    <section class="max-w-7xl mx-auto px-4 md:px-6 mt-32 fade-in-up">
+    <section class="px-4 md:px-6 mt-32 fade-in-up">
         <div class="relative overflow-hidden rounded-xl">
             <!-- CAROUSEL - MAX SLIDE 8 -->
             <div x-data="{

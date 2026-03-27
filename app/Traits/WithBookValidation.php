@@ -14,6 +14,7 @@ trait WithBookValidation
             'publication_year' => 'required',
             'summary' => 'required',
             'subscription' => 'required',
+            'is_premium' => 'nullable',
             'cover_file_name' => 'required|file|mimes:png,jpeg,jpe',
             'pdf_file_name' => 'required|file|mimes:pdf'
 

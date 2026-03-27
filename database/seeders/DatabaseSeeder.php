@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
-
 use App\Models\User;
 use Database\Seeders\BookCategoriesSeeder;
 use Database\Seeders\BookSeeder;
 use Database\Seeders\CategoriesSeeder;
-use Database\Seeders\PaketSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 
 class DatabaseSeeder extends Seeder
@@ -21,6 +21,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'anggota']);
+        Permission::create(['name' => 'premium']);
+
         $this->call([
             CategoriesSeeder::class,
             BookSeeder::class,

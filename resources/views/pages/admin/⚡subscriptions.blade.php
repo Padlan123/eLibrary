@@ -5,6 +5,7 @@ use App\Traits\WithFlashMessages;
 use Livewire\Attributes\Computed;
 use App\Models\SubscriptionTransaction;
 use App\Models\MemberSubscription;
+use Illuminate\Support\Facades\DB;
 use App\Models\Package;
 use Carbon\Carbon;
 
@@ -57,27 +58,38 @@ new class extends Component {
         if (!$transaction) {
             return;
         }
+
         $transaction->load('package');
 
         if ($transaction->status == 'completed' || $transaction->status == 'rejected') {
             $this->flashMessage('gagal', 'invoice sudah terdaftar', 'admin.subscriptions');
             return;
         }
-        $existMemberSubscription = MemberSubscription::where('member_id', $transaction->member_id)->where('status', 'active')->where('end_date', '>', now())->latest('end_date')->first();
 
-        if ($existMemberSubscription) {
-            $existMemberSubscription->end_date = Carbon::parse($existMemberSubscription->end_date)->addDays($transaction->package->duration_days);
-            $existMemberSubscription->save();
-        } else {
-            MemberSubscription::create([
-                'member_id' => $transaction->member_id,
-                'start_date' => now(),
-                'end_date' => now()->addDays($transaction->duration_days),
-                'status' => 'active',
-            ]);
+        DB::transaction(function () use ($transaction) {
+            $existMemberSubscription = MemberSubscription::where('user_id', $transaction->user_id)->where('status', 'active')->where('end_date', '>', now())->latest('end_date')->first();
+
+            if ($existMemberSubscription) {
+                $existMemberSubscription->end_date = Carbon::parse($existMemberSubscription->end_date)->addDays($transaction->package->duration_days);
+                $existMemberSubscription->save();
+            } else {
+                MemberSubscription::create([
+                    'user_id' => $transaction->user_id,
+                    'start_date' => now(),
+                    'end_date' => now()->addDays($transaction->package->duration_days),
+                    'status' => 'active',
+                ]);
+            }
+
+            $transaction->status = 'completed';
+            $transaction->save();
+        });
+
+        $user = User::find($transaction->user_id);
+        if ($user && !$user->hasPermissionTo('premium')) {
+            $user->givePermissionTo('premium');
         }
-        $transaction->status = 'completed';
-        $transaction->save();
+
         $this->flashMessage('sukses', 'berlangganan disetujui', 'admin.subscriptions');
     }
 

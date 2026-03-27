@@ -30,7 +30,7 @@
 </head>
 
 <body class="font-sans">
-    @livewire('navbar')
+    <x-navbar.default></x-navbar.default>
     <main class="pt-8">
         {{ $slot }}
     </main>

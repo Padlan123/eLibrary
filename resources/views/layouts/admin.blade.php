@@ -48,7 +48,7 @@
 <body class="font-sans">
     @livewire('sidebar')
     <div class="flex flex-1 flex-col min-w-0 md:ml-50 lg:ml-64">
-        @livewire('navbar.admin')
+        <x-navbar.admin></x-navbar.admin>
         <main class="p-4 md:p-8 flex-1 min-w-0 fade-in-up">
             {{ $slot }}
         </main>

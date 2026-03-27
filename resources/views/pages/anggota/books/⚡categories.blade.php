@@ -22,8 +22,7 @@ new #[Lazy] class extends Component {
 ?>
 
 <div>
-    <section aria-labelledby="jelajahi-kategori"
-        class="max-w-7xl mx-auto px-4 md:px-6 space-y-10 py-12 lg:py-24 fade-in-up">
+    <section aria-labelledby="jelajahi-kategori" class="px-4 md:px-6 space-y-10 py-12 lg:py-24 fade-in-up">
         <header class="text-center" id="jelajahi-kategori">
             <h2 class="text-xl font-semibold text-gray-700 tracking-wide uppercase">
                 Jelajahi Kategori

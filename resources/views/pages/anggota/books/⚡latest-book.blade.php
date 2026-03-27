@@ -55,7 +55,7 @@ new #[Lazy] class extends Component {
 
 <div>
     <section aria-labelledby="terbaru"
-        class="max-w-7xl mx-auto px-4 md:px-6 space-y-6 md:space-y-8 py-12 lg:py-24 fade-in-up">
+        class="px-4 md:px-6 space-y-6 md:space-y-8 py-12 lg:py-24 fade-in-up">
         <header id="terbaru" class="text-center">
             <h2 class="text-2xl font-semibold text-gray-700 uppercase tracking-widest">
                 Terbaru

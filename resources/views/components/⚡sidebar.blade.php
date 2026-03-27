@@ -93,7 +93,7 @@ new class extends Component {
                     <h3 class="mb-6 text-body">Apakah kamu yakin ingin Keluar? kamu harus login kembali</h3>
                     </h3>
                     <div class="flex items-center space-x-4 justify-center">
-                        <button wire:click="logout" data-modal-hide="logout" type="button"
+                        <button wire:click="logout" type="button"
                             class="text-white bg-danger box-border border border-transparent hover:bg-danger-strong focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                             Keluar
                         </button>
