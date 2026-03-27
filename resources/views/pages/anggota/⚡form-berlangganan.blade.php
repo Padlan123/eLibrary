@@ -73,7 +73,7 @@ new class extends Component {
         $packageSelected = Package::find($this->packageSelectedId);
 
         SubscriptionTransaction::create([
-            'member_id' => auth()->id(),
+            'user_id' => auth()->id(),
             'package_id' => $this->packageSelectedId,
             'invoice_number' => $this->generateInvoiceNumber(),
             'name' => $this->name,
@@ -444,11 +444,11 @@ new class extends Component {
                 show = true;
                 setTimeout(() => show = false, 3000)
             }, 300)"
-            class="fixed top-36 left-1/2 -translate-x-1/2 z-50
-        w-[calc(100%-2rem)] sm:w-auto sm:max-w-sm
-        flex items-start sm:items-center px-4 py-3 text-sm
-        text-fg-success-strong rounded-xl bg-success-soft
-        border border-success-subtle shadow-lg"
+            class="fixed top-24 left-1/2 -translate-x-1/2 z-50
+    w-[calc(100%-2rem)] sm:w-auto sm:max-w-sm
+    flex items-start sm:items-center px-4 py-3 text-sm
+    text-fg-success-strong rounded-xl bg-success-soft
+    border border-success-subtle shadow-lg"
             role="alert">
             <svg class="w-4 h-4 me-2 shrink-0 mt-0.5 sm:mt-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                 width="24" height="24" fill="none" viewBox="0 0 24 24">

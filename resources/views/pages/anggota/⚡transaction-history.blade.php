@@ -8,7 +8,7 @@ new class extends Component {
     #[Computed]
     public function transactionHistories()
     {
-        return SubscriptionTransaction::where('member_id', auth()->id())
+        return SubscriptionTransaction::where('user_id', auth()->id())
             ->latest()
             ->get();
     }
@@ -21,8 +21,9 @@ new class extends Component {
 ?>
 
 <div>
-    <div class="px-4 pt-6 pb-8 mt-24 flex flex-col gap-3 w-1/2 mx-auto shadow">
+    <div class="md:px-4 px-6 pt-6 pb-8 mt-24 flex flex-col gap-3 w-full md:w-1/2 mx-auto shadow-md">
         <h1 class="text-2xl font-semibold text-slate-600 leading-5">Riwayat Transaksi</h1>
+        <hr class="text-slate-300">
         @forelse ($this->transactionHistories as $history)
             <a href="{{ route('anggota.invoice', $history->id) }}">
                 <article class="flex mt-3 gap-3 hover:bg-gray-50 transition cursor-pointer">
@@ -39,6 +40,7 @@ new class extends Component {
                 </article>
             </a>
         @empty
+            <p class="text-center text-lg font-medium py-12">Belum Melakukan Transaksi</p>
         @endforelse
     </div>
 

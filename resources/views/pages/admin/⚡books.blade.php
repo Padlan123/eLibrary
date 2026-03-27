@@ -123,32 +123,28 @@ new class extends Component {
                     @endforeach
                 </select>
             </div>
-            <table class="w-full border-separate border-spacing-y-3 min-w-150">
+            <table class="w-full border-separate text-left min-w-150">
                 <thead>
                     <tr>
-                        <th class="p-3">Judul</th>
-                        <th class="p-3">Penulis</th>
-                        <th class="p-3">Tahun</th>
-                        <th class="p-3">Kategori</th>
-                        <th class="p-3">Aksi</th>
+                        <th class="px-1">Judul</th>
+                        <th class="px-1">Penulis</th>
+                        <th class="px-1">Tahun</th>
+                        <th class="px-1">Kategori</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     @forelse ($this->books as $book)
-                        <tr wire:key="{{ $book->id }}" class="bg-white rounded-xl shadow-md">
-                            <td class="p-3">{{ $book->title }}</td>
-                            <td class="p-3">{{ $book->author }}</td>
-                            <td class="p-3">{{ $book->publication_year }}</td>
-                            <td class="p-3">
-                                @foreach ($book->categories as $category)
-                                    {{ $category->name }} @if (!$loop->last)
-                                        ,
-                                    @endif
-                                @endforeach
+                        <tr wire:key="{{ $book->id }}" class="bg-white rounded-xl shadow space-y-0.5">
+                            <td class="py-3 px-1">{{ $book->title }}</td>
+                            <td class="py-3 px-1">{{ $book->author }}</td>
+                            <td class="py-3 px-1">{{ $book->publication_year }}</td>
+                            <td class="py-3 px-1">
+                                {{ $book->category_names }}
                             </td>
 
-                            <td class="p-3 text-center space-x-2">
+                            <td class="py-3 px-1 text-center space-x-2">
                                 <button wire:click="modalUpdate({{ $book->id }})"
                                     class="bg-blue-50 text-blue-600 px-3 py-2 rounded-lg hover:bg-blue-100">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"

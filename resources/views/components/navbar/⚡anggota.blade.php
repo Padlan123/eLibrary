@@ -24,12 +24,13 @@ new class extends Component {
 <div>
     <header
         class="fixed top-0 w-full bg-linear-to-l from-blue-500/95 to-blue-600/95 backdrop-blur-md shadow-md z-100 py-1">
-        <nav class="max-w-7xl mx-auto px-6 md:px-6 py-3 flex items-center justify-between" aria-label="navigasi utama">
+        <nav class="max-w-7xl mx-auto px-6 md:px-6 py-3 flex items-center gap-4 justify-between"
+            aria-label="navigasi utama">
             @unless (request()->routeIs('anggota.subscriptions'))
                 <div class="flex items-center justify-center gap-4">
                     <img src="{{ asset('img/logo-Readify.webp') }}" alt="" class="size-10 bg-white rounded-lg">
 
-                    <span class="text-xl text-white font-semibold tracking-wide">
+                    <span class="text-xl text-white font-semibold tracking-wide hidden md:inline">
                         READIFY
                     </span>
                 </div>
@@ -49,7 +50,7 @@ new class extends Component {
                         <label for="search" class="sr-only"> Cari buku </label>
 
                         <input id="search" type="search" placeholder="Cari judul atau kategori"
-                            class="w-40 md:w-56 lg:w-72 px-3 py-1 md:py-1.5 text-sm bg-gray-100 focus:bg-white rounded-l-lg outline-none border-none transition" />
+                            class="w-56 md:w-56 lg:w-72 px-3 py-1 md:py-1.5 text-sm bg-gray-100 focus:bg-white rounded-l-lg outline-none border-none transition" />
 
                         <button type="submit" aria-label="Cari buku"
                             class="px-3 bg-gray-100 hover:bg-white rounded-r-lg flex items-center justify-center transition">
@@ -67,7 +68,7 @@ new class extends Component {
                             request()->routeIs('anggota.profil') ||
                             request()->routeIs('anggota.transaction.history') ||
                             request()->routeIs('anggota.invoice'))
-                        <li>
+                        <li class="hidden md:flex">
                             <a href="{{ route('anggota.subscriptions') }}"
                                 class="flex items-center gap-2 px-3 py-1 rounded-lg text-gray-600 hover:text-gray-700 bg-white/90 hover:bg-white backdrop-blur-sm transition">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"

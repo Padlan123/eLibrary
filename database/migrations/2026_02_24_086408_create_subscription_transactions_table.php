@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('subscription_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('package_id')->constrained()->cascadeOnDelete();
             $table->string('invoice_number')->unique();
             $table->string('name');
             $table->integer('number');
@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('payment_proof')->nullable();
             $table->timestamps();
 
-            $table->index(['member_id', 'package_id']);
+            $table->index(['user_id', 'package_id']);
         });
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class MemberSubscription extends Model
 {
     protected $fillable = [
-        'member_id',
+        'user_id',
         'start_date',
         'end_date',
         'status',

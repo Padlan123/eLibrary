@@ -47,22 +47,14 @@ new class extends Component {
                 }
             }" @mouseenter="stopAutoplay" @mouseleave="startAutoplay"
                 class="relative overflow-hidden aspect-video md:aspect-16/5">
-                <!-- TRACK -->
                 <div x-ref="track" class="flex transition-transform duration-500"
                     :style="`transform: translateX(-${current * 100}%)`">
                     @foreach ($this->books as $book)
                         <article class="min-w-full">
-                            @if ($book->cover_file_name)
-                                <img src="{{ url('storage/' . $book->cover_file_name) }}" alt="{{ $book->title }}"
-                                    loading="{{ $loop->index === 0 ? 'eager' : 'lazy' }}"
-                                    fetchpriority="{{ $loop->index === 0 ? 'high' : 'low' }}"
-                                    class="w-full h-full object-cover" />
-                            @else
-                                <img src="{{ url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
-                                    alt="{{ $book->title }}" loading="{{ $loop->index === 0 ? 'eager' : 'lazy' }}"
-                                    fetchpriority="{{ $loop->index === 0 ? 'high' : 'low' }}"
-                                    class="w-full h-full object-cover" />
-                            @endif
+                            <img src="{{ $book->cover_file_name ? Storage::url($book->cover_file_name) : url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
+                                alt="{{ $book->title }}" loading="{{ $loop->index === 0 ? 'eager' : 'lazy' }}"
+                                fetchpriority="{{ $loop->index === 0 ? 'high' : 'low' }}"
+                                class="w-full h-full object-cover" />
                         </article>
                     @endforeach
 
@@ -121,5 +113,5 @@ new class extends Component {
     @livewire('pages::anggota.books.categories')
     @livewire('pages::anggota.books.latest-book')
     @livewire('pages::anggota.books.recommended-book')
-    
+
 </div>

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer('total_pages')->nullable();
             $table->decimal('progress_percent', 5, 2)->default(0);
             $table->enum('status', ['reading', 'finished', 'dropped'])->default('reading');
-            $table->boolean('is_favorite')->default(false);
             $table->timestamp('last_read_at')->nullable();
             $table->timestamps();
         });

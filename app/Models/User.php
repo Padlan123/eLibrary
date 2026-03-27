@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(ReadingHistory::class);
     }
+
+    public function favoriteBooks()
+    {
+        return $this->belongsToMany(Book::class, 'user_favorite_books')->withTimestamps();
+    }
 }

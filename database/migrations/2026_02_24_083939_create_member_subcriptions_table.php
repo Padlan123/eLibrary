@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('member_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->dateTime('start_date');
             $table->dateTime('end_date');
             $table->enum('status', ['active', 'expired', 'cancelled'])->default('active');
             $table->timestamps();
 
-            $table->index(['member_id', 'end_date', 'status']);
+            $table->index(['user_id', 'end_date', 'status']);
         });
     }
 

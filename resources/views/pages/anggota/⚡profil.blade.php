@@ -3,16 +3,22 @@
 use Livewire\Component;
 use App\Models\SubscriptionTransaction;
 use App\Models\ReadingHistory;
+use App\Models\Book;
 use Livewire\Attributes\Computed;
 
 new class extends Component {
+    public $username = '';
     public $initials = '';
+    public $created_at = '';
 
     public function mount()
     {
-        $words = explode(' ', auth()->user()->username);
+        $user = auth()->user();
+        $words = explode(' ', $user->username);
         $initial = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''));
 
+        $this->username = $user->username;
+        $this->created_at = $user->created_at;
         $this->initials = $initial;
     }
 
@@ -29,17 +35,9 @@ new class extends Component {
     #[Computed]
     public function favorites()
     {
-        return ReadingHistory::with('book')
-            ->where('user_id', auth()->id())
-            ->where('is_favorite', true)
-            ->latest('last_read_at')
-            ->get();
-    }
+        return auth()->user()->favoriteBooks()->with('categories')->get()->sortByDesc(fn($book) => $book->pivot->created_at);
 
-    #[Computed]
-    public function user()
-    {
-        return Auth::user();
+        // Debug sementara, cek urutan created_at pivot
     }
 
     public function render()
@@ -57,7 +55,7 @@ new class extends Component {
                 <div class="space-y-4 max-w-md">
                     <div class="flex items-center justify-center gap-2 flex-wrap">
                         <h1 class="text-xl md:text-2xl font-semibold text-gray-800">
-                            {{ $this->user->username }}
+                            {{ $this->username }}
                         </h1>
                     </div>
                     <div
@@ -70,7 +68,7 @@ new class extends Component {
                         Premium
                     </span>
 
-                    <p class="text-sm text-gray-500">Bergabung sejak {{ $this->user->created_at->format('Y') }}</p>
+                    <p class="text-sm text-gray-500">Bergabung sejak {{ $this->created_at->format('Y') }}</p>
 
                     <a href="#"
                         class="inline-block text-sm text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-500 transition">
@@ -176,34 +174,28 @@ new class extends Component {
                 {{-- TAB: FAVORIT --}}
                 <template x-if="activeTab === 'favorites'">
                     <div class="p-4 space-y-4">
-                        @forelse ($this->favorites as $history)
+                        @forelse ($this->favorites as $favorite)
                             <article class="flex gap-4 pb-4 border-b last:border-0 last:pb-0">
                                 <figure class="w-20 sm:w-24 shrink-0">
-                                    <img src="{{ $history->book->cover ? Storage::url($history->book->cover) : '/img/book/default.jpg' }}"
-                                        alt="{{ $history->book->title }}"
+                                    <img src="{{ $favorite->cover_file_name ? Storage::url($favorite->cover_file_name) : '/img/book/default.jpg' }}"
+                                        alt="{{ $favorite->title }}"
                                         class="w-full aspect-2/3 object-cover rounded-lg" />
                                 </figure>
 
                                 <div class="flex flex-col flex-1 justify-between space-y-3">
                                     <div class="space-y-2">
                                         <p class="text-sm font-medium text-gray-800">
-                                            {{ $history->book->title }}
+                                            {{ $favorite->title }}
                                         </p>
                                         <p class="text-xs text-gray-500">
-                                            {{ $history->book->author ?? '-' }}
+                                            {{ $favorite->author ?? '-' }}
                                         </p>
-
-                                        <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
-                                            <div class="h-full bg-blue-500 transition-all duration-300"
-                                                style="width: {{ $history->progress_percent }}%">
-                                            </div>
-                                        </div>
                                         <p class="text-xs text-gray-500">
-                                            {{ number_format($history->progress_percent, 0) }}% selesai
+                                            {{ $favorite->category_names }}
                                         </p>
                                     </div>
 
-                                    <a href="{{ route('books.read', $history->book) }}"
+                                    <a href="{{ route('anggota.books.read', $favorite) }}"
                                         class="self-start text-sm bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-500 transition">
                                         Baca
                                     </a>

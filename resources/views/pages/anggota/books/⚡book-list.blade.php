@@ -2,17 +2,45 @@
 
 use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use App\Models\Book;
+use App\Models\ReadingHistory;
 
 new class extends Component {
     #[Computed]
     public function books()
     {
-        return Book::with('categories')->latest()->limit(12)->get();
+        return Book::with([
+            'favoriteBooks' => function ($query) {
+                $query->where('user_id', auth()->id());
+            },
+        ])
+            ->orderBy('id', 'desc')
+            ->limit(12)
+            ->get();
     }
-    public function render()
+
+    public function favorite($id)
     {
-        return $this->view()->title('Home')->layout('layouts.anggota');
+        auth()
+            ->user()
+            ->favoriteBooks()
+            ->syncWithoutDetaching([$id]);
+        unset($this->books);
+        $this->dispatch('favorite-updated');
+    }
+
+    public function unfavorite($id)
+    {
+        auth()->user()->favoriteBooks()->detach($id);
+        unset($this->books);
+        $this->dispatch('favorite-updated');
+    }
+
+    #[On('favorite-updated')]
+    public function refreshBooks()
+    {
+        unset($this->books);
     }
 };
 ?>
@@ -29,7 +57,7 @@ new class extends Component {
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <!-- BOOK CARD - START - FOREACH -->
                 @forelse ($this->books as $book)
-                    <article
+                    <article wire:key="{{ $book->id }}"
                         class="group flex gap-3 p-3 bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-transform ease-out duration-500">
                         <figure class="w-20 shrink-0 aspect-2/3 overflow-hidden rounded-md">
                             <img src="{{ $book->cover_file_name ? Storage::url($book->cover_file_name) : url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
@@ -47,20 +75,36 @@ new class extends Component {
                                 </h3>
 
                                 <p class="text-xs text-gray-500">{{ $book->author }}</p>
-                                @foreach ($book->categories as $kategori)
-                                    <span class="text-xs text-gray-600">
-                                        {{ $kategori->name }} @if (!$loop->last)
-                                            ,
-                                        @endif
-                                    </span>
-                                @endforeach
+
+                                <span class="text-xs text-gray-600">
+                                    {{ $book->category_names }}
+                                </span>
+
                             </div>
 
                             <div class="flex items-center justify-between">
-                                <a href="{{ route('anggota.books.read', $book) }}" aria-label="Baca buku Atomic Habits"
-                                    class="px-3 py-1 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-md transition">
-                                    Baca
-                                </a>
+                                <div class="space-x-2">
+
+                                    <a href="{{ route('anggota.books.read', $book) }}"
+                                        class="px-3 py-1 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-md transition">
+                                        Baca
+                                    </a>
+                                    @php
+                                        $isFavorite = $book->favoriteBooks->isNotEmpty();
+                                    @endphp
+
+                                    @if ($isFavorite)
+                                        <button wire:click="unfavorite({{ $book->id }})"
+                                            class="px-3 py-1 text-sm text-black bg-gray-100 hover:bg-gray-200 rounded-md transition cursor-pointer">
+                                            Batal Disukai
+                                        </button>
+                                    @else
+                                        <button wire:click="favorite({{ $book->id }})"
+                                            class="px-3 py-1 text-sm text-black bg-gray-100 hover:bg-gray-200 rounded-md transition cursor-pointer">
+                                            Sukai
+                                        </button>
+                                    @endif
+                                </div>
 
                                 <a href="{{ route('anggota.detail-book', $book->id) }}"
                                     class="text-xs text-gray-500 hover:text-blue-600 transition">

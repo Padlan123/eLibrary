@@ -3,6 +3,7 @@
 use Livewire\Component;
 use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use App\Models\Book;
 use App\Models\Category;
 
@@ -23,7 +24,38 @@ new #[Lazy] class extends Component {
     #[Computed]
     public function books()
     {
-        return Book::with('categories')->latest()->limit(8)->get();
+        return Book::with([
+            'favoriteBooks' => function ($query) {
+                $query->where('user_id', auth()->id());
+            },
+        ])
+            ->orderBy('id', 'desc')
+            ->limit(12)
+            ->get();
+    }
+
+    public function favorite($id)
+    {
+        auth()
+            ->user()
+            ->favoriteBooks()
+            ->syncWithoutDetaching([$id]);
+
+        unset($this->books);
+        $this->dispatch('favorite-updated');
+    }
+
+    public function unfavorite($id)
+    {
+        auth()->user()->favoriteBooks()->detach($id);
+        unset($this->books);
+        $this->dispatch('favorite-updated');
+    }
+
+    #[On('favorite-updated')]
+    public function refreshBooks()
+    {
+        unset($this->books);
     }
 };
 ?>
@@ -126,22 +158,39 @@ new #[Lazy] class extends Component {
                                     </h3>
 
                                     <p class="text-xs text-gray-500">{{ $book->author }}</p>
-                                    @foreach ($book->categories as $kategori)
-                                        <span class="text-xs text-gray-600">
-                                            {{ $kategori->name }} @if (!$loop->last)
-                                                ,
-                                            @endif
-                                        </span>
-                                    @endforeach
+
+                                    <span class="text-xs text-gray-600">
+                                        {{ $book->category_names }}
+                                    </span>
+
                                 </div>
 
                                 <div class="flex items-center justify-between">
-                                    <a href="#" aria-label="Baca buku Atomic Habits"
-                                        class="px-3 py-1 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-md transition">
-                                        Baca
-                                    </a>
+                                    <div class="space-x-2">
 
-                                    <a href="#" class="text-xs text-gray-500 hover:text-blue-600 transition">
+                                        <a href="{{ route('anggota.books.read', $book) }}"
+                                            class="px-3 py-1 text-sm text-white bg-blue-600 hover:bg-blue-700 rounded-md transition">
+                                            Baca
+                                        </a>
+                                        @php
+                                            $isFavorite = $book->favoriteBooks->isNotEmpty();
+                                        @endphp
+
+                                        @if ($isFavorite)
+                                            <button wire:click="unfavorite({{ $book->id }})"
+                                                class="px-3 py-1 text-sm text-black bg-gray-100 hover:bg-gray-200 rounded-md transition cursor-pointer">
+                                                Batal Disukai
+                                            </button>
+                                        @else
+                                            <button wire:click="favorite({{ $book->id }})"
+                                                class="px-3 py-1 text-sm text-black bg-gray-100 hover:bg-gray-200 rounded-md transition cursor-pointer">
+                                                Sukai
+                                            </button>
+                                        @endif
+                                    </div>
+
+                                    <a href="{{ route('anggota.detail-book', $book->id) }}"
+                                        class="text-xs text-gray-500 hover:text-blue-600 transition">
                                         Lihat detail →
                                     </a>
                                 </div>
@@ -194,22 +243,6 @@ new #[Lazy] class extends Component {
                     <a href="transaksi.html"
                         class="inline-block mt-4 text-sm font-medium bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
                         Lihat Rekomendasi
-                    </a>
-                </div>
-
-                <!-- CTA UPLOAD BUKU -->
-                <div class="p-5 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-500 text-white shadow-lg space-y-4">
-                    <h4 class="text-lg font-semibold">
-                        Punya buku yang ingin dibagikan?
-                    </h4>
-
-                    <p class="text-sm opacity-90">
-                        Unggah buku Anda dan bagikan ilmu kepada pembaca lain.
-                    </p>
-
-                    <a href="upload-user.html"
-                        class="inline-block mt-4 text-sm font-medium bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
-                        unggah buku
                     </a>
                 </div>
             </aside>

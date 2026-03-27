@@ -16,7 +16,7 @@ new #[Lazy] class extends Component {
     #[Computed]
     public function categories()
     {
-        return Category::latest()->get();
+        return Category::all();
     }
 };
 ?>
