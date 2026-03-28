@@ -24,30 +24,26 @@ new class extends Component {
     #[Computed]
     public function is_favorite()
     {
-        return ReadingHistory::where('book_id', $this->id)
-            ->where('user_id', auth()->id())
-            ->where('is_favorite', true)
-            ->first();
+        return Book::whereHas('favoriteBooks', function ($query) {
+            $query->where('user_id', auth()->id());
+        })
+            ->where('id', $this->id)
+            ->exists();
     }
 
-    public function favorite()
+    public function favorite($id)
     {
-        $book = ReadingHistory::where('book_id', $this->id)->where('user_id', auth()->id());
-        $book->update([
-            'is_favorite' => true,
-        ]);
-
-        $this->FlashMessage('sukses', 'berhasil menambahkan ke favorit', 'anggota.detail-book', $this->id);
+        auth()
+            ->user()
+            ->favoriteBooks()
+            ->syncWithoutDetaching([$id]);
+        unset($this->is_favorite);
     }
 
-    public function unfavorite()
+    public function unfavorite($id)
     {
-        $book = ReadingHistory::where('book_id', $this->id)->where('user_id', auth()->id());
-        $book->update([
-            'is_favorite' => false,
-        ]);
-
-        $this->FlashMessage('sukses', 'membatalkan ke favorit', 'anggota.detail-book', $this->id);
+        auth()->user()->favoriteBooks()->detach($id);
+        unset($this->is_favorite);
     }
 
     public function render()
@@ -89,12 +85,12 @@ new class extends Component {
 
                     <p>
                         <span class="font-medium text-gray-600">Tahun:</span>
-                        {{ $this->selectedBook->publication_year }}
+                        {{ $this->selectedBook->publication_year->format('Y') }}
                     </p>
 
                     <p>
                         <span class="font-medium text-gray-600">Halaman:</span>
-                        {{ $this->selectedBook->total_pages }}
+                        {{ $this->selectedBook->total_pages ?? '' }}
                     </p>
 
                     <p>
@@ -111,21 +107,28 @@ new class extends Component {
 
                 <!-- CTA BUTTON -->
                 <div class="flex gap-4">
-                    <a href="#" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    <a href="{{ route('anggota.books.read', $this->selectedBook) }}"
+                        class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
                         Mulai Membaca
                     </a>
 
                     @if ($this->is_favorite)
-                        <button wire:click="unfavorite"
+                        <button wire:loading.remove wire:target="unfavorite, favorite"
+                            wire:click="unfavorite({{ $this->selectedBook->id }})"
                             class="px-6 py-3 border border-gray-300 rounded-lg bg-gray-100 transition">
-                            Batalkan Disukai
+                            Batalkan Suka
                         </button>
                     @else
-                        <button wire:click="favorite"
+                        <button wire:loading.remove wire:target="unfavorite, favorite"
+                            wire:click="favorite({{ $this->selectedBook->id }})"
                             class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-100 transition">
-                            Disukai
+                            Suka
                         </button>
                     @endif
+                    <button wire:loading wire:target="unfavorite, favorite"
+                        class="px-6 py-3 bg-gray-200 rounded-lg transition">
+                        Loading...
+                    </button>
                 </div>
             </div>
         </section>
@@ -134,19 +137,13 @@ new class extends Component {
         <section class="bg-white rounded-xl p-6 shadow-sm space-y-4">
             <h2 class="text-xl font-semibold text-gray-800">Deskripsi Buku</h2>
 
-            <p class="text-gray-600 leading-relaxed">
-                Atomic Habits adalah buku yang menjelaskan bagaimana perubahan kecil
-                yang dilakukan secara konsisten dapat menghasilkan dampak besar dalam
-                kehidupan. James Clear membahas konsep kebiasaan melalui pendekatan
-                ilmiah dan memberikan strategi praktis untuk membangun kebiasaan baik
-                serta menghentikan kebiasaan buruk.
-            </p>
-
-            <p class="text-gray-600 leading-relaxed">
-                Buku ini sangat cocok bagi siapa saja yang ingin meningkatkan
-                produktivitas, memperbaiki gaya hidup, dan mencapai tujuan jangka
-                panjang melalui perubahan kecil yang konsisten.
-            </p>
+            @foreach (explode("\n", $this->selectedBook->summary) as $paragraph)
+                @if (trim($paragraph))
+                    <p class="text-gray-600 leading-relaxed">
+                        {{ trim($paragraph) }}
+                    </p>
+                @endif
+            @endforeach
         </section>
 
         <!-- INFORMASI BUKU -->
@@ -156,12 +153,12 @@ new class extends Component {
             <div class="grid md:grid-cols-2 gap-4 text-sm">
                 <p>
                     <span class="font-medium text-gray-600">Penulis:</span>
-                    James Clear
+                    {{ $this->selectedBook->author }}
                 </p>
 
                 <p>
                     <span class="font-medium text-gray-600">Penerbit:</span>
-                    Avery
+                    {{ $this->selectedBook->publisher }}
                 </p>
 
                 <p>
@@ -171,31 +168,9 @@ new class extends Component {
 
                 <p>
                     <span class="font-medium text-gray-600">Tanggal Terbit:</span>
-                    16 Oktober 2018
+                    {{ $this->selectedBook->publication_year->format('d M Y') }}
                 </p>
             </div>
         </section>
     </div>
-    @if (session('sukses'))
-        <div x-data="{ show: false }" x-show="show" x-cloak x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-300" x-transition:leave-start="opacity-100 translate-y-0"
-            x-transition:leave-end="opacity-0 translate-y-4" x-init="setTimeout(() => {
-                show = true;
-                setTimeout(() => show = false, 3000)
-            }, 300)"
-            class="fixed top-24 left-1/2 -translate-x-1/2 z-50
-    w-[calc(100%-2rem)] sm:w-auto sm:max-w-sm
-    flex items-start sm:items-center px-4 py-3 text-sm
-    text-fg-success-strong rounded-xl bg-success-soft
-    border border-success-subtle shadow-lg"
-            role="alert">
-            <svg class="w-4 h-4 me-2 shrink-0 mt-0.5 sm:mt-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            <p>{{ session('sukses') }}</p>
-        </div>
-    @endif
 </div>

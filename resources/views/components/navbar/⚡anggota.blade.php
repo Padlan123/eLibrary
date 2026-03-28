@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 
 new class extends Component {
     public $initials = '';
+    public $keyword = '';
 
     public function mount()
     {
@@ -12,6 +13,11 @@ new class extends Component {
         $initial = strtoupper(substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''));
 
         $this->initials = $initial;
+    }
+
+    public function search()
+    {
+        $this->dispatch('search-filter', search: $this->keyword);
     }
 
     public function logout()
@@ -47,13 +53,13 @@ new class extends Component {
                         request()->routeIs('anggota.profil') ||
                         request()->routeIs('anggota.transaction.history') ||
                         request()->routeIs('anggota.invoice'))
-                    <form role="search" class="flex">
+                    <form wire:submit="search" role="search" class="flex">
                         <label for="search" class="sr-only"> Cari buku </label>
 
-                        <input id="search" type="search" placeholder="Cari judul atau kategori"
+                        <input wire:model="keyword" id="search" type="search" placeholder="Cari judul atau kategori"
                             class="w-56 md:w-56 lg:w-72 px-3 py-1 md:py-1.5 text-sm bg-gray-100 focus:bg-white rounded-l-lg outline-none border-none transition" />
 
-                        <button type="submit" aria-label="Cari buku"
+                        <button wire:click="search" type="submit" aria-label="Cari buku"
                             class="px-3 bg-gray-100 hover:bg-white rounded-r-lg flex items-center justify-center transition">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-4 text-gray-700">

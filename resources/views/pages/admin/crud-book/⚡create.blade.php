@@ -170,7 +170,7 @@ new class extends Component {
                     </div>
 
                     <div class="relative">
-                        <input wire:model="publication_year" type="text" id="tahun"
+                        <input wire:model="publication_year" type="date" id="tahun"
                             class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
                             placeholder=" " />
                         <label for="tahun"

@@ -26,6 +26,7 @@ class Book extends Model
 
     protected $casts = [
         'subscription' => 'boolean',
+        'publication_year' => 'date'
     ];
 
     protected $appends = ['category_names'];

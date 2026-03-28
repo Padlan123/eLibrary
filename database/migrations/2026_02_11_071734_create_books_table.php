@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('author');
             $table->string('publisher');
-            $table->unsignedSmallInteger('publication_year');
+            $table->date('publication_year');
             $table->text('summary')->nullable();
             $table->boolean('subscription')->default(false);
             $table->integer('total_pages')->nullable();

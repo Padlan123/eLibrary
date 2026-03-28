@@ -2,6 +2,7 @@
 
 use Livewire\Component;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use App\Models\Book;
 
 new class extends Component {
@@ -18,7 +19,7 @@ new class extends Component {
 };
 ?>
 
-<div>
+<div class="relative">
     <section class="px-4 md:px-6 mt-32 fade-in-up">
         <div class="relative overflow-hidden rounded-xl">
             <!-- CAROUSEL - MAX SLIDE 8 -->
@@ -109,6 +110,7 @@ new class extends Component {
             <div class="dots absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"></div>
         </div>
     </section>
+    @livewire('pages::anggota.books.filter-book')
     @livewire('pages::anggota.books.book-list')
     @livewire('pages::anggota.books.categories')
     @livewire('pages::anggota.books.latest-book')

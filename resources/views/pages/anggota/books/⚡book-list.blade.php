@@ -94,16 +94,25 @@ new class extends Component {
                                     @endphp
 
                                     @if ($isFavorite)
-                                        <button wire:click="unfavorite({{ $book->id }})"
-                                            class="px-3 py-1 text-sm text-black bg-gray-100 hover:bg-gray-200 rounded-md transition cursor-pointer">
-                                            Batal Disukai
+                                        <button wire:loading.remove
+                                            wire:target="unfavorite({{ $book->id }}), favorite({{ $book->id }})"
+                                            wire:click="unfavorite({{ $book->id }})"
+                                            class="px-3 py-1 text-sm border border-gray-300 rounded-lg bg-gray-100 transition">
+                                            Batalkan Suka
                                         </button>
                                     @else
-                                        <button wire:click="favorite({{ $book->id }})"
-                                            class="px-3 py-1 text-sm text-black bg-gray-100 hover:bg-gray-200 rounded-md transition cursor-pointer">
-                                            Sukai
+                                        <button wire:loading.remove
+                                            wire:target="unfavorite({{ $book->id }}), favorite({{ $book->id }})"
+                                            wire:click="favorite({{ $book->id }})"
+                                            class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+                                            Suka
                                         </button>
                                     @endif
+                                    <button wire:loading
+                                        wire:target="unfavorite({{ $book->id }}), favorite({{ $book->id }})"
+                                        class="px-3 py-1 text-sm bg-gray-200 rounded-lg transition">
+                                        Loading...
+                                    </button>
                                 </div>
 
                                 <a href="{{ route('anggota.detail-book', $book->id) }}"

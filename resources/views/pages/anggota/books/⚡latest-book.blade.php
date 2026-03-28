@@ -54,8 +54,7 @@ new #[Lazy] class extends Component {
 ?>
 
 <div>
-    <section aria-labelledby="terbaru"
-        class="px-4 md:px-6 space-y-6 md:space-y-8 py-12 lg:py-24 fade-in-up">
+    <section aria-labelledby="terbaru" class="px-4 md:px-6 space-y-6 md:space-y-8 py-12 lg:py-24 fade-in-up">
         <header id="terbaru" class="text-center">
             <h2 class="text-2xl font-semibold text-gray-700 uppercase tracking-widest">
                 Terbaru
@@ -102,16 +101,25 @@ new #[Lazy] class extends Component {
                                 @endphp
 
                                 @if ($isFavorite)
-                                    <button wire:click="unfavorite({{ $book->id }})"
-                                        class="px-3 py-1 text-sm text-black bg-gray-100 hover:bg-gray-200 rounded-md transition">
-                                        Batal Disukai
+                                    <button wire:loading.remove
+                                        wire:target="unfavorite({{ $book->id }}), favorite({{ $book->id }})"
+                                        wire:click="unfavorite({{ $book->id }})"
+                                        class="px-3 py-1 text-sm border border-gray-300 rounded-lg bg-gray-100 transition">
+                                        Batalkan Suka
                                     </button>
                                 @else
-                                    <button wire:click="favorite({{ $book->id }})"
-                                        class="px-3 py-1 text-sm text-black bg-gray-100 hover:bg-gray-200 rounded-md transition">
-                                        Sukai
+                                    <button wire:loading.remove
+                                        wire:target="unfavorite({{ $book->id }}), favorite({{ $book->id }})"
+                                        wire:click="favorite({{ $book->id }})"
+                                        class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+                                        Suka
                                     </button>
                                 @endif
+                                <button wire:loading
+                                    wire:target="unfavorite({{ $book->id }}), favorite({{ $book->id }})"
+                                    class="px-3 py-1 text-sm bg-gray-200 rounded-lg transition">
+                                    Loading...
+                                </button>
                             </div>
 
                             <a href="{{ route('anggota.detail-book', $book->id) }}"
