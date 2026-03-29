@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Database\Seeders\BookCategoriesSeeder;
-use Database\Seeders\BookSeeder;
+// use Database\Seeders\BookCategoriesSeeder;
+// use Database\Seeders\BookSeeder;
 use Database\Seeders\CategoriesSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -27,8 +27,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             CategoriesSeeder::class,
-            BookSeeder::class,
-            BookCategoriesSeeder::class,
+            // BookSeeder::class,
+            // BookCategoriesSeeder::class,
             PackagesSeeder::class,
         ]);
 
@@ -45,6 +45,6 @@ class DatabaseSeeder extends Seeder
         $anggota->assignRole('anggota');
         $admin->assignRole('admin');
 
-        User::factory()->anggota()->count(10)->create();
+        // User::factory()->anggota()->count(10)->create();
     }
 }

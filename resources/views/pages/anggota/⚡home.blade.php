@@ -112,8 +112,8 @@ new class extends Component {
     </section>
     @livewire('pages::anggota.books.filter-book')
     @livewire('pages::anggota.books.book-list')
-    @livewire('pages::anggota.books.categories')
     @livewire('pages::anggota.books.latest-book')
     @livewire('pages::anggota.books.recommended-book')
+    @livewire('pages::anggota.books.categories')
 
 </div>

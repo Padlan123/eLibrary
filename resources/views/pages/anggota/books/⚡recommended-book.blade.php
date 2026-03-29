@@ -18,7 +18,7 @@ new #[Lazy] class extends Component {
     #[Computed]
     public function categories()
     {
-        return Category::withCount('books')->orderBy('name', 'asc')->get();
+        return Category::withCount('books')->having('books_count', '>', 0)->orderBy('books_count', 'desc')->limit(6)->get();
     }
 
     #[Computed]

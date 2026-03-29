@@ -22,7 +22,19 @@ class CategoriesSeeder extends Seeder
             ['name' => 'Sci-Fi'],
             ['name' => 'Romantis'],
             ['name' => 'Aksi'],
-            ['name' => 'Self-Development'],
+            ['name' => 'Psikologi'],
+            ['name' => 'Sejarah'],
+            ['name' => 'Biografi'],
+            ['name' => 'Politik'],
+            ['name' => 'Ekonomi'],
+            ['name' => 'Sosial'],
+            ['name' => 'Agama'],
+            ['name' => 'Filsafat'],
+            ['name' => 'Kesehatan'],
+            ['name' => 'Olahraga'],
+            ['name' => 'Hiburan'],
+            ['name' => 'Pendidikan'],
+            ['name' => 'Budaya'],
         ]);
     }
 }
