@@ -53,6 +53,13 @@ class User extends Authenticatable
         return $this->hasMany(MemberSubscription::class, 'user_id');
     }
 
+    public function packages()
+    {
+        return $this->belongsToMany(Package::class, 'member_subscriptions', 'user_id', 'package_id')
+            ->withPivot('start_date', 'end_date', 'status')
+            ->withTimestamps();
+    }
+
     public function readingHistories()
     {
         return $this->hasMany(ReadingHistory::class);

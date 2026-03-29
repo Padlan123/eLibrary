@@ -15,7 +15,7 @@ new class extends Component {
     #[Computed]
     public function invoice()
     {
-        return SubscriptionTransaction::where('member_id', auth()->id())
+        return SubscriptionTransaction::where('user_id', auth()->id())
             ->where('id', $this->id)
             ->first();
     }

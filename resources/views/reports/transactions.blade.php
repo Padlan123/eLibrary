@@ -35,7 +35,8 @@
                     <td>{{ $item->member->username }}</td>
                     <td>{{ $item->package->name }}</td>
                     <td>
-                        <span class="{{ $item->status === 'completed' ? 'badge-success' : 'badge-danger' }}">
+                        <span
+                            class="{{ $item->status === 'completed' ? 'badge-success' : ($item->status === 'pending' ? 'badge-pending' : 'badge-danger') }}">
                             {{ ucfirst($item->status) }}
                         </span>
                     </td>

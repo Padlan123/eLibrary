@@ -7,13 +7,14 @@ use App\Models\SubscriptionTransaction;
 use App\Models\MemberSubscription;
 use Illuminate\Support\Facades\DB;
 use App\Models\Package;
+use App\Models\User;
 use Carbon\Carbon;
 
 new class extends Component {
     use WithFlashMessages;
 
     public $packageId = [];
-    public $status = [];
+    public $status = ['pending', 'completed', 'rejected'];
     public $search = '';
 
     public bool $show = false;
@@ -90,7 +91,7 @@ new class extends Component {
             $user->givePermissionTo('premium');
         }
 
-        $this->flashMessage('sukses', 'berlangganan disetujui', 'admin.subscriptions');
+        // $this->flashMessage('sukses', 'berlangganan disetujui', 'admin.subscriptions');
     }
 
     public function rejectTransaction($id)
@@ -120,7 +121,7 @@ new class extends Component {
     #[Computed]
     public function selectedStatuses()
     {
-        return SubscriptionTransaction::whereIn('status', $this->status)->get();
+        return collect($this->status);
     }
 
     #[computed]
@@ -249,33 +250,6 @@ new class extends Component {
 
             <!-- Actions -->
             <div class="flex items-center gap-2 flex-wrap">
-                <ul class="max-w-md space-y-1 text-body list-disc list-inside">
-                    <li class="text-xs list-none">
-                        filter :
-                    </li>
-                </ul>
-                <ul class="max-w-md space-y-1 text-body list-disc list-inside">
-                    <li class="text-xs">
-                        @forelse ($this->selectedPackages as $package)
-                            {{ $package->name }} @if (!$loop->last)
-                                ,
-                            @endif
-                        @empty
-                            -
-                        @endforelse
-                    </li>
-                </ul>
-                <ul class="max-w-md space-y-1 text-body list-disc list-inside">
-                    <li class="text-xs">
-                        @forelse ($this->selectedStatuses as $status)
-                            {{ $status->status }} @if (!$loop->last)
-                                ,
-                            @endif
-                        @empty
-                            -
-                        @endforelse
-                    </li>
-                </ul>
                 <div class="relative" x-data="{ open: false }">
                     <button @click="open = !open" type="button"
                         class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-colors">
@@ -378,9 +352,16 @@ new class extends Component {
                         <tr wire:key="{{ $transaction->id }}" class="table-row-hover bg-white">
                             <td class="px-5 py-3.5">
                                 <div class="flex items-center gap-2.5">
+                                    @php
+                                        $words = explode(' ', $transaction->member->username);
+                                        $initial = strtoupper(
+                                            substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''),
+                                        );
+                                    @endphp
                                     <div
                                         class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-xs shrink-0">
-                                        -</div>
+                                        {{ $initial }}
+                                    </div>
                                     <span
                                         class="font-semibold text-slate-800">{{ $transaction->member->username }}</span>
                                 </div>

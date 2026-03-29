@@ -46,7 +46,7 @@
 
     {{-- TOOLBAR --}}
     <div id="toolbar" class="flex items-center justify-between gap-3 px-4 py-3 bg-gray-900 text-white">
-        <a href="{{ route('anggota.home') }}" class="text-sm text-gray-400 hover:text-white transition">
+        <a href="{{ url()->previous() }}" class="text-sm text-gray-400 hover:text-white transition">
             ← Kembali
         </a>
 

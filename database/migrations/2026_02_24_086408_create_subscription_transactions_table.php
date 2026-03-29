@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('package_id')->constrained()->cascadeOnDelete();
             $table->string('invoice_number')->unique();
             $table->string('name');
-            $table->integer('number');
+            $table->string('number');
             $table->decimal('amount', 8, 2);
             $table->enum('status', ['pending', 'completed', 'rejected'])->default('pending');
             $table->dateTime('paid_date');

@@ -6,7 +6,7 @@ new class extends Component {
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('welcome');
+        return redirect()->route('login');
     }
 };
 ?>

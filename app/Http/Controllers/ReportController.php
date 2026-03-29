@@ -62,6 +62,6 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('reports.transactions', compact('transactions', 'periode', 'total', 'packageNames', 'status'))
             ->setPaper('a4', 'portrait');
 
-        return $pdf->download("laporan-penjualan-{$from}-{$to}.pdf");
+        return $pdf->download("laporan-berlangganan-{$from}-ke-{$to}.pdf");
     }
 }

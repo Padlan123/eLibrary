@@ -97,6 +97,11 @@
             font-weight: bold;
         }
 
+        .badge-pending {
+            color: #d8c65e;
+            font-weight: bold;
+        }
+
         .badge-danger {
             color: #c0392b;
             font-weight: bold;

@@ -9,12 +9,12 @@ new class extends Component {
     public function subscribes()
     {
         return User::whereHas('subscribes', function ($query) {
-            $query->active();
+            $query->status->active();
         })
             ->with([
                 'subscribes',
                 function ($query) {
-                    $query->active();
+                    $query->status->active();
                 },
             ])
             ->latest()
@@ -44,7 +44,6 @@ new class extends Component {
                     <th>Username</th>
                     <th>Email</th>
                     <th>Status</th>
-                    <th>Paket langganan</th>
                     <th>Tanggal langganan</th>
                 </tr>
             </thead>
@@ -54,26 +53,18 @@ new class extends Component {
                     <tr class="bg-gray-50 rounded-lg shadow-sm">
                         <td class="p-4">{{ $user->username }}</td>
                         <td class="p-4">{{ $user->email }}</td>
-                        @if ($user->subscribe)
+                        @if ($user->subscribes->firstWhere('status', 'active'))
                             <td class="p-4">
                                 <span class="bg-blue-400 px-3 py-1 rounded-full text-sm">
-                                    Berlangganan
+                                    premium
                                 </span>
                             </td>
                             <td class="p-4">
-                                <span class="bg-amber-400 px-3 py-1 rounded-full text-sm">
-                                    Paket pro
-                                </span>
+                                {{ $user->subscribes->first()?->end_date?->format('d M Y') ?? '-' }}
                             </td>
-                            <td class="p-4">2026-07-12</td>
                         @else
                             <td class="p-4">
                                 <span class="bg-blue-400 px-3 py-1 rounded-full text-sm">
-                                    -
-                                </span>
-                            </td>
-                            <td class="p-4">
-                                <span class="bg-amber-400 px-3 py-1 rounded-full text-sm">
                                     -
                                 </span>
                             </td>

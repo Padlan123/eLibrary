@@ -222,7 +222,7 @@ new class extends Component {
                             {{-- Field Nama --}}
                             <div class="flex flex-col gap-1.5 sm:gap-2">
                                 <label for="username" class="text-sm font-medium text-gray-700 flex items-center gap-1">
-                                    Nama
+                                    Atas Nama
                                     <button data-popover-target="name-popover" data-popover-placement="top"
                                         type="button"
                                         class="text-body box-border shadow-xs font-medium leading-5 rounded-base text-sm">

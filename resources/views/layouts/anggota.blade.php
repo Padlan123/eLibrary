@@ -32,7 +32,7 @@
     @unless (request()->routeIs('anggota.invoice'))
         @livewire('navbar.anggota')
     @endunless
-    <main class="max-w-7xl mx-auto">
+    <main>
         {{ $slot }}
     </main>
     @unless (Request()->routeIs('anggota.transaction.history') || request()->routeIs('anggota.invoice'))

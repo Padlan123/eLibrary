@@ -25,7 +25,7 @@ class SubscriptionTransaction extends Model
 
     public function member()
     {
-        return $this->belongsTo(User::class, 'member_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function package()

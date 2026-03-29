@@ -78,14 +78,14 @@ new class extends Component {
                         <span class="font-medium text-gray-600">Kategori:</span>
 
                         <span class="text-xs text-gray-600">
-                            {{ $this->selectedBook->category_names }}
+                            {{ $this->selectedBook->categories->pluck('name')->join(', ') }}
                         </span>
 
                     </p>
 
                     <p>
                         <span class="font-medium text-gray-600">Tahun:</span>
-                        {{ $this->selectedBook->publication_year->format('Y') }}
+                        {{ $this->selectedBook->publication_year }}
                     </p>
 
                     <p>
@@ -93,17 +93,13 @@ new class extends Component {
                         {{ $this->selectedBook->total_pages ?? '' }}
                     </p>
 
-                    <p>
-                        <span class="font-medium text-gray-600">Bahasa:</span>
-                        Inggris
-                    </p>
                 </div>
 
                 <!-- RATING -->
-                <div class="flex items-center gap-2 text-yellow-500">
+                {{-- <div class="flex items-center gap-2 text-yellow-500">
                     ⭐⭐⭐⭐⭐
                     <span class="text-sm text-gray-500"> 4.8 / 5 (120 ulasan) </span>
-                </div>
+                </div> --}}
 
                 <!-- CTA BUTTON -->
                 <div class="flex gap-4">
@@ -161,14 +157,14 @@ new class extends Component {
                     {{ $this->selectedBook->publisher }}
                 </p>
 
-                <p>
+                {{-- <p>
                     <span class="font-medium text-gray-600">ISBN:</span>
                     9780735211292
-                </p>
+                </p> --}}
 
                 <p>
-                    <span class="font-medium text-gray-600">Tanggal Terbit:</span>
-                    {{ $this->selectedBook->publication_year->format('d M Y') }}
+                    <span class="font-medium text-gray-600">Tahun Terbit:</span>
+                    {{ $this->selectedBook->publication_year }}
                 </p>
             </div>
         </section>

@@ -31,7 +31,7 @@
 
 <body class="font-sans">
     <x-navbar.default></x-navbar.default>
-    <main class="pt-8">
+    <main class="pt-8 ">
         {{ $slot }}
     </main>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>

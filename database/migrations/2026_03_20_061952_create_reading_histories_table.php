@@ -21,6 +21,8 @@ return new class extends Migration
             $table->enum('status', ['reading', 'finished', 'dropped'])->default('reading');
             $table->timestamp('last_read_at')->nullable();
             $table->timestamps();
+
+            $table->index(['user_id', 'book_id']);
         });
     }
 

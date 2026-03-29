@@ -71,7 +71,8 @@ new class extends Component {
     }" Saat keyword berubah jadi kosong/null, show langsung di-set false sehingga background
         hilang.>
         {{-- Skeleton loading --}}
-        <template x-if="loading && $wire.keyword" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2 ">
+        <template x-if="loading && $wire.keyword"
+            class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-2 ">
             <div class="px-8 pt-20 space-y-4 fixed top-0 left-0 bg-amber-50 w-full py-12 z-99">
                 <div class="h-4 w-40 bg-gray-200 rounded animate-pulse"></div>
                 <section class="grid grid-cols-2 md:grid-cols-4 gap-4">

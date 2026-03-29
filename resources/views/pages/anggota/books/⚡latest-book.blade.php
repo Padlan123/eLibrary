@@ -6,13 +6,13 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use App\Models\Book;
 
-new #[Lazy] class extends Component {
-    public function placeholder()
-    {
-        return view('placeholder.default', [
-            'message' => 'memuat buku...',
-        ]);
-    }
+new class extends Component {
+    // public function placeholder()
+    // {
+    //     return view('placeholder.default', [
+    //         'message' => 'memuat buku...',
+    //     ]);
+    // }
 
     #[Computed]
     public function books()
@@ -65,7 +65,7 @@ new #[Lazy] class extends Component {
             <!-- BOOK CARD - START - FOREACH -->
             @forelse ($this->books as $book)
                 <article
-                    class="group flex gap-3 p-3 bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-transform ease-out duration-500">
+                    class="relative group flex gap-3 p-3 bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-transform ease-out duration-500">
                     <figure class="w-20 shrink-0 aspect-2/3 overflow-hidden rounded-md">
                         <img src="{{ $book->cover_file_name ? Storage::url($book->cover_file_name) : url('https://img.pikbest.com/origin/09/02/31/56bpIkbEsTFtz.jpg!f305cw') }}"
                             loading="{{ $loop->index < 3 ? 'eager' : 'lazy' }}"
@@ -128,6 +128,10 @@ new #[Lazy] class extends Component {
                             </a>
                         </div>
                     </div>
+                    @if ($book->subscription === true)
+                        <span
+                            class="absolute right-2 top-2 z-99 bg-warning-soft text-fg-warning text-xs font-medium px-2 py-0.5 rounded shadow">Premium</span>
+                    @endif
                 </article>
             @empty
                 <div class="col-span-full text-center py-10">

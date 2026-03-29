@@ -4,6 +4,7 @@ use Livewire\Component;
 use App\Models\SubscriptionTransaction;
 use App\Models\ReadingHistory;
 use App\Models\Book;
+use App\Models\User;
 use Livewire\Attributes\Computed;
 
 new class extends Component {
@@ -23,6 +24,24 @@ new class extends Component {
     }
 
     #[Computed]
+    public function isPremium()
+    {
+        return User::whereHas('subscribes', function ($query) {
+            $query->where('status', 'active');
+        })
+            ->where('id', auth()->id())
+            ->exists();
+    }
+
+    #[Computed]
+    public function reject()
+    {
+        return SubscriptionTransaction::where('user_id', auth()->id())
+            ->where('status', 'rejected')
+            ->exists();
+    }
+
+    #[Computed]
     public function histories()
     {
         return ReadingHistory::with('book')
@@ -36,8 +55,6 @@ new class extends Component {
     public function favorites()
     {
         return auth()->user()->favoriteBooks()->with('categories')->get()->sortByDesc(fn($book) => $book->pivot->created_at);
-
-        // Debug sementara, cek urutan created_at pivot
     }
 
     public function render()
@@ -64,9 +81,31 @@ new class extends Component {
                             {{ $initials }}
                         </span>
                     </div>
-                    <span class="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">
-                        Premium
-                    </span>
+                    @if ($this->isPremium)
+                        <span class="text-xs bg-blue-500 text-white px-2 py-0.5 rounded-full">
+                            Premium
+                        </span>
+                    @endif
+                    @if ($this->reject && !$this->isPremium)
+                        <div class="relative inline-block group">
+                            <span class="text-xs bg-red-500 text-white px-2 py-0.5 rounded-full cursor-default">
+                                Berlangganan di tolak
+                            </span>
+                            <div
+                                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 
+                    opacity-0 group-hover:opacity-100 transition-opacity duration-150
+                    bg-gray-800 text-white text-xs rounded px-2 py-1 
+                    whitespace-nowrap pointer-events-none z-10">
+                                Perhatikan lebih teliti saat mengisi formulir berlangganan, Coba isi Kembali dengan data
+                                yang benar dan lengkap.
+
+                                <div
+                                    class="absolute top-full left-1/2 -translate-x-1/2 
+                        border-4 border-transparent border-t-gray-800">
+                                </div>
+                            </div>
+                        </div>
+                    @endif
 
                     <p class="text-sm text-gray-500">Bergabung sejak {{ $this->created_at->format('Y') }}</p>
 
@@ -191,7 +230,7 @@ new class extends Component {
                                             {{ $favorite->author ?? '-' }}
                                         </p>
                                         <p class="text-xs text-gray-500">
-                                            {{ $favorite->category_names }}
+                                            {{ $favorite->categories->pluck('name')->join(', ') }}
                                         </p>
                                     </div>
 

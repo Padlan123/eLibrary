@@ -19,6 +19,7 @@ class Book extends Model
         'publication_year',
         'summary',
         'subscription',
+        'is_recommended',
         'total_pages',
         'cover_file_name',
         'pdf_file_name'
@@ -26,16 +27,10 @@ class Book extends Model
 
     protected $casts = [
         'subscription' => 'boolean',
+        'is_recommended' => 'boolean',
         'publication_year' => 'integer',
         'total_pages' => 'integer',
     ];
-
-    protected $appends = ['category_names'];
-
-    public function getCategoryNamesAttribute()
-    {
-        return $this->categories->pluck('name')->implode(', ');
-    }
 
     public function categories()
     {

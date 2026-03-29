@@ -22,6 +22,9 @@ new class extends Component {
 
 <div>
     <div class="md:px-4 px-6 pt-6 pb-8 mt-24 flex flex-col gap-3 w-full md:w-1/2 mx-auto shadow-md">
+        <a href="{{ url()->previous() }}" class="text-sm text-gray-600 hover:text-black transition">
+            ← Kembali
+        </a>
         <h1 class="text-2xl font-semibold text-slate-600 leading-5">Riwayat Transaksi</h1>
         <hr class="text-slate-300">
         @forelse ($this->transactionHistories as $history)
