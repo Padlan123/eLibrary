@@ -169,6 +169,5 @@ new class extends Component {
     {{-- @livewire('pages::anggota.books.book-list') --}}
     @livewire('pages::anggota.books.latest-book')
     @livewire('pages::anggota.books.recommended-book')
-    @livewire('pages::anggota.books.categories')
 
 </div>
