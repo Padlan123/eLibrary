@@ -1,6 +1,6 @@
 # Readify - Sistem Perpustakaan Digital
 
-Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur subscripsi, pembacaan PDF, dan laporan penjualan.
+Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur berlangganan, pembacaan PDF, dan laporan penjualan.
 
 ---
 
@@ -20,9 +20,9 @@ Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur subscripsi, pe
 **Readify** adalah aplikasi untuk mengelola perpustakaan digital berbasis web. Aplikasi ini dilengkapi dengan:
 - Sistem login untuk admin dan member
 - Koleksi e-book yang bisa dibaca langsung di browser
-- Manajemen subscripsi dan pembayaran
+- Manajemen langganan dan pembayaran
 - Pelacakan riwayat membaca
-- Laporan penjualan dan statistik buku
+- Laporan langganan dan data buku
 - Invoice otomatis dalam format PDF
 
 ---
@@ -41,10 +41,9 @@ Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur subscripsi, pe
 ### Untuk Admin
 - ✅ Dashboard dengan statistik
 - ✅ Tambah, edit, hapus buku
-- ✅ Kelola kategori buku
 - ✅ Lihat data member
-- ✅ Kelola paket subscripsi
-- ✅ Lihat laporan penjualan
+- ✅ Lihat laporan langganan
+- ✅ Konfirmasi transaksi berlangganan
 - ✅ Export laporan ke PDF
 
 ---
@@ -55,8 +54,8 @@ Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur subscripsi, pe
 - **Frontend:** Livewire 4, Tailwind CSS, Flowbite
 - **Database:** MySQL 8.0+
 - **PDF Reader:** PDF.js
+- **Export PDF:** laravel-dompdf
 - **Build Tool:** Vite, npm
-- **Testing:** Pest 3.8
 
 ---
 
@@ -139,10 +138,9 @@ Aplikasi akan berjalan di `http://localhost:8000`
 eLibrary/
 ├── app/
 │   ├── Models/              # Model database
-│   ├── Http/
+│   └── Http/
 │       ├── Controllers/     # Controller
-│       └── Middleware/      # Middleware
-│   
+│       └── Middleware/      # Middleware   
 ├── resources/
 │   ├── views/               # Template HTML
 │   └── css/                 # Style Tailwind
@@ -189,27 +187,16 @@ eLibrary/
 - Navigasi halaman mudah
 - Tracking halaman terakhir dibaca
 
-### Manajemen Subscripsi
+### Manajemen langganan
 - Berbagai paket pilihan
-- Track status subscripsi
+- Track status langganan
 - History transaksi
-- Invoice otomatis PDF
+- Invoice dapat didownload sebagai PDF
 
 ### Laporan
-- Laporan penjualan
-- Statistik buku
+- Laporan berlangganan
+- Data buku
 - Export ke PDF
-
----
-
-## 🤝 Kontribusi
-
-Ingin berkontribusi? Silakan:
-1. Fork repository
-2. Buat branch fitur (`git checkout -b fitur/fitur-baru`)
-3. Commit perubahan (`git commit -m 'Tambah fitur baru'`)
-4. Push ke branch (`git push origin fitur/fitur-baru`)
-5. Buat Pull Request
 
 ---
 
