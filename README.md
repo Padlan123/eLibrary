@@ -1,59 +1,222 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Readify - Sistem Perpustakaan Digital
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur subscripsi, pembacaan PDF, dan laporan penjualan.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📋 Daftar Isi
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Tentang Aplikasi](#tentang-aplikasi)
+- [Fitur](#fitur)
+- [Teknologi](#teknologi)
+- [Instalasi](#instalasi)
+- [Cara Menjalankan](#cara-menjalankan)
+- [Struktur Folder](#struktur-folder)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📚 Tentang Aplikasi
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+**Readify** adalah aplikasi untuk mengelola perpustakaan digital berbasis web. Aplikasi ini dilengkapi dengan:
+- Sistem login untuk admin dan member
+- Koleksi e-book yang bisa dibaca langsung di browser
+- Manajemen subscripsi dan pembayaran
+- Pelacakan riwayat membaca
+- Laporan penjualan dan statistik buku
+- Invoice otomatis dalam format PDF
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## ✨ Fitur
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Untuk Member (Anggota)
+- ✅ Daftar dan login akun
+- ✅ Cari dan jelajahi koleksi buku
+- ✅ Baca buku langsung dengan PDF reader
+- ✅ Tandai buku favorit
+- ✅ Lihat riwayat membaca
+- ✅ Langganan paket membership
+- ✅ Lihat dan download invoice
 
-### Premium Partners
+### Untuk Admin
+- ✅ Dashboard dengan statistik
+- ✅ Tambah, edit, hapus buku
+- ✅ Kelola kategori buku
+- ✅ Lihat data member
+- ✅ Kelola paket subscripsi
+- ✅ Lihat laporan penjualan
+- ✅ Export laporan ke PDF
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 🛠️ Teknologi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **Backend:** Laravel 12, PHP 8.2+
+- **Frontend:** Livewire 4, Tailwind CSS, Flowbite
+- **Database:** MySQL 8.0+
+- **PDF Reader:** PDF.js
+- **Build Tool:** Vite, npm
+- **Testing:** Pest 3.8
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 📦 Instalasi
 
-## Security Vulnerabilities
+### Prasyarat
+- PHP 8.2 atau lebih tinggi
+- MySQL 8.0 atau lebih tinggi
+- Composer
+- Node.js 18+
+- npm
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Langkah Instalasi
 
-## License
+**1. Clone repository**
+```bash
+git clone <url-repository>
+cd eLibrary
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**2. Install dependencies**
+```bash
+composer install
+npm install
+```
+
+**3. Setup environment**
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+**4. Konfigurasi database di `.env`**
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=elibrary
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+**5. Jalankan migrasi database**
+```bash
+php artisan migrate
+```
+
+**6. Build frontend**
+```bash
+npm run build
+```
+
+**Atau jalankan setup lengkap sekaligus:**
+```bash
+composer run setup
+```
+
+---
+
+## 🚀 Cara Menjalankan
+
+### Mode Pengembangan
+```bash
+npm run dev
+```
+
+Aplikasi akan berjalan di `http://localhost:8000`
+
+### Akses Aplikasi
+- **Landing Page:** `http://localhost:8000/Readify/home`
+- **Login Member:** `http://localhost:8000/Readify/login`
+- **Dashboard Member:** `http://localhost:8000/Readify/anggota/home`
+- **Dashboard Admin:** `http://localhost:8000/Readify/admin/dashboard`
+
+---
+
+## 📁 Struktur Folder
+
+```
+eLibrary/
+├── app/
+│   ├── Models/              # Model database
+│   ├── Http/
+│       ├── Controllers/     # Controller
+│       └── Middleware/      # Middleware
+│   
+├── resources/
+│   ├── views/               # Template HTML
+│   └── css/                 # Style Tailwind
+├── routes/
+│   └── web.php              # Route aplikasi
+├── database/
+│   ├── migrations/          # Schema database
+│   └── seeders/             # Data dummy
+├── public/                  # File publik
+└── config/                  # Konfigurasi
+```
+
+---
+
+## 👥 Peran Pengguna
+
+### Admin
+- Akses penuh ke dashboard admin
+- Kelola buku, member, dan subscripsi
+- Lihat laporan dan statistik
+
+### Member (Anggota)
+- Akses halaman member
+- Baca buku dan lihat detail
+- Langganan paket
+- Lihat invoice
+
+---
+
+## 🔐 Keamanan
+
+- ✅ Sistem login dengan Laravel Authentication
+- ✅ Proteksi CSRF otomatis
+- ✅ Password di-hash dengan bcrypt
+- ✅ Role-based access control
+- ✅ Session aman berbasis database
+
+---
+
+## 📚 Fitur Utama
+
+### Pembaca PDF
+- Baca buku langsung di browser
+- Navigasi halaman mudah
+- Tracking halaman terakhir dibaca
+
+### Manajemen Subscripsi
+- Berbagai paket pilihan
+- Track status subscripsi
+- History transaksi
+- Invoice otomatis PDF
+
+### Laporan
+- Laporan penjualan
+- Statistik buku
+- Export ke PDF
+
+---
+
+## 🤝 Kontribusi
+
+Ingin berkontribusi? Silakan:
+1. Fork repository
+2. Buat branch fitur (`git checkout -b fitur/fitur-baru`)
+3. Commit perubahan (`git commit -m 'Tambah fitur baru'`)
+4. Push ke branch (`git push origin fitur/fitur-baru`)
+5. Buat Pull Request
+
+---
+
+## 📧 Support
+
+Ada pertanyaan atau masalah? Buat issue di repository ini.
+
+---
+
+**Dibuat dengan ❤️ oleh tim development**
