@@ -48,36 +48,50 @@ Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur berlangganan, 
 
 ---
 
-## 📦 Instalasi
+## 📦 Instalasi dengan Laragon
 
 ### Prasyarat
-- PHP 8.2 atau lebih tinggi
-- MySQL 8.0 atau lebih tinggi
-- Composer
-- Node.js 18+
-- npm
+- **Laragon** sudah terinstall dengan versi terbaru
+
+> **Catatan:** Laragon adalah all-in-one development environment yang sudah include:
+> - PHP 8.2+
+> - MySQL / MariaDB
+> - Apache / Nginx
+> - Composer
+> - Node.js & npm
+> - Git
+
+Jadi tidak perlu install Composer, Node.js, atau npm secara terpisah!
 
 ### Langkah Instalasi
 
-**1. Clone repository**
+**1. Clone repository ke folder Laragon**
 ```bash
+# Buka Terminal Laragon (Klik Menu Laragon > Terminal)
+cd C:\laragon\www
 git clone https://github.com/Padlan123/eLibrary.git
 cd eLibrary
 ```
 
-**2. Install dependencies**
+**2. Install dependencies PHP dan npm**
 ```bash
+# Masih di terminal Laragon
 composer install
 npm install
 ```
 
-**3. Setup environment**
+**3. Setup environment file**
 ```bash
-cp .env.example .env
+# Copy file environment
+copy .env.example .env
+
+# Generate app key
 php artisan key:generate
 ```
 
-**4. Konfigurasi database di `.env`**
+**4. Database sudah siap (default Laragon)**
+
+File `.env` sudah dikonfigurasi untuk Laragon:
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -87,41 +101,88 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-**5. Jalankan migrasi database**
+Jika MySQL config Laragon berbeda, sesuaikan di `.env`
+
+**5. Setup database & seeder**
 ```bash
-php artisan migrate
+# Jalankan migrasi dan seeding (pertama kali)
+php artisan migrate --seed
+
 ```
 
-**6. Build frontend**
+**6. Build frontend assets (Opsional pada setup awal)**
 ```bash
 npm run build
 ```
 
-**Atau jalankan setup lengkap sekaligus:**
-```bash
-composer run setup
-```
+✅ **Instalasi selesai!**
+
+> ⚠️ **PENTING:** Selalu gunakan **Terminal Laragon** (bukan CMD/PowerShell biasa), karena Laragon otomatis set PATH untuk PHP dan Composer
 
 ---
 
 ## 🚀 Cara Menjalankan
 
-### Mode Pengembangan
+### 1. Mulai Laragon
+- Buka aplikasi **Laragon**
+- Klik tombol **Start All** untuk menjalankan Apache dan MySQL
+- Pastikan kedua service sudah berjalan (icon berubah hijau ✅)
+
+### 2. Jalankan Development Mode
+
+Buka **2 Terminal Laragon** (Klik Menu Laragon > Terminal):
+
+**Terminal 1 - Navigasi ke project**
 ```bash
+cd C:\laragon\www\eLibrary
+code .
+```
+
+Biarkan di sini untuk nanti.
+
+**Terminal 2 - Jalankan Vite Development Server**
+```bash
+cd C:\laragon\www\eLibrary
 npm run dev
 ```
 
-Aplikasi akan berjalan di `http://localhost:8000`
+Tunggu sampai Vite siap (akan muncul pesan seperti "Local: http://localhost:5173")
 
-### Akses Aplikasi
-- **Landing Page:** `http://localhost:8000/Readify/home`
-- **Login Member:** `http://localhost:8000/Readify/login`
-- **Dashboard Member:** `http://localhost:8000/Readify/anggota/home`
-- **Dashboard Admin:** `http://localhost:8000/Readify/admin/dashboard`
+Biarkan kedua terminal tetap running.
+
+### 3. Akses Aplikasi di Browser
+
+Buka browser dan kunjungi URLs berikut:
+
+| Halaman | URL |
+|---------|-----|
+| Landing Page | `http://localhost/eLibrary/` |
+| Login | `http://localhost/eLibrary/login` |
 
 ---
 
-## 📁 Struktur Folder
+## 🧪 Akun Test (Seeder)
+
+### Admin
+```
+Email:    alex123@gmail.com
+Password: alex123
+Username: Alex
+```
+
+### Anggota (Member)
+```
+Email:    padlan123@gmail.com
+Password: padlan123
+Username: Padlan padilah
+```
+
+> **Info:** Ada 4 akun anggota tambahan lainnya di database untuk testing. Cek detail di `database/seeders/DatabaseSeeder.php`
+
+
+---
+
+### Struktur Folder
 
 ```
 eLibrary/
