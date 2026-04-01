@@ -4,17 +4,6 @@ Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur berlangganan, 
 
 ---
 
-## 📋 Daftar Isi
-
-- [Tentang Aplikasi](#tentang-aplikasi)
-- [Fitur](#fitur)
-- [Teknologi](#teknologi)
-- [Instalasi](#instalasi)
-- [Cara Menjalankan](#cara-menjalankan)
-- [Struktur Folder](#struktur-folder)
-
----
-
 ## 📚 Tentang Aplikasi
 
 **Readify** adalah aplikasi untuk mengelola perpustakaan digital berbasis web. Aplikasi ini dilengkapi dengan:
