@@ -73,7 +73,7 @@ Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur subscripsi, pe
 
 **1. Clone repository**
 ```bash
-git clone <url-repository>
+git clone https://github.com/Padlan123/eLibrary.git
 cd eLibrary
 ```
 
