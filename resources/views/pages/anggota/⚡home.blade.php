@@ -86,7 +86,7 @@ new class extends Component {
                             </div>
 
                             {{-- Judul --}}
-                            <h2 class="text-xl md:text-2xl lg:text-3xl font-semibold leading-tight mb-2">
+                            <h2 class="text-xl md:text-2xl lg:text-3xl font-semibold leading-tight line-clamp-2 mb-2">
                                 {{ $book->title }}
                             </h2>
 
@@ -166,7 +166,7 @@ new class extends Component {
         </div>
     </section>
     @livewire('pages::anggota.books.filter-book')
-    {{-- @livewire('pages::anggota.books.book-list') --}}
+    @livewire('pages::anggota.books.book-list')
     @livewire('pages::anggota.books.latest-book')
     @livewire('pages::anggota.books.recommended-book')
 

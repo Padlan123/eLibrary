@@ -24,6 +24,7 @@ new class extends Component {
     public $author;
     public $publisher;
     public $summary;
+    public $language;
     public $cover_file_name;
     public $pdf_file_name;
     public $total_pages = 0;
@@ -66,6 +67,7 @@ new class extends Component {
                     'publisher' => $this->publisher,
                     'summary' => $this->summary,
                     'subscription' => $this->subscription,
+                    'language' => $this->language,
                     'total_pages' => $this->total_pages,
                     'cover_file_name' => $this->cover_file_name->store('cover', 'public'),
                     'pdf_file_name' => $this->pdf_file_name->store('pdf', 'public'),
@@ -119,11 +121,11 @@ new class extends Component {
                             placeholder=" " />
                         <label for="judul"
                             class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-left bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Judul</label>
-                        @error('title')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
 
                     </div>
+                    @error('title')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
 
                     <div x-data="{ open: false }" class="relative">
                         <button @click="open = !open" type="button"
@@ -176,35 +178,87 @@ new class extends Component {
                         <label for="tahun"
                             class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-left bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Tahun
                             Terbit</label>
-                        @error('publication_year')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
 
                     </div>
+                    @error('publication_year')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
 
                     <div class="relative">
                         <input wire:model="author" type="text" id="penulis"
                             class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
-                            placeholder="penulis... " />
+                            placeholder=" " />
                         <label for="penulis"
                             class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-left bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Penulis</label>
-                        @error('author')
-                            <span class="text-red-500 text-sm">{{ $message }}</span>
-                        @enderror
 
                     </div>
+                    @error('author')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
 
                     <div class="relative">
                         <input wire:model="publisher" type="text" id="penerbit"
                             class="block px-2.5 pb-2.5 pt-4 w-full text-sm text-heading bg-transparent rounded-base border border-gray-500 appearance-none focus:outline-none focus:ring-0 focus:border-brand peer"
-                            placeholder="penerbit... " />
+                            placeholder=" " />
                         <label for="penerbit"
                             class="absolute text-sm text-body duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-left bg-neutral-primary px-2 peer-focus:px-2 peer-focus:text-fg-brand peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1">Penerbit</label>
-                        @error('publisher')
+
+                    </div>
+                    @error('publisher')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" type="button"
+                            class="inline-flex items-center text-body bg-white border border-gray-600 hover:bg-gray-300 mx-auto shadow-xs leading-5 rounded-base text-sm px-4 py-2.5 w-full appearance-none focus:outline-none focus:ring-0 focus:border-brand peer">
+                            Bahasa
+                            <svg class="h-4 w-4 ms-auto rtl:rotate-180" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m9 5 7 7-7 7" />
+                            </svg>
+                        </button>
+                        @error('language')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
 
+                        <div x-show="open" @click.outside="open = false" x-transition
+                            class="absolute left-1/2 top-0 ml-2 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-48 md:w-60 md:left-full">
+
+                            <ul class="select-none overflow-y-auto p-2 text-sm text-body font-medium">
+                                <li>
+                                    <div
+                                        class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded-md">
+                                        <input wire:model.live.debounce.500ms="language" id="Indonesia"
+                                            type="radio" value="Indonesia"
+                                            class="w-4 h-4 border border-default-strong rounded-xs bg-neutral-secondary-strong focus:ring-2 focus:ring-brand-soft">
+                                        <label for="Indonesia"
+                                            class="w-full ms-2 text-sm font-medium text-heading">Indonesia</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div
+                                        class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded-md">
+                                        <input wire:model.live.debounce.500ms="language" id="English"
+                                            type="radio" value="English"
+                                            class="w-4 h-4 border border-default-strong rounded-xs bg-neutral-secondary-strong focus:ring-2 focus:ring-brand-soft">
+                                        <label for="English"
+                                            class="w-full ms-2 text-sm font-medium text-heading">English</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        @if ($this->language)
+                            <h2 class="my-2 text-base font-medium text-gray-700">Bahasa yang dipilih</h2>
+                            <ul class="max-w-md space-x-4 gap-y-2 text-body flex flex-wrap mb-2">
+                                <li class="list-none">
+                                    <span
+                                        class="bg-gray-600 text-neutral-primary text-xs font-medium px-2 py-1 rounded">{{ $this->language }}</span>
+                                </li>
+                            </ul>
+                        @endif
                     </div>
+
 
                     <div>
                         <label>Akses buku</label>

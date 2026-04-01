@@ -24,6 +24,7 @@ new class extends Component {
     public $update_author;
     public $update_publisher;
     public $update_summary;
+    public $update_language;
     public $update_cover_file_name;
     public $update_pdf_file_name;
 
@@ -44,6 +45,7 @@ new class extends Component {
         $this->update_author = $book->author;
         $this->update_publisher = $book->publisher;
         $this->update_summary = $book->summary;
+        $this->update_language = $book->language;
         $this->update_pdf_file_name = null;
         $this->update_cover_file_name = null;
 
@@ -71,35 +73,40 @@ new class extends Component {
         $this->validateBookUpdate();
 
         try {
-            $parser = new Parser();
-            $pdf = $parser->parseFile($this->pdf_file_name->getRealPath());
-            $total_pages = count($pdf->getPages());
+            $data = [
+                'title' => $this->update_title,
+                'author' => $this->update_author,
+                'publication_year' => $this->update_publication_year,
+                'publisher' => $this->update_publisher,
+                'summary' => $this->update_summary,
+                'language' => $this->update_language,
+                'subscription' => $this->update_subscription,
+            ];
 
-            DB::transaction(function () {
+            // Hanya parse PDF jika ada file baru
+            if ($this->update_pdf_file_name && is_object($this->update_pdf_file_name)) {
+                $parser = new Parser();
+                $pdf = $parser->parseFile($this->update_pdf_file_name->getRealPath());
+                $data['total_pages'] = count($pdf->getPages());
+                $data['pdf_file_name'] = $this->update_pdf_file_name->store('pdf', 'public');
+            }
+
+            if ($this->update_cover_file_name && is_object($this->update_cover_file_name)) {
+                $data['cover_file_name'] = $this->update_cover_file_name->store('cover', 'public');
+            }
+
+            DB::transaction(function () use ($data) {
+                // ✅ pass $data ke closure
                 $book = Book::findOrFail($this->updateId);
-                $book->update([
-                    'title' => $this->update_title,
-                    'author' => $this->update_author,
-                    'publication_year' => $this->update_publication_year,
-                    'publisher' => $this->update_publisher,
-                    'summary' => $this->update_summary,
-                    'subscription' => $this->update_subscription,
-                    'total_pages' => $total_pages,
-                ]);
-
+                $book->update($data);
                 $book->categories()->sync($this->update_book_categories);
-
-                if ($this->update_cover_file_name) {
-                    $data['cover_file_name'] = $this->update_cover_file_name->store('cover', 'public');
-                }
-
-                if ($this->update_pdf_file_name) {
-                    $data['pdf_file_name'] = $this->update_pdf_file_name->store('pdf', 'public');
-                }
             });
+
             $this->flashMessage('sukses', 'buku berhasil diedit', 'admin.books');
         } catch (\Exception $e) {
+            // ✅ Jangan tutup modal saat error, biar user tahu ada masalah
             session()->flash('error', 'Gagal menyimpan: ' . $e->getMessage());
+            return; // early return, tidak tutup modal
         }
 
         $this->open = false;
@@ -137,6 +144,11 @@ new class extends Component {
                         <span class="sr-only">Close modal</span>
                     </button>
                 </div>
+                @if (session('error'))
+                    <div class="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 <form wire:submit="update" class="flex flex-col space-y-4">
 
                     <div class="relative">
@@ -232,6 +244,58 @@ new class extends Component {
 
                     </div>
 
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" type="button"
+                            class="inline-flex items-center text-body bg-white border border-gray-600 hover:bg-gray-300 mx-auto shadow-xs leading-5 rounded-base text-sm px-4 py-2.5 w-full appearance-none focus:outline-none focus:ring-0 focus:border-brand peer">
+                            Bahasa
+                            <svg class="h-4 w-4 ms-auto rtl:rotate-180" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                viewBox="0 0 24 24">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m9 5 7 7-7 7" />
+                            </svg>
+                        </button>
+                        @error('language')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                        @enderror
+
+                        <div x-show="open" @click.outside="open = false" x-transition
+                            class="absolute left-1/2 top-0 ml-2 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-48 md:w-60 md:left-full">
+
+                            <ul class="select-none overflow-y-auto p-2 text-sm text-body font-medium">
+                                <li>
+                                    <div
+                                        class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded-md">
+                                        <input wire:model.live.debounce.500ms="update_language" id="Indonesia"
+                                            type="radio" value="Indonesia"
+                                            class="w-4 h-4 border border-default-strong rounded-xs bg-neutral-secondary-strong focus:ring-2 focus:ring-brand-soft">
+                                        <label for="Indonesia"
+                                            class="w-full ms-2 text-sm font-medium text-heading">Indonesia</label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div
+                                        class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded-md">
+                                        <input wire:model.live.debounce.500ms="update_language" id="English"
+                                            type="radio" value="English"
+                                            class="w-4 h-4 border border-default-strong rounded-xs bg-neutral-secondary-strong focus:ring-2 focus:ring-brand-soft">
+                                        <label for="English"
+                                            class="w-full ms-2 text-sm font-medium text-heading">English</label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        @if ($this->update_language)
+                            <h2 class="my-2 text-base font-medium text-gray-700">Bahasa yang dipilih</h2>
+                            <ul class="max-w-md space-x-4 gap-y-2 text-body flex flex-wrap mb-2">
+                                <li class="list-none">
+                                    <span
+                                        class="bg-gray-600 text-neutral-primary text-xs font-medium px-2 py-1 rounded">{{ $this->update_language }}</span>
+                                </li>
+                            </ul>
+                        @endif
+                    </div>
+
                     <div>
                         <label>Akses buku</label>
                         <div class="flex items-center my-4">
@@ -304,7 +368,7 @@ new class extends Component {
 
                     </div>
 
-                    <button wire:loading.attr="disabled" wire:click="update"
+                    <button wire:loading.attr="disabled" type="submit"
                         wire:loading.class="pointer-events-none cursor-not-allowed opacity-60"
                         class="mt-6 bg-linear-to-r from-indigo-500 to-blue-600 text-white px-6 py-3 rounded-xl shadow hover:from-indigo-600 hover:to-blue-700 transition-colors duration-300 w-full">
                         <span wire:loading class="opacity-50"

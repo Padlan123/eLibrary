@@ -45,8 +45,10 @@ Route::prefix('/Readify')->group(function () {
             Route::livewire('/ebook', 'pages::admin.books')->name('books');
             Route::livewire('/pengguna', 'pages::admin.users')->name('users');
             Route::livewire('/langganan', 'pages::admin.subscriptions')->name('subscriptions');
-            Route::get('/laporan/penjualan/download', [ReportController::class, 'download'])
+            Route::get('/laporan/penjualan/download', [ReportController::class, 'downloadSubscriptions'])
                 ->name('report.transactions.download');
+            Route::get('/laporan/buku/download', [ReportController::class, 'downloadBooks'])
+                ->name('report.books.download');
         });
     });
 });

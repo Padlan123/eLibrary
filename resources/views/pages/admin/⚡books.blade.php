@@ -7,8 +7,15 @@ use App\Models\Category;
 use Livewire\WithPagination;
 
 new class extends Component {
-    public $category = '';
+    public $category = [];
 
+    #[computed]
+    public function getUrlDownload()
+    {
+        return route('admin.report.books.download', [
+            'categories' => $this->category,
+        ]);
+    }
     #[Computed]
     public function categories()
     {
@@ -128,13 +135,21 @@ new class extends Component {
             {{-- Header --}}
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                 <h2 class="font-semibold text-lg text-gray-800">Daftar E-Book</h2>
-                <select wire:model.live.debounce="category" id="kategori"
-                    class="px-3 py-2 bg-white border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm w-full sm:w-48">
-                    <option value="">Semua kategori</option>
-                    @foreach ($this->categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
+                <div class="flex gap-6 items-center">
+                    <a href="{{ $this->getUrlDownload() }}"
+                        class="w-full px-4 py-2 inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white text-semibold rounded-lg transition-colors">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
+                        </svg>Download</a>
+                    <select wire:model.live.debounce="category" id="kategori"
+                        class="px-3 py-2 bg-white border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm w-full sm:w-48">
+                        <option value="">Semua kategori</option>
+                        @foreach ($this->categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
             {{-- DESKTOP: Table (hidden on mobile) --}}
@@ -245,9 +260,9 @@ new class extends Component {
                             <span class="bg-gray-100 text-gray-500 text-xs px-2.5 py-1 rounded-full">
                                 {{ $book->publication_year }}
                             </span>
-                            @foreach (explode(',', $book->category_names) as $cat)
+                            @foreach ($book->categories as $category)
                                 <span class="bg-blue-50 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full">
-                                    {{ trim($cat) }}
+                                    {{ $category->name }}
                                 </span>
                             @endforeach
                         </div>

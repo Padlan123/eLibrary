@@ -21,18 +21,17 @@ new class extends Component {
         $this->open = true;
     }
 
-    public function delete()
+    public function deleteBook()
     {
         Book::findOrFail($this->deleteId)->delete();
-        $this->dispatch('close-delete-modal');
-        $this->flashMessage('sukses', 'buku berhasil dihapus', 'admin.books');
         $this->deleteId = null;
         $this->open = false;
+        $this->flashMessage('sukses', 'buku berhasil dihapus', 'admin.books');
     }
 };
 ?>
 
-<div x-data="{ open: false }" @open-delete-modal.window="open = true" @close-delete-modal.window="open = false">
+<div x-data="{ open: @entangle('open') }">
     <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
         x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-100"
         x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" @click="open = false"
@@ -44,7 +43,7 @@ new class extends Component {
         x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
         class="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
-        <div class="relative p-4 w-full max-w-md max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full pointer-events-auto">
             <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
                 <button type="button"
                     class="absolute top-3 end-2.5 text-body bg-transparent hover:bg-neutral-tertiary hover:text-heading rounded-base text-sm w-9 h-9 ms-auto inline-flex justify-center items-center"
@@ -71,7 +70,7 @@ new class extends Component {
                     </h3>
                     </h3>
                     <div class="flex items-center space-x-4 justify-center">
-                        <button wire:click="delete" type="button"
+                        <button wire:click="deleteBook" type="button"
                             class="text-white bg-danger box-border border border-transparent hover:bg-danger-strong focus:ring-4 focus:ring-danger-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                             Hapus
                         </button>

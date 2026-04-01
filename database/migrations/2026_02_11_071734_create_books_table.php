@@ -17,12 +17,13 @@ return new class extends Migration
             $table->string('author');
             $table->string('publisher');
             $table->integer('publication_year');
+            $table->enum('language', ['Indonesia', 'English']);
             $table->text('summary')->nullable();
             $table->boolean('subscription')->default(false);
-            $table->integer('total_pages')->nullable();
+            $table->integer('total_pages');
             $table->boolean('is_recommended')->default(false);
-            $table->string('cover_file_name')->nullable();
-            $table->string('pdf_file_name')->nullable();
+            $table->string('cover_file_name');
+            $table->string('pdf_file_name');
             $table->timestamps();
         });
     }

@@ -3,10 +3,17 @@
 use Livewire\Component;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Lazy;
 use App\Models\Book;
 use App\Models\ReadingHistory;
 
-new class extends Component {
+new #[Lazy] class extends Component {
+    public function placeholder()
+    {
+        return view('placeholder.default', [
+            'message' => 'memuat buku...',
+        ]);
+    }
     #[Computed]
     public function books()
     {
@@ -68,8 +75,9 @@ new class extends Component {
 
                         <div class="flex flex-col justify-between flex-1">
                             <div>
-                                <h3 class="text-sm md:text-base font-medium text-gray-700 line-clamp-2">
-                                    <a href="#" class="hover:text-blue-600 transition">
+                                <h3 class="text-sm md:text-base font-medium text-gray-700 w-36 truncate">
+                                    <a href="{{ route('anggota.detail-book', $book->id) }}"
+                                        class="hover:text-blue-600 transition">
                                         {{ $book->title }}
                                     </a>
                                 </h3>
@@ -135,13 +143,6 @@ new class extends Component {
                 <!-- BOOK CARD - END - FOREACH -->
 
             </div>
-        </div>
-
-        <div class="flex justify-center">
-            <a href="#"
-                class="bg-linear-to-t from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 py-1 px-3 text-center rounded-lg shadow-sm text-sm text-white transition">
-                Lihat semua
-            </a>
         </div>
     </section>
 </div>

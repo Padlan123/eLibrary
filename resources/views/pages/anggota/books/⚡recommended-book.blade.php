@@ -144,7 +144,7 @@ new #[Lazy] class extends Component {
 
 
                                 <!-- Judul -->
-                                <h3 class="text-lg md:text-2xl font-semibold leading-tight mb-1.5">
+                                <h3 class="text-lg md:text-2xl font-semibold  leading-tight mb-1.5">
                                     {{ $book->title }}
                                 </h3>
 
@@ -196,8 +196,9 @@ new #[Lazy] class extends Component {
 
                         <div class="flex flex-col justify-between flex-1">
                             <div>
-                                <h3 class="text-sm md:text-base font-medium text-gray-700 line-clamp-2">
-                                    <a href="#" class="hover:text-blue-600 transition">
+                                <h3 class="text-sm md:text-base font-medium text-gray-700 w-36 truncate">
+                                    <a href="{{ route('anggota.detail-book', $book->id) }}"
+                                        class="hover:text-blue-600 transition">
                                         {{ $book->title }}
                                     </a>
                                 </h3>
@@ -274,19 +275,23 @@ new #[Lazy] class extends Component {
             </div>
 
             <!-- PREMIUM -->
-            <div class="p-5 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-500 text-white shadow-lg space-y-4">
-                <h4 class="text-lg font-semibold">Rekomendasi Premium</h4>
+            @if (auth()->user()->hasPermissionTo('premium'))
+                <div>kamu sudah berlangganan premium</div>
+            @else
+                <div class="p-5 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-500 text-white shadow-lg space-y-4">
+                    <h4 class="text-lg font-semibold">Berlangganan Premium</h4>
 
-                <p class="text-sm opacity-90">
-                    Jelajahi pilihan buku premium terbaik yang direkomendasikan
-                    untuk meningkatkan wawasan dan pengalaman membaca Anda.
-                </p>
+                    <p class="text-sm opacity-90">
+                        Jelajahi pilihan buku premium terbaik yang direkomendasikan
+                        untuk meningkatkan wawasan dan pengalaman membaca Anda.
+                    </p>
 
-                <a href="transaksi.html"
-                    class="inline-block mt-4 text-sm font-medium bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
-                    Lihat Rekomendasi
-                </a>
-            </div>
+                    <a href="{{ route('anggota.subscriptions') }}"
+                        class="inline-block mt-4 text-sm font-medium bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                        Berlangganan Sekarang
+                    </a>
+                </div>
+            @endif
         </aside>
     </div>
 </section>

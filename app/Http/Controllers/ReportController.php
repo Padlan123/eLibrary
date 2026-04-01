@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
+use App\Models\Category;
 use App\Models\Package;
 use App\Models\SubscriptionTransaction;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -10,7 +12,31 @@ use Illuminate\Http\Request;
 
 class ReportController extends Controller
 {
-    public function download(Request $request)
+    public function downloadBooks(Request $request)
+    {
+        $categories   = $request->categories ?? [];
+        if (!is_array($categories)) {
+            $categories = $categories ? [$categories] : [];
+        }
+        $categories = array_filter($categories);
+
+        $book = Book::with('categories')
+            ->when($categories, fn($q) => $q->whereHas('categories', fn($q) => $q->whereIn('categories.id', [$categories])))
+            ->orderBy('title')
+            ->get();
+
+        $categoryName = $categories
+            ? \App\Models\Category::where('id', $categories)->value('name')
+            : 'Semua';
+
+        $pdf = Pdf::loadView('reports.books', compact('book', 'categoryName'))
+            ->setPaper('a4', 'portrait');
+
+        $filename = $categories ? "laporan-buku-kategori-{$categoryName}" : "laporan-buku-semua";
+
+        return $pdf->download("{$filename}.pdf");
+    }
+    public function downloadSubscriptions(Request $request)
     {
         $from   = $request->get('from',  now()->startOfMonth()->format('Y-m-d'));
         $to = $request->get('to', now()->format('Y-m-d'));

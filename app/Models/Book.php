@@ -19,6 +19,7 @@ class Book extends Model
         'publication_year',
         'summary',
         'subscription',
+        'language',
         'is_recommended',
         'total_pages',
         'cover_file_name',
@@ -50,5 +51,19 @@ class Book extends Model
     public function favoriteBooks()
     {
         return $this->belongsToMany(User::class, 'user_favorite_books')->withTimestamps()->orderByPivot('created_at', 'desc');
+    }
+
+    public function ratedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'user_reting_books')
+            ->withPivot('rating')
+            ->withTimestamps();
+    }
+
+    public function averageRating()
+    {
+        $rate = $this->ratedByUsers()->wherePivotNotNull('rating');
+
+        return $rate->count() == 0 ? null : round($rate->avg(), 2);
     }
 }

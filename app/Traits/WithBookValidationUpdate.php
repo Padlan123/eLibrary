@@ -13,6 +13,7 @@ trait WithBookValidationUpdate
             'update_publisher' => 'required',
             'update_publication_year' => 'required',
             'update_summary' => 'required',
+            'update_language' => 'required',
             'update_subscription' => 'required',
             'update_cover_file_name' => 'nullable|file|mimes:png,jpeg,jpe',
             'update_pdf_file_name' => 'nullable|file|mimes:pdf'
@@ -28,6 +29,8 @@ trait WithBookValidationUpdate
             'update_author.required' => 'tuliskan penulis buku',
             'update_publisher.required' => 'tuliskan penerbit buku',
             'update_summary.required' => 'tuliskan sinopsis buku',
+            'update_language.required' => 'tuliskan bahasa buku',
+            // 'update_language.in' => 'pilih bahasa yang valid',
             'update_subscription.required' => 'tuliskan hak akses buku',
             'update_publication_year.required' => 'tuliskan tahun terbit buku',
             'update_cover_file_name.file' => 'masukkan file',
