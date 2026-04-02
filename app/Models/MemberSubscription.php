@@ -23,16 +23,10 @@ class MemberSubscription extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function package()
-    {
-        return $this->belongsTo(Package::class, 'package_id');
-    }
-
     public function scopeActive($query)
     {
-        $today = now()->toDateString();
         return $query->where('status', 'active')
-            ->where('start_date', '<=', $today)
-            ->where('end_date', '=>', $today);
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now());
     }
 }

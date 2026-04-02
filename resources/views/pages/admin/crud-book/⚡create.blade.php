@@ -85,11 +85,10 @@ new class extends Component {
 
 <div>
     <section x-data="{
-        open: false,
+        open: @entangle('open'),
         preview: null,
         cover_file_name: 'Tidak ada file dipilih',
-    }" @open-create-modal.window="open = true" @close-create-modal.window="open = false"
-        x-cloak @click="open = false" x-show="open" x-transition:enter="transition ease-out duration-300"
+    }" x-cloak x-show="open" x-transition:enter="transition ease-out duration-300"
         x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
         x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"

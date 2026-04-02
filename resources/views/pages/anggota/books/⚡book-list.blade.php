@@ -27,6 +27,24 @@ new #[Lazy] class extends Component {
             ->get();
     }
 
+    #[Computed]
+    public function popularBooks()
+    {
+        return Book::join('user_reting_books', 'books.id', '=', 'user_reting_books.book_id')
+            ->selectRaw('books.*, AVG(user_reting_books.rating) as avg_rating, COUNT(user_reting_books.rating) as rating_count')
+            ->groupBy('books.id')
+            ->having('rating_count', '>', 0)
+            ->orderByDesc('avg_rating')
+            ->limit(6)
+            ->with([
+                'favoriteBooks' => function ($query) {
+                    $query->where('user_id', auth()->id());
+                },
+                'categories',
+            ])
+            ->get();
+    }
+
     public function favorite($id)
     {
         auth()
@@ -63,7 +81,7 @@ new #[Lazy] class extends Component {
 
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <!-- BOOK CARD - START - FOREACH -->
-                @forelse ($this->books as $book)
+                @forelse ($this->popularBooks as $book)
                     <article wire:key="{{ $book->id }}"
                         class="relative group flex gap-3 p-3 bg-white rounded-md shadow-sm hover:shadow-lg hover:-translate-y-1 transition-transform ease-out duration-500">
                         <figure class="w-20 shrink-0 aspect-2/3 overflow-hidden rounded-md">
@@ -85,7 +103,18 @@ new #[Lazy] class extends Component {
                                 <p class="text-xs text-gray-500">{{ $book->author }}</p>
 
                                 <span class="text-xs text-gray-600">
-                                    {{ $book->category_names }}
+                                    {{ $book->categories->pluck('name')->join(', ') }}
+                                </span>
+                                <span class="text-sm text-gray-500 block mt-1">
+                                    @if ($book->avg_rating)
+                                        {{ number_format($book->avg_rating, 1) }} / 5
+                                        <span class="text-gray-400">
+                                            ({{ $book->rating_count }}
+                                            {{ Str::plural('ulasan', $book->rating_count) }})
+                                        </span>
+                                    @else
+                                        Belum ada ulasan
+                                    @endif
                                 </span>
 
                             </div>
@@ -136,7 +165,7 @@ new #[Lazy] class extends Component {
                     </article>
                 @empty
                     <div class="col-span-full text-center py-10">
-                        <p class="text-gray-500 text-lg">Tidak ada buku yang ditemukan</p>
+                        <p class="text-gray-500 text-lg">Tidak ada buku populer yang ditemukan</p>
                     </div>
                 @endforelse
 

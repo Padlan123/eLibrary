@@ -276,7 +276,20 @@ new #[Lazy] class extends Component {
 
             <!-- PREMIUM -->
             @if (auth()->user()->hasPermissionTo('premium'))
-                <div>kamu sudah berlangganan premium</div>
+                <div class="p-5 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-500 text-white shadow-lg space-y-4">
+                    <h4 class="text-lg font-semibold">Kamu Anggota Premium</h4>
+
+                    <p class="text-sm opacity-90">
+                        Mau perpanjang langgananmu atau upgrade ke paket yang lebih tinggi? Klik tombol di bawah untuk
+                        melihat pilihan paket langganan premium kami dan nikmati akses tak terbatas ke koleksi buku
+                        terbaik kami.
+                    </p>
+
+                    <a href="{{ route('anggota.subscriptions') }}"
+                        class="inline-block mt-4 text-sm font-medium bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition">
+                        Langganan atau Perpanjang Sekarang
+                    </a>
+                </div>
             @else
                 <div class="p-5 rounded-2xl bg-linear-to-br from-blue-500 to-indigo-500 text-white shadow-lg space-y-4">
                     <h4 class="text-lg font-semibold">Berlangganan Premium</h4>

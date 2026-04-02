@@ -133,9 +133,9 @@ new class extends Component {
         <section class="bg-white/80 backdrop-blur-md rounded-2xl shadow p-6 md:p-8 border border-blue-100">
 
             {{-- Header --}}
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+            <div class="flex flex-col lg:flex-row gap-6 items-center justify-between mb-6">
                 <h2 class="font-semibold text-lg text-gray-800">Daftar E-Book</h2>
-                <div class="flex gap-6 items-center">
+                <div class="flex gap-6 items-center w-full lg:w-120">
                     <a href="{{ $this->getUrlDownload() }}"
                         class="w-full px-4 py-2 inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white text-semibold rounded-lg transition-colors">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -143,7 +143,7 @@ new class extends Component {
                                 d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" />
                         </svg>Download</a>
                     <select wire:model.live.debounce="category" id="kategori"
-                        class="px-3 py-2 bg-white border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm w-full sm:w-48">
+                        class="px-1.5 py-2 bg-white border border-gray-200 text-gray-700 text-sm rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm w-full">
                         <option value="">Semua kategori</option>
                         @foreach ($this->categories as $category)
                             <option value="{{ $category->id }}">{{ $category->name }}</option>

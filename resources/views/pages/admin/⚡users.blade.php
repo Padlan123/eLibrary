@@ -44,7 +44,7 @@ new class extends Component {
                     <th>Username</th>
                     <th>Email</th>
                     <th>Status</th>
-                    <th>Tanggal langganan</th>
+                    <th>Tanggal berakhir</th>
                 </tr>
             </thead>
 

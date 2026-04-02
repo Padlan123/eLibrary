@@ -74,7 +74,6 @@ new class extends Component {
         $this->userRating = null;
     }
 
-    // Computed untuk average rating dan jumlah rating
     #[Computed]
     public function averageRating(): float|null
     {

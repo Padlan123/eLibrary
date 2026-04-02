@@ -57,7 +57,7 @@ new class extends Component {
             <div class="bg-white/30 backdrop-blur-lg p-8 rounded-2xl shadow-2xl w-full max-w-md fade-in-up">
                 <div class="text-center mb-8">
                     <h1 class="text-4xl font-bold text-orange-50 bg-clip-text mb-2">
-                        KOMIKPAGE
+                        READIFY
                     </h1>
                     <p class="text-gray-600">Daftar sekarang</p>
 
