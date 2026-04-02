@@ -22,7 +22,7 @@ Aplikasi perpustakaan digital untuk manajemen e-book dengan fitur berlangganan, 
 - ✅ Daftar dan login akun
 - ✅ Cari dan jelajahi koleksi buku
 - ✅ Baca buku langsung dengan PDF reader
-- ✅ Tandai buku favorit
+- ✅ Tandai buku yang disukai
 - ✅ Lihat riwayat membaca
 - ✅ Langganan paket membership
 - ✅ Lihat dan download invoice
