@@ -229,13 +229,45 @@ new class extends Component {
     <section class="bg-white rounded-xl p-6 shadow-sm space-y-4">
         <h2 class="text-xl font-semibold text-gray-800">Deskripsi Buku</h2>
 
-        @foreach (explode("\n", $this->selectedBook->summary) as $paragraph)
-            @if (trim($paragraph))
-                <p class="text-gray-600 leading-relaxed md:line-clamp-3 line-clamp-5">
-                    {{ trim($paragraph) }}
-                </p>
-            @endif
-        @endforeach
+        <div x-data="{
+            expanded: false,
+            overflowing: false,
+            init() {
+                this.$nextTick(() => {
+                    const el = this.$refs.content;
+                    this.overflowing = el.scrollHeight > el.clientHeight;
+                });
+            }
+        }">
+            {{-- Wrapper konten dengan max-height saat collapsed --}}
+            <div x-ref="content" class="overflow-hidden transition-all duration-500 ease-in-out"
+                :class="expanded ? 'max-h-500' : 'max-h-30 md:max-h-18'">
+                @foreach (explode("\n", $this->selectedBook->summary) as $paragraph)
+                    @if (trim($paragraph))
+                        <p class="text-gray-600 leading-relaxed mb-3 last:mb-0">
+                            {{ trim($paragraph) }}
+                        </p>
+                    @endif
+                @endforeach
+            </div>
+
+            {{-- Fade overlay saat collapsed --}}
+            <div x-show="!expanded && overflowing"
+                class="relative -mt-8 h-8 bg-linear-to-t from-white to-transparent pointer-events-none"></div>
+
+            {{-- Tombol toggle, hanya muncul jika konten melebihi batas --}}
+            <div x-show="overflowing" class="mt-2">
+                <button @click="expanded = !expanded"
+                    class="text-sm font-medium text-indigo-600 hover:text-indigo-800 flex items-center gap-1 transition-colors">
+                    <span x-text="expanded ? 'Persingkat' : 'Selengkapnya'"></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300"
+                        :class="expanded ? 'rotate-180' : 'rotate-0'" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
     </section>
 
 </div>
