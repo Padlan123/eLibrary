@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use App\Models\Category;
 use App\Models\Package;
 use App\Models\SubscriptionTransaction;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -32,10 +31,11 @@ class ReportController extends Controller
         $pdf = Pdf::loadView('reports.books', compact('book', 'categoryName'))
             ->setPaper('a4', 'portrait');
 
-        $filename = $categories ? "laporan-buku-kategori-{$categoryName}" : "laporan-buku-semua";
+        $filename = $categories ? "laporan-buku-kategori-{$categoryName}" : "laporan-semua-kategoiri-buku";
 
         return $pdf->download("{$filename}.pdf");
     }
+
     public function downloadSubscriptions(Request $request)
     {
         $from   = $request->get('from',  now()->startOfMonth()->format('Y-m-d'));

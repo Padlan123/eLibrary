@@ -338,8 +338,8 @@ new class extends Component {
                     <tr>
                         <th scope="col" class="px-5 py-3.5 font-semibold">Pengguna</th>
                         <th scope="col" class="px-5 py-3.5 font-semibold">Paket</th>
-                        <th scope="col" class="px-5 py-3.5 font-semibold">Nama Pengirim</th>
-                        <th scope="col" class="px-5 py-3.5 font-semibold">No. Pengirim</th>
+                        <th scope="col" class="px-5 py-3.5 font-semibold">Atas Nama</th>
+                        <th scope="col" class="px-5 py-3.5 font-semibold">Nomor Rekening</th>
                         <th scope="col" class="px-5 py-3.5 font-semibold">Tanggal</th>
                         <th scope="col" class="px-5 py-3.5 font-semibold text-center">Bukti</th>
                         <th scope="col" class="px-5 py-3.5 font-semibold text-center">Status</th>
@@ -403,24 +403,27 @@ new class extends Component {
                                 </span>
                             </td>
                             <td class="px-5 py-3.5">
-                                <div class="flex items-center justify-center gap-2">
-                                    <button wire:click="approveTransaction({{ $transaction->id }})" type="button"
-                                        class="inline-flex items-center gap-1 text-xs font-semibold text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 px-3 py-1.5 rounded-lg transition-colors">
-                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="2.5">
-                                            <path d="m5 13 4 4L19 7" />
-                                        </svg>
-                                        Setujui
-                                    </button>
-                                    <button wire:click="rejectTransaction({{ $transaction->id }})" type="button"
-                                        class="inline-flex items-center gap-1 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg transition-colors">
-                                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                                            stroke="currentColor" stroke-width="2.5">
-                                            <path d="M6 18 18 6M6 6l12 12" />
-                                        </svg>
-                                        Tolak
-                                    </button>
-                                </div>
+                                @if ($transaction->status !== 'completed' && $transaction->status !== 'rejected')
+                                    <div class="flex items-center justify-center gap-2">
+                                        <button wire:click="approveTransaction({{ $transaction->id }})"
+                                            type="button"
+                                            class="inline-flex items-center gap-1 text-xs font-semibold text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 px-3 py-1.5 rounded-lg transition-colors">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" stroke-width="2.5">
+                                                <path d="m5 13 4 4L19 7" />
+                                            </svg>
+                                            Setujui
+                                        </button>
+                                        <button wire:click="rejectTransaction({{ $transaction->id }})" type="button"
+                                            class="inline-flex items-center gap-1 text-xs font-semibold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1.5 rounded-lg transition-colors">
+                                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" stroke-width="2.5">
+                                                <path d="M6 18 18 6M6 6l12 12" />
+                                            </svg>
+                                            Tolak
+                                        </button>
+                                    </div>
+                                @endif
                             </td>
                         </tr>
                     @empty
@@ -447,9 +450,16 @@ new class extends Component {
                     data-status="pending" data-name="budi_santoso paket pro budi santoso">
                     <div class="flex items-center justify-between px-4 pt-4 pb-3 border-b border-slate-50">
                         <div class="flex items-center gap-2.5">
+                            @php
+                                $words = explode(' ', $transaction->member->username);
+                                $initial = strtoupper(
+                                    substr($words[0], 0, 1) . (isset($words[1]) ? substr($words[1], 0, 1) : ''),
+                                );
+                            @endphp
                             <div
                                 class="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold text-sm shrink-0">
-                                -</div>
+                                {{ $initial }}
+                            </div>
                             <div>
                                 <p class="font-bold text-slate-800 text-sm leading-tight">
                                     {{ $transaction->member->username }}</p>
@@ -459,17 +469,26 @@ new class extends Component {
                         </div>
                         <span
                             class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-700 text-xs font-semibold px-2.5 py-1 rounded-full border border-amber-100">
-                            <span
-                                class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>{{ $transaction->status }}
+                            @if ($transaction->status == 'completed')
+                                <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse"></span><span
+                                    class="text-green-600">Disetujui</span>
+                            @elseif ($transaction->status == 'rejected')
+                                <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span><span
+                                    class="text-red-600">Ditolak</span>
+                            @else
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span><span
+                                    class="text-amber-600">Pending</span>
+                            @endif
                         </span>
                     </div>
                     <div class="grid grid-cols-2 gap-x-4 gap-y-2.5 px-4 py-3">
                         <div>
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Pengirim</p>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Atas Nama</p>
                             <p class="text-sm text-slate-700 font-medium">{{ $transaction->name }}</p>
                         </div>
                         <div>
-                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Nomor</p>
+                            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-0.5">Nomor Rekening
+                            </p>
                             <p class="num-pill text-slate-600">{{ $transaction->number }}</p>
                         </div>
                         <div>
@@ -490,24 +509,26 @@ new class extends Component {
                             </button>
                         </div>
                     </div>
-                    <div class="flex gap-2 px-4 pb-4">
-                        <button wire:click="approveTransaction({{ $transaction->id }})"
-                            class="flex-1 flex items-center justify-center gap-1.5 text-sm font-semibold text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 py-2 rounded-lg transition-colors">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                stroke-width="2.5">
-                                <path d="m5 13 4 4L19 7" />
-                            </svg>
-                            Setujui
-                        </button>
-                        <button wire:click="rejectTransaction({{ $transaction->id }})"
-                            class="flex-1 flex items-center justify-center gap-1.5 text-sm font-semibold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 py-2 rounded-lg transition-colors">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                stroke-width="2.5">
-                                <path d="M6 18 18 6M6 6l12 12" />
-                            </svg>
-                            Tolak
-                        </button>
-                    </div>
+                    @if ($transaction->status !== 'completed' && $transaction->status !== 'rejected')
+                        <div class="flex gap-2 px-4 pb-4">
+                            <button wire:click="approveTransaction({{ $transaction->id }})"
+                                class="flex-1 flex items-center justify-center gap-1.5 text-sm font-semibold text-green-700 bg-green-50 hover:bg-green-100 border border-green-200 py-2 rounded-lg transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                    stroke-width="2.5">
+                                    <path d="m5 13 4 4L19 7" />
+                                </svg>
+                                Setujui
+                            </button>
+                            <button wire:click="rejectTransaction({{ $transaction->id }})"
+                                class="flex-1 flex items-center justify-center gap-1.5 text-sm font-semibold text-red-700 bg-red-50 hover:bg-red-100 border border-red-200 py-2 rounded-lg transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                    stroke-width="2.5">
+                                    <path d="M6 18 18 6M6 6l12 12" />
+                                </svg>
+                                Tolak
+                            </button>
+                        </div>
+                    @endif
                 </div>
 
             @empty

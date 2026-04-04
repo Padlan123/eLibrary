@@ -12,7 +12,7 @@ class InvoiceController extends Controller
     public function download(SubscriptionTransaction $invoice)
     {
         // Pastikan hanya pemilik invoice yang bisa download
-        abort_if($invoice->member_id !== Auth::id(), 403);
+        abort_if($invoice->user_id !== Auth::id(), 403);
 
         $pdf = Pdf::loadView('invoice.pdf', compact('invoice'));
 

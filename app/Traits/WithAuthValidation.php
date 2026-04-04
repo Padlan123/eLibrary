@@ -7,7 +7,7 @@ trait WithAuthValidation
     protected function loginRules()
     {
         return [
-            'email' => 'required|email:dns',
+            'email' => 'required|email',
             'password' => 'required',
         ];
     }
@@ -23,7 +23,7 @@ trait WithAuthValidation
     {
         return [
             'username' => 'required',
-            'email' => 'required|email:dns|unique:users,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
         ];
     }
