@@ -126,8 +126,8 @@ new class extends Component {
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
 
-                    <div x-data="{ dropdownOpen: false }" class="relative">
-                        <button @click="dropdownOpen = !dropdownOpen" type="button"
+                    <div x-data="{ dropDownOpen: false }" class="relative">
+                        <button @click="dropDownOpen = !dropDownOpen" type="button"
                             class="inline-flex items-center text-body bg-white border border-gray-600 hover:bg-gray-300 mx-auto shadow-xs leading-5 rounded-base text-sm px-4 py-2.5 w-full appearance-none focus:outline-none focus:ring-0 focus:border-brand peer">
                             Kategori
                             <svg class="h-4 w-4 ms-auto rtl:rotate-180" aria-hidden="true"
@@ -140,7 +140,7 @@ new class extends Component {
                         @error('book_categories')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
-                        <div x-show="dropdownOpen" @click.outside="dropdownOpen = false" x-transition
+                        <div x-show="dropDownOpen" @click.outside="dropDownOpen = false" x-transition
                             class="absolute left-1/2 top-0 ml-2 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-48 md:w-60 md:left-full">
                             <ul class="select-none overflow-y-auto p-2 text-sm text-body font-medium">
                                 @foreach ($this->categories as $category)
@@ -206,8 +206,8 @@ new class extends Component {
                     @error('publisher')
                         <span class="text-red-500 text-sm">{{ $message }}</span>
                     @enderror
-                    <div x-data="{ dropdownOpen: false }" class="relative">
-                        <button @click="dropdownOpen = !dropdownOpen" type="button"
+                    <div x-data="{ dropDownOpen: false }" class="relative">
+                        <button @click="dropDownOpen = !dropDownOpen" type="button"
                             class="inline-flex items-center text-body bg-white border border-gray-600 hover:bg-gray-300 mx-auto shadow-xs leading-5 rounded-base text-sm px-4 py-2.5 w-full appearance-none focus:outline-none focus:ring-0 focus:border-brand peer">
                             Bahasa
                             <svg class="h-4 w-4 ms-auto rtl:rotate-180" aria-hidden="true"
@@ -221,7 +221,7 @@ new class extends Component {
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
 
-                        <div x-show="dropdownOpen" @click.outside="dropdownOpen = false" x-transition
+                        <div x-show="dropDownOpen" @click.outside="dropDownOpen = false" x-transition
                             class="absolute left-1/2 top-0 ml-2 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-48 md:w-60 md:left-full">
 
                             <ul class="select-none overflow-y-auto p-2 text-sm text-body font-medium">
