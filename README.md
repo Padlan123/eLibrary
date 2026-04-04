@@ -96,7 +96,7 @@ File `.env` sudah dikonfigurasi untuk Laragon:
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=elibrary
+DB_DATABASE=readify
 DB_USERNAME=root
 DB_PASSWORD=
 ```
