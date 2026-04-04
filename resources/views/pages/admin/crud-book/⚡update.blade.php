@@ -120,10 +120,10 @@ new class extends Component {
         preview: null,
         update_cover_file_name: 'Tidak ada file dipilih',
         update_pdf_file_name: 'Tidak ada file dipilih',
-    }" x-cloak x-show="open" x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
+    }" @click="open = false" x-cloak x-show="open"
+        x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0"
+        x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-100"
+        x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
         class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex items-center justify-center min-h-screen bg-black/50">
         <div @click.stop class="relative p-4 w-full max-w-md max-h-full">
             <div
@@ -162,8 +162,8 @@ new class extends Component {
 
                     </div>
 
-                    <div x-data="{ open: false }" class="relative">
-                        <button @click="open = !open" type="button"
+                    <div x-data="{ dropDownOpen: false }" class="relative">
+                        <button @click="dropDownOpen = !dropDownOpen" type="button"
                             class="inline-flex items-center text-body bg-white border border-gray-600 hover:bg-gray-300 mx-auto shadow-xs leading-5 rounded-base text-sm px-4 py-2.5 w-full appearance-none focus:outline-none focus:ring-0 focus:border-brand peer">
                             Kategori
                             <svg class="h-4 w-4 ms-auto rtl:rotate-180" aria-hidden="true"
@@ -176,7 +176,7 @@ new class extends Component {
                         @error('update_book_categories')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
-                        <div x-show="open" @click.outside="open = false" x-transition
+                        <div x-show="dropDownOpen" @click.outside="dropDownOpen = false" x-transition
                             class="absolute left-1/2 top-0 ml-2 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-48 md:w-60 md:left-full">
                             <ul class="select-none overflow-y-auto p-2 text-sm text-body font-medium">
                                 @foreach ($this->categories as $category)
@@ -243,8 +243,8 @@ new class extends Component {
 
                     </div>
 
-                    <div x-data="{ open: false }" class="relative">
-                        <button @click="open = !open" type="button"
+                    <div x-data="{ dropDownOpen: false }" class="relative">
+                        <button @click="dropDownOpen = !dropDownOpen" type="button"
                             class="inline-flex items-center text-body bg-white border border-gray-600 hover:bg-gray-300 mx-auto shadow-xs leading-5 rounded-base text-sm px-4 py-2.5 w-full appearance-none focus:outline-none focus:ring-0 focus:border-brand peer">
                             Bahasa
                             <svg class="h-4 w-4 ms-auto rtl:rotate-180" aria-hidden="true"
@@ -258,7 +258,7 @@ new class extends Component {
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
 
-                        <div x-show="open" @click.outside="open = false" x-transition
+                        <div x-show="dropDownOpen" @click.outside="dropDownOpen = false" x-transition
                             class="absolute left-1/2 top-0 ml-2 z-50 bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-48 md:w-60 md:left-full">
 
                             <ul class="select-none overflow-y-auto p-2 text-sm text-body font-medium">
